@@ -1,29 +1,44 @@
-import React, { ChangeEvent, ChangeEventHandler, FC, FormEvent, FormEventHandler, useState } from "react";
+import {
+  ChangeEvent,
+  ChangeEventHandler,
+  FC,
+  FormEvent,
+  FormEventHandler,
+  useState,
+} from "react";
 import bgImg from "../Images/bg.png";
 import { useAxiosContext } from "../Context/useAxiosContext";
+import { useNavigate } from "react-router";
 
 const Login: FC = () => {
-  const [formData, setFormData] = useState<{ email: string; password: string }>({ email: "", password: "" });
+  const [formData, setFormData] = useState<{ email: string; password: string }>(
+    { email: "", password: "" }
+  );
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const navigate = useNavigate();
   const axios = useAxiosContext();
 
-  const handleChange: ChangeEventHandler<HTMLInputElement> = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleChange: ChangeEventHandler<HTMLInputElement> = (
+    event: ChangeEvent<HTMLInputElement>
+  ) => {
     setFormData((prevFormData) => ({
       ...prevFormData,
       [event.target.name]: event.target.value,
     }));
   };
 
-  const handleSubmit: FormEventHandler<HTMLFormElement> = async (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit: FormEventHandler<HTMLFormElement> = async (
+    event: FormEvent<HTMLFormElement>
+  ) => {
     event.preventDefault();
     setErrorMessage(null);
 
     try {
       const response = await axios.post("/api/v1/user/login", formData);
-      // Handle successful login 
+      // Handle successful login
       console.log("Login successful:", response.data);
     } catch (error) {
-      setErrorMessage("An unknown error occured")
+      setErrorMessage("An unknown error occured");
     }
   };
 
@@ -35,10 +50,14 @@ const Login: FC = () => {
         </div>
         <div className="flex flex-col justify-center items-center md:w-3/5 max-md:w-full p-4">
           <div className="w-full max-w-md">
-            <h2 className="text-3xl text-center mb-8">Log in to your account</h2>
+            <h2 className="text-3xl text-center mb-8">
+              Log in to your account
+            </h2>
             <form onSubmit={handleSubmit}>
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Email address</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Email address
+                </label>
                 <input
                   type="email"
                   name="email"
@@ -49,7 +68,9 @@ const Login: FC = () => {
                 />
               </div>
               <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Password
+                </label>
                 <input
                   type="password"
                   name="password"
@@ -65,10 +86,19 @@ const Login: FC = () => {
                 </div>
               )}
               <div className="flex flex-row justify-between items-center mb-6">
-                <a href="#" className="text-xl underline underline-offset-2 text-orange-500 hover:underline">
+                <a
+                  href="#"
+                  className="text-md underline underline-offset-2 text-orange-500 hover:underline"
+                  onClick={() => {
+                    navigate("/signup");
+                  }}
+                >
                   Create account
                 </a>
-                <button type="submit" className="px-4 bg-orange-500 text-white py-2 rounded-md hover:bg-orange-600 transition duration-200">
+                <button
+                  type="submit"
+                  className="px-4 bg-orange-500 text-white py-2 rounded-md hover:bg-orange-600 transition duration-200"
+                >
                   Sign in
                 </button>
               </div>
