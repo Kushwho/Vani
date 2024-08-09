@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { useNavigate } from "react-router";
-import useAuthContext from "../Context/useAuthContext";
-import useWindowDimensions from "../Context/useWindowDimensions";
+import useAuthContext from "../Hooks/useAuthContext";
+import useWindowDimensions from "../Hooks/useWindowDimensions";
 
 const Navbar: React.FC = () => {
   const [isActive, setIsActive] = useState(false);
@@ -40,36 +40,42 @@ const Navbar: React.FC = () => {
 
   const handleToggle = () => setIsActive(!isActive);
 
-  const menuContainerClasses = `menu-container flex items-center ${
-    isMobile
-      ? "fixed inset-0 bg-primary-50 transform transition-transform duration-300 ease-in-out justify-center"
-      : "gap-10"
-  } ${
-    isActive && isMobile
-      ? "translate-x-0 z-50"
-      : isMobile
-      ? "translate-x-full"
-      : ""
-  }`;
+  const menuContainerClasses = useMemo(() => {
+    return `menu-container flex items-center ${
+      isMobile
+        ? "absolute h-[100vh] inset-0  bg-primary-50 transform transition-transform duration-300 ease-in-out justify-center"
+        : "gap-10"
+    } ${
+      isActive && isMobile
+        ? "translate-x-0 z-50"
+        : isMobile
+        ? "translate-x-full"
+        : ""
+    }`;
+  }, [isActive, isMobile]);
 
-  const menuItemsClasses = `menu-items flex flex-col md:flex-row md:items-center  gap-10 ${
-    isMobile && isActive ? "block" : "hidden"
-  } md:block`;
+  const menuItemsClasses = useMemo(() => {
+    return `menu-items flex flex-col md:flex-row md:items-center gap-10 ${
+      isMobile && isActive ? "block" : "hidden"
+    } md:block`;
+  }, [isMobile, isActive]);
 
-  const hamburgerClasses = `block w-8 h-1 bg-primary-700 rounded transition-transform duration-500 ease-in-out ${
-    isActive ? "transform rotate-45 translate-y-2" : "translate-y-2"
-  }`;
+  const hamburgerClasses = useMemo(() => {
+    return `block w-8 h-1 bg-primary-700 rounded transition-transform duration-500 ease-in-out ${
+      isActive ? "transform rotate-45 translate-y-2" : "translate-y-2"
+    }`;
+  }, [isActive]);
 
-  const hamburgerClasses2 = `block w-8 h-1 bg-primary-700 rounded transition-transform duration-500 ease-in-out ${
-    isActive ? "transform -rotate-45" : "-translate-y-2"
-  }`;
+  const hamburgerClasses2 = useMemo(() => {
+    return `block w-8 h-1 bg-primary-700 rounded transition-transform duration-500 ease-in-out ${
+      isActive ? "transform -rotate-45" : "-translate-y-2"
+    }`;
+  }, [isActive]);
 
   return (
     <header
-      className={`p-4 observe px-16 w-full bg-primary-50 transition-all duration-300 ${
-        isSticky
-          ? "fixed top-0 w-full z-50 bg-opacity-50 backdrop-blur-sm bg-primary-50 px-16"
-          : ""
+      className={`p-4 px-16 w-full bg-primary-50 transition-all duration-300 ${
+        isSticky ? "fixed top-0 w-full z-50 bg-opacity-50 backdrop-blur-sm" : ""
       }`}
       ref={ref}
     >

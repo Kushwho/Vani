@@ -37,6 +37,7 @@ const Blogs: FC = () => {
             heroImage={faker.image.nature()}
           />
         </div>
+        <div>Hello World</div>
       </main>
     </div>
   );

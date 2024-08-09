@@ -7,7 +7,7 @@ import {
   useState,
 } from "react";
 import bgImg from "../Images/bg.png";
-import { useAxiosContext } from "../Context/useAxiosContext";
+import { useAxiosContext } from "../Hooks/useAxiosContext";
 import { useNavigate } from "react-router";
 
 const Login: FC = () => {

@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { FC } from "react";
 import { useParams } from "react-router";
-import "../styles/blogDetails.scss";
+import "@/styles/routes/blogs/blogDetails.module.scss"
 
 import { faker } from "@faker-js/faker";
 

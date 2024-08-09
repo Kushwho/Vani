@@ -1,9 +1,9 @@
 import { FC } from "react";
 import axios from "axios";
-import AxiosContext from "./Context/useAxiosContext";
+import AxiosContext from "./Hooks/useAxiosContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import AppRoutes from "./routes/AppRoutes";
-import { WindowDimensionsProvider } from "./Context/useWindowDimensions";
+import { WindowDimensionsProvider } from "./Hooks/useWindowDimensions";
 
 const App: FC = () => {
   const instance = axios.create({

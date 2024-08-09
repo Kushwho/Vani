@@ -18,7 +18,7 @@ import {
   ErrorMessageDisplay,
   FormData,
 } from "../services/ValidateSignupForm.ts";
-import { useAxiosContext } from "../Context/useAxiosContext.tsx";
+import { useAxiosContext } from "../Hooks/useAxiosContext.tsx";
 import { useNavigate } from "react-router";
 
 const Signup: FC = () => {
@@ -228,14 +228,15 @@ const Signup: FC = () => {
               <a
                 href="#"
                 className="text-base underline underline-offset-2 text-orange-500 hover:underline"
-                onClick={() => {navigate("/login")}}
+                onClick={() => {
+                  navigate("/login");
+                }}
               >
                 Already have an account?
               </a>
               <button
                 type="submit"
                 className="px-4 bg-orange-500 text-white py-2 rounded-md hover:bg-orange-600 transition duration-200 text-sm"
-
               >
                 Sign up
               </button>

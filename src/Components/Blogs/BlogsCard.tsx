@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect } from "react";
 import { useNavigate } from "react-router";
-import useWindowDimensions from "../../Context/useWindowDimensions";
+import useWindowDimensions from "../../Hooks/useWindowDimensions";
 
 interface BlogsCardProps {
   id: string;
