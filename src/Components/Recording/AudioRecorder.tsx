@@ -14,7 +14,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
   history,
 }) => {
   const [isRecording, setIsRecording] = useState(false);
-  const [audioQueue, setAudioQueue] = useState<ArrayBuffer[]>([]);
+  const [_audioQueue, setAudioQueue] = useState<ArrayBuffer[]>([]);
   const [isPlayingAudio, setIsPlayingAudio] = useState<boolean>(false);
   const [isDeepGramConnectionOpened, setIsDeepGramConnectionOpened] =
     useState<boolean>(false);
@@ -24,10 +24,10 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
 
   
 
+
   
   useEffect(() => {
-    let  myVar = audioQueue;
-    myVar = [];
+    
     setSessionId("1")
     setSocket(() => {
       const tempSock = MySocket.getInstance();
