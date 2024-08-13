@@ -25,7 +25,7 @@ const Signup: FC = () => {
   const axios = useAxiosContext();
   const [displayOtp, setDisplayOtp] = useState<boolean>(false);
   const [formData, sendFormData] = useState<FormData>({
-    username: "",
+    email: "",
     password: "",
     phone: "",
     verifyPassword: "",
@@ -38,7 +38,7 @@ const Signup: FC = () => {
 
   const [errorMessageDisplay, setErrorMessageDisplay] =
     useState<ErrorMessageDisplay>({
-      username: null,
+      email: null,
       password: null,
       phone: null,
       verifyPassword: null,
@@ -71,14 +71,14 @@ const Signup: FC = () => {
     }
 
     setErrorMessageDisplay({
-      username: null,
+      email: null,
       password: null,
       verifyPassword: null,
       phone: null,
     });
 
     const data: sendOtp = {
-      username: formData.username,
+      username: formData.email,
       password: formData.password,
       phone: formData.phone,
     };
@@ -137,19 +137,19 @@ const Signup: FC = () => {
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
               <label className="block text-xs font-medium text-gray-700 mb-1">
-                Username
+                Email Id
               </label>
               <input
                 type="text"
                 name="username"
-                placeholder="Your preferred name"
+                placeholder="Your email Id"
                 className="w-full px-3 py-2 border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
-                value={formData.username}
+                value={formData.email}
                 onChange={handleChange}
               />
-              {errorMessageDisplay.username && (
+              {errorMessageDisplay.email && (
                 <p className="text-red-500 text-xs">
-                  {errorMessageDisplay.username}
+                  {errorMessageDisplay.email}
                 </p>
               )}
             </div>

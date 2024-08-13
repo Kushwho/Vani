@@ -1,11 +1,9 @@
 import React, { useState, useEffect, useRef, Dispatch } from "react";
-import io from "socket.io-client";
 import { Player } from "@lottiefiles/react-lottie-player";
 import { ChatHistoryProps } from "./Chat";
-
-const sessionId = "2";
-const socketPort = 5001;
-const socket = io(`http://${window.location.hostname}:${socketPort}`);
+import getMicrophone from "@/services/MicrophoneService/GetMicrophone";
+import { MySocket } from "@/services/socket";
+import OpenMicrophone from "@/services/MicrophoneService/OpenMicrophone";
 
 export type AudioRecorderProps = {
   setHistory: Dispatch<ChatHistoryProps>;
@@ -18,90 +16,93 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
   const [isRecording, setIsRecording] = useState(false);
   const [audioQueue, setAudioQueue] = useState<ArrayBuffer[]>([]);
   const [isPlayingAudio, setIsPlayingAudio] = useState<boolean>(false);
+  const [isDeepGramConnectionOpened, setIsDeepGramConnectionOpened] =
+    useState<boolean>(false);
   const microphoneRef = useRef<MediaRecorder | null>(null);
+  const [sessionId, setSessionId] = useState<string>("1");
+  const [socket, setSocket] = useState<MySocket>();
 
   useEffect(() => {
-    socket.on("connect", () => {
-      socket.emit("session_start", { sessionId });
-      socket.emit("join", { sessionId });
-    });
+    setSocket(() => {
+      const tempSock = MySocket.getInstance();
+      console.log("Hello");
 
-    socket.on("transcription_update", (data) => {
-      const {
-        transcription,
-        user,
-        audioBinary,
-        sessionId: responseSessionId,
-      } = data;
-      if (responseSessionId === sessionId) {
-        const captionsElement = document.getElementById("captions");
-        if (captionsElement) {
-          captionsElement.innerHTML = transcription;
-          setHistory({
-            messages: [
-              ...history.messages,
-              { id: sessionId, sender: "me", content: user },
-              { id: sessionId, sender: "other", content: transcription },
-            ],
-          });
+      tempSock.onConnect(() => {
+        // TODO: comment these two line
+        tempSock.emit("session_start", { sessionId });
+        tempSock.emit("join", { sessionId });
+        console.log("Connected with session id ", tempSock.getId());
+      });
+
+      // TODO: Working in future uncomment it.Waiting for backend
+      // socket.on("sessionId", (data: { sessionId: string }) => {
+      //   setSessionId(data.sessionId);
+      // });
+
+      tempSock.onTranscriptionUpdate((data: any) => {
+        const {
+          transcription,
+          user,
+          audioBinary,
+          sessionId: responseSessionId,
+        } = data;
+        console.log(data);
+
+        if (responseSessionId === sessionId) {
+          const captionsElement = document.getElementById("captions");
+          if (captionsElement) {
+            captionsElement.innerHTML = transcription;
+            setHistory({
+              messages: [
+                ...history.messages,
+                { id: sessionId, sender: "me", content: user },
+                { id: sessionId, sender: "other", content: transcription },
+              ],
+            });
+
+            enqueueAudio(audioBinary);
+          }
         }
-        enqueueAudio(audioBinary);
-      }
+      });
+
+      return tempSock;
     });
 
     return () => {
-      socket.off("connect");
-      socket.off("transcription_update");
+      socket?.off("connect");
+      socket?.off("transcription_update");
     };
   }, []);
 
-  const getMicrophone = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      return new MediaRecorder(stream, { mimeType: "audio/webm" });
-    } catch (error) {
-      console.error("Error accessing microphone:", error);
-      throw error;
-    }
-  };
-
-  const openMicrophone = async (microphone: MediaRecorder) => {
-    return new Promise<void>((resolve) => {
-      microphone.onstart = () => {
-        document.body.classList.add("recording");
-        resolve();
-      };
-      microphone.ondataavailable = (event) => {
-        if (event.data.size > 0) {
-          socket.emit("audio_stream", { data: event.data, sessionId });
-        }
-      };
-      microphone.start(1000);
-    });
-  };
-
   const startRecording = async () => {
-    socket.emit("join", { sessionId });
+    socket?.emit("join", { sessionId });
     setIsRecording(true);
     const microphone = await getMicrophone();
     microphoneRef.current = microphone;
-    await openMicrophone(microphone);
+
+    socket?.onDeepGramConnectionOpen(async () => {
+      await OpenMicrophone(
+        microphone,
+        () => {
+          document.body.classList.add("recording");
+        },
+        (event: BlobEvent) => {
+          socket?.emit("audio_stream", { data: event.data, sessionId });
+        }
+      );
+    });
   };
 
   const stopRecording = async () => {
     if (isRecording && microphoneRef.current) {
       microphoneRef.current.stop();
       microphoneRef.current.stream.getTracks().forEach((track) => track.stop());
-      socket.emit("toggle_transcription", { action: "stop", sessionId });
-      socket.emit("leave", { sessionId });
+      setIsDeepGramConnectionOpened(false);
+      socket?.emit("toggle_transcription", { action: "stop", sessionId });
+      socket?.emit("leave", { sessionId });
       setIsRecording(false);
       microphoneRef.current = null;
       document.body.classList.remove("recording");
-
-      // Start playing queued audio if any
-      if (audioQueue.length > 0 && !isPlayingAudio) {
-        playNextAudio(audioQueue);
-      }
     }
   };
 
@@ -110,6 +111,9 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
       const newQueue = [...prevQueue, audioBinary];
       return newQueue;
     });
+    if (!isPlayingAudio) {
+      playAudio(audioBinary);
+    }
   };
 
   const playNextAudio = async (audioQue: ArrayBuffer[]) => {
@@ -120,7 +124,6 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
       setAudioQueue([]);
       return;
     }
-    ``;
 
     setIsPlayingAudio(true);
     const audioBinary = audioQue[audioQue.length - 1];
@@ -139,7 +142,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
       if (!audioBinary) throw new Error("No audio data received");
 
       // Create a Blob from the ArrayBuffer
-      const audioBlob = new Blob([audioBinary], { type: "audio/webm" });
+      const audioBlob = new Blob([audioBinary], { type: "audio/mpeg" });
       console.log("Created Blob:", audioBlob);
 
       // Create a URL for the Blob
@@ -171,8 +174,8 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
     }
   };
   const handleRecordButtonClick = () => {
-    if (!isRecording) {
-      socket.emit("toggle_transcription", { action: "start", sessionId });
+    if (!isRecording && isDeepGramConnectionOpened) {
+      socket?.emit("toggle_transcription", { action: "start", sessionId });
       startRecording().catch((error) =>
         console.error("Error starting recording:", error)
       );

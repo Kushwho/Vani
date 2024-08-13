@@ -1,14 +1,14 @@
 // src/services/formValidation.ts
 
 export interface FormData {
-  username: string;
+  email: string;
   password: string;
   phone: string;
   verifyPassword: string;
 }
 
 export interface ErrorMessageDisplay {
-  username: string | null;
+  email: string | null;
   password: string | null;
   phone: string | null;
   verifyPassword: string | null;
@@ -18,15 +18,15 @@ export const validateFormData = (
   formData: FormData
 ): { isValid: boolean; errors: ErrorMessageDisplay } => {
   const errors: ErrorMessageDisplay = {
-    username: null,
+    email: null,
     password: null,
     phone: null,
     verifyPassword: null,
   };
   let isValid = true;
 
-  if (formData.username.trim().length === 0) {
-    errors.username = "Please enter a valid username";
+  if (formData.email.trim().length === 0) {
+    errors.email = "Please enter a valid username";
     isValid = false;
   }
 
@@ -43,5 +43,3 @@ export const validateFormData = (
 
   return { isValid, errors };
 };
-
-

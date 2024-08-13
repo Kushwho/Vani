@@ -44,7 +44,7 @@ const Blogs: FC = () => {
 
   return (
     <div className="flex gap-12 justify-stretch items-stretch w-screen max-w-6xl mx-auto min-h-screen h-full bg-white py-8 max-lg:px-6">
-      <BlogsSidebar />
+      {/* <BlogsSidebar /> */}
       <main className="flex-1 w-full h-full mx-auto px-6 flex flex-col items-center space-y-12 p-4">
         <div className="flex flex-col space-y-6">
           {posts.map((post) => (

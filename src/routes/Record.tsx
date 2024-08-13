@@ -1,6 +1,5 @@
 import { FC, useState } from "react";
 
-
 import ChatHistory, {
   ChatHistoryProps,
   Message,
@@ -14,10 +13,10 @@ const Record: FC = () => {
     <main className="">
       <div className="h-screen relative flex flex-col gap-8 justify-center items-center pb-16">
         <div className="relative">
-          <AudioRecorder setHistory= {setMessages} history={messages}/>
+          <AudioRecorder setHistory={setMessages} history={messages} />
         </div>
 
-        <h1 className="heading">Captions by Vanii</h1>
+        <h1 className="heading">Vanii</h1>
         <h2 className="captions" id="captions"></h2>
       </div>
       <ChatHistory messages={messages.messages} />
