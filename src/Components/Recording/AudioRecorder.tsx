@@ -19,7 +19,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
   const [isDeepGramConnectionOpened, setIsDeepGramConnectionOpened] =
     useState<boolean>(false);
   const microphoneRef = useRef<MediaRecorder | null>(null);
-  const [sessionId, setSessionId] = useState<string>("1");
+  const [sessionId, _setSessionId] = useState<string>("1");
   const [socket, setSocket] = useState<MySocket>();
 
   
@@ -28,7 +28,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
   
   useEffect(() => {
     
-    setSessionId("1")
+
     setSocket(() => {
       const tempSock = MySocket.getInstance();
       console.log("Hello");
