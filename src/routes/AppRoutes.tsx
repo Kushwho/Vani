@@ -7,6 +7,7 @@ import Blogs from "./Blogs";
 import BlogDetail from "./BlogsDetail";
 import Record from "./Record";
 import Home from "./Home";
+import HealthCheck from "./HealthCheck";
 
 const AppRoutes: FC = () => {
   return (
@@ -45,6 +46,14 @@ const AppRoutes: FC = () => {
             element={
               <Layout>
                 <Record />
+              </Layout>
+            }
+          />
+          <Route
+            path="/health-check"
+            element={
+              <Layout>
+                <HealthCheck />
               </Layout>
             }
           />
