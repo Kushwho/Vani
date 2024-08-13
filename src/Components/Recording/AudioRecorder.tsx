@@ -22,7 +22,9 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
   const [sessionId, setSessionId] = useState<string>("1");
   const [socket, setSocket] = useState<MySocket>();
 
+  
   useEffect(() => {
+    
     setSocket(() => {
       const tempSock = MySocket.getInstance();
       console.log("Hello");

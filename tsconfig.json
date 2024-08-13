@@ -10,6 +10,7 @@
   ],
   "compilerOptions": {
     "noUnusedLocals": false,
-    "noEmitOnError": false
+    "noEmitOnError": false,
+    "noUnusedParameters": false
   }
 }

@@ -1,7 +1,7 @@
-import React, { FC, useState, useEffect } from "react";
+import React, { FC } from "react";
 import Navbar from "../Components/Header";
 import Footer from "../Components/Footer";
-import { RouterProvider } from "react-router-dom";
+// import { RouterProvider } from "react-router-dom";
 
 interface LayoutProps {
   children: React.ReactNode;
