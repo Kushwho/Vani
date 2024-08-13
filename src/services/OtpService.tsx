@@ -1,6 +1,6 @@
 // src/services/otpService.ts
 
-import axios, { AxiosInstance } from "axios";
+import { AxiosInstance } from "axios";
 
 export interface sendOtp {
   username: string;
