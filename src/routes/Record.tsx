@@ -1,8 +1,6 @@
 import { FC, useState } from "react";
-import { useSocketConnect } from "@/Hooks/useSocketConnect";
-import { useSocketUpdate } from "@/Hooks/useSocketUpdate";
 
-import RecordBtn from "@/Components/Recording/RecordButton";
+
 import ChatHistory, {
   ChatHistoryProps,
   Message,
@@ -10,7 +8,6 @@ import ChatHistory, {
 import AudioRecorder from "@/Components/Recording/AudioRecorder";
 
 const Record: FC = () => {
-  const { isConnected } = useSocketConnect();
   const [messages, setMessages] = useState<ChatHistoryProps>({ messages: [] });
 
   return (

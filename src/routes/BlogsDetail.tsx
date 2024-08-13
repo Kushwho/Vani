@@ -1,89 +1,75 @@
 import { useQuery } from "@tanstack/react-query";
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import { useParams } from "react-router";
-import "@/styles/routes/blogs/blogDetails.module.scss"
+import "@/styles/routes/blogs/blogDetails.module.scss";
+import { PortableTextComponentProps } from "@portabletext/react";
 
 import { faker } from "@faker-js/faker";
+import client, { urlFor } from "@/services/SanityClient";
+import { SanityImage } from "@/types/SanityImage.type";
+import { PortableText } from "@portabletext/react";
+
+import { myPortableTextComponents } from "@/Components/Blogs/MyPortableComponent";
 
 interface BlogDetailResponse {
-  id: number;
+  _id: string;
   title: string;
-  body: string;
-  author: string;
-  dateOfPublication: string;
-  authorImageUrl: string;
-  heroImageUrl: string;
-}
-
-const generateRandomBlog = (): BlogDetailResponse => {
-  return {
-    id: faker.datatype.number({ min: 1, max: 1000 }),
-    title: faker.lorem.sentence(),
-    body: `
-     
-
-      <h2>${faker.lorem.sentence()}</h2>
-      <p>${faker.lorem.paragraph()}</p>
-      <h3>${faker.lorem.sentence()}</h3>
-      <ul style ="list:type">
-        <li>${faker.lorem.sentence()}</li>
-        <li>${faker.lorem.sentence()}</li>
-        <li>${faker.lorem.sentence()}</li>
-        
-      </ul>
-       <img src=${faker.image.urlLoremFlickr()}/>
-      <p>${faker.lorem.paragraph()}</p>
-      <img src=${faker.image.urlLoremFlickr()}/>
-            <img src=${faker.image.urlLoremFlickr()}/>
-    `,
-    author: faker.name.firstName(),
-    dateOfPublication: faker.date.past().toLocaleString(),
-    authorImageUrl: faker.image.avatar(),
-    heroImageUrl: faker.image.urlPicsumPhotos(),
+  mainImage: SanityImage;
+  publishedAt: string;
+  content: any[];
+  author: {
+    name: string;
+    image: SanityImage;
   };
-};
+}
 
 const BlogDetail: FC = () => {
   const { id } = useParams();
 
-  const { data, isLoading, isError } = useQuery<BlogDetailResponse, Error>({
-    queryKey: ["blogdetails", id],
-    //TODO
-    queryFn: () => {
-      return generateRandomBlog();
-    },
-  });
+  const [post, setPost] = useState<BlogDetailResponse | undefined>(undefined);
+  const query = `*[_type == "blogPost" && _id == "${id}"]{_id, title, mainImage, publishedAt, content,author->{name, image}}`;
+
+  useEffect(() => {
+    client.fetch(query).then((fetchedPost: BlogDetailResponse[]) => {
+      setPost(fetchedPost[0]);
+      console.log(fetchedPost);
+    });
+  }, []);
+
   return (
     <div className="w-full bg-white ">
-      {data ? (
+      {post ? (
         <img
-          src={data.heroImageUrl}
+          src={urlFor(post.mainImage.asset._ref).url()}
           className="w-full  max-md:max-h-[40vh] md:max-h-[60vh] mx-auto"
         />
       ) : (
         <></>
       )}
-      {data ? (
+      {post ? (
         <div className="3xl:max-w-[70vw] max-3xl:max-w-[50vw] max-md:max-w-[90vw] max-lg:[70vw] w-full mx-auto max-md:p-8 my-6">
           <div className="mx-auto  ">
-            <h1 className="twp">{data.title}</h1>
+            <h1 className="twp">{post.title}</h1>
 
             <div className="w-full flex">
               <span>
                 <img
-                  src={data.authorImageUrl}
+                  src={urlFor(post.author.image.asset._ref).url()}
                   className="rounded-full h-10 w-10"
                 />
               </span>
-              <span className="text-sm text-gray-500 flex flex-col ml-4">
-                <span>{data.author}</span>
-                <span>Published on {data.dateOfPublication}</span>
+              <span className="text-sm text-gray-500 flex flex-col ml-4 mb-4">
+                <span>{post.author.name}</span>
+                <span>{new Date(post.publishedAt).toLocaleDateString()}</span>
               </span>
             </div>
-            <div
-              dangerouslySetInnerHTML={{ __html: data.body }}
-              className="twp "
-            ></div>
+
+            <div className="text-lg space-y-4">
+              <PortableText
+                value={post.content}
+                components={myPortableTextComponents}
+              />
+            </div>
           </div>
         </div>
       ) : (

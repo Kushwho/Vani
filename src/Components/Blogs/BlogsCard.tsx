@@ -2,12 +2,12 @@ import React, { FC, useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import useWindowDimensions from "../../Hooks/useWindowDimensions";
 
-interface BlogsCardProps {
+export interface BlogsCardProps {
   id: string;
   author: string;
   title: string;
   description: string;
-  date: string;
+  publishedAt: string;
   imageUrl: string;
   heroImage: string;
 }
@@ -17,21 +17,13 @@ const BlogsCard: FC<BlogsCardProps> = ({
   author,
   title,
   description,
-  date,
+  publishedAt,
   imageUrl,
-  heroImage,
+  heroImage: mainImage,
 }) => {
   const navigate = useNavigate();
   const window = useWindowDimensions();
 
-  const data = {
-    author: "Tari Ibaba",
-    title: "5 amazing new JavaScript features in ES15 (2024)",
-    description:
-      "5 juicy ES15 features with new functionality for cleaner and shorter JavaScript code in 2024.",
-    date: "Jun 2",
-    imageUrl: "https://via.placeholder.com/150",
-  };
 
   return (
     <div className=" rounded-lg  p-6 flex border border-orange-200 bg-white ">
@@ -53,13 +45,13 @@ const BlogsCard: FC<BlogsCardProps> = ({
         <p className="mt-1 text-gray-700">{description}</p>
         <div className="mt-4 flex items-center justify-between text-gray-500 text-sm">
           <div className="flex items-center">
-            <span>{date}</span>
+            <span>{publishedAt}</span>
           </div>
         </div>
       </div>
       {window.dimensions.width > 768 ? (
         <div className="flex items-center justify-center mx-6">
-          <img src={heroImage} className="w-40 h-32" />
+          <img src={mainImage} className="w-40 h-32" />
         </div>
       ) : (
         <></>
