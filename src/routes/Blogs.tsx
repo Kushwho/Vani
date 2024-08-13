@@ -17,14 +17,28 @@ interface BlogShortResponse {
   };
 }
 
+interface PopularPostsResponse {
+  _id: string;
+  title: string;
+}
+
 const Blogs: FC = () => {
   const [posts, setPosts] = useState<BlogsCardProps[]>([]);
 
-  const query =
-    '*[_type == "blogPost"]{_id, title, mainImage, publishedAt, shortDescription,author->{name, image}}';
+  const [popularPostTitle, setPopularPostTitle] = useState<
+    {
+      title: string;
+      id: string;
+    }[]
+  >([]);
+
+  const queryPostCard =
+    '*[_type == "blogPost"][0..9]{_id, title, mainImage, publishedAt, shortDescription,author->{name, image}}';
+
+  const queryPopularPosts = '*[_type == "blogPost"][0..5]{_id, title}';
 
   useEffect(() => {
-    client.fetch(query).then((fetchedPosts: BlogShortResponse[]) => {
+    client.fetch(queryPostCard).then((fetchedPosts: BlogShortResponse[]) => {
       setPosts(
         fetchedPosts.map(
           (post: BlogShortResponse): BlogsCardProps => ({
@@ -32,19 +46,30 @@ const Blogs: FC = () => {
             title: post.title,
             imageUrl: urlFor(post.author.image.asset._ref).url(),
             author: post.author.name,
-            publishedAt: (new Date(post.publishedAt)).toLocaleDateString(),
+            publishedAt: new Date(post.publishedAt).toLocaleDateString(),
             heroImage: urlFor(post.mainImage.asset._ref).url(),
             description: post.shortDescription,
           })
         )
       );
+
+      client
+        .fetch(queryPopularPosts)
+        .then((fetchedPosts: PopularPostsResponse[]) => {
+          setPopularPostTitle(
+            fetchedPosts.map((post: PopularPostsResponse) => ({
+              title: post.title,
+              id: post._id,
+            }))
+          );
+        });
       console.log(fetchedPosts);
     });
   }, []);
 
   return (
     <div className="flex gap-12 justify-stretch items-stretch w-screen max-w-6xl mx-auto min-h-screen h-full bg-white py-8 max-lg:px-6">
-      {/* <BlogsSidebar /> */}
+      <BlogsSidebar posts={popularPostTitle} />
       <main className="flex-1 w-full h-full mx-auto px-6 flex flex-col items-center space-y-12 p-4">
         <div className="flex flex-col space-y-6">
           {posts.map((post) => (

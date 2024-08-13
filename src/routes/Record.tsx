@@ -1,8 +1,7 @@
 import { FC, useState } from "react";
 
 import ChatHistory, {
-  ChatHistoryProps,
-  Message,
+  ChatHistoryProps
 } from "@/Components/Recording/Chat";
 import AudioRecorder from "@/Components/Recording/AudioRecorder";
 

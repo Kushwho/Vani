@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from "react";
+import { FC } from "react";
 
 const AboutUs: FC = () => {
   return (

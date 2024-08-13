@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from "react";
+import { FC } from "react";
 import { useNavigate } from "react-router";
 import useWindowDimensions from "../../Hooks/useWindowDimensions";
 

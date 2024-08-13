@@ -1,10 +1,7 @@
-import { useQuery } from "@tanstack/react-query";
 import { FC, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import "@/styles/routes/blogs/blogDetails.module.scss";
-import { PortableTextComponentProps } from "@portabletext/react";
 
-import { faker } from "@faker-js/faker";
 import client, { urlFor } from "@/services/SanityClient";
 import { SanityImage } from "@/types/SanityImage.type";
 import { PortableText } from "@portabletext/react";

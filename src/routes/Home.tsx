@@ -3,7 +3,7 @@ import CTA from "@/Components/Home/CTA";
 import Features from "@/Components/Home/Features";
 import HeroSection from "@/Components/Home/HeroSection";
 import Testimonials from "@/Components/Home/Testimonials";
-import React, { FC, useState, useEffect } from "react";
+import { FC } from "react";
 
 const Home: FC = () => {
   return (

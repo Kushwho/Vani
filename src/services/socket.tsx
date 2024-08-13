@@ -1,7 +1,7 @@
 import { io, Socket } from "socket.io-client";
 
 // Define the socket port type as a constant
-const socketPort: number = 5001;
+
 
 export class MySocket {
   private static instance: MySocket;
