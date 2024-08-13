@@ -9,6 +9,7 @@
     }
   ],
   "compilerOptions": {
-    "noUnusedLocals": false
+    "noUnusedLocals": false,
+    "noEmitOnError": false
   }
 }
