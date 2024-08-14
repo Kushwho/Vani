@@ -1,4 +1,4 @@
-import { ApiError } from "@/types/ApiError";
+
 import ApiResponse from "@/types/ApiResponse";
 import UserDetails from "@/types/UserDetails";
 import { AxiosInstance } from "axios";

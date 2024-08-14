@@ -1,5 +1,4 @@
-import { ApiError } from "@/types/ApiError";
-import axios, { AxiosError, AxiosInstance } from "axios";
+import axios, { AxiosInstance } from "axios";
 import React, { useContext } from "react";
 const instance = axios.create({
   withCredentials: true,
