@@ -1,3 +1,4 @@
+import ApiResponse from "@/types/ApiResponse";
 import { AxiosInstance } from "axios";
 
 export interface ResendOtpRequest {
@@ -13,7 +14,7 @@ const URL = "/api/v1/user/resend-otp";
 export default async (
   data: ResendOtpRequest,
   axios: AxiosInstance
-): Promise<ResendOtpResponse> => {
-  const response = await axios.post<ResendOtpRequest>(URL, data);
+): Promise<ApiResponse<ResendOtpResponse>> => {
+  const response = await axios.post<ApiResponse<ResendOtpResponse>>(URL, data);
   return response.data;
 };

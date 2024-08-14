@@ -8,23 +8,22 @@ import {
 } from "react";
 import bgImg from "../Images/bg.png";
 import {
-  sendOtp,
-  sendOtpRequest,
-  verifyOtpRequest,
-  resendOtpRequest as resendOtpApiRequest,
-} from "../services/OtpService.tsx";
-import {
   validateFormData,
   ErrorMessageDisplay,
   FormData,
 } from "../services/ValidateSignupForm.ts";
 import { useAxiosContext } from "../Hooks/useAxiosContext.tsx";
 import { useNavigate } from "react-router";
+import SendOtp, { SendOtpProps } from "@/services/OtpService/SendOtp.ts";
+import VerifyOtp from "@/services/OtpService/VerifyOtp.ts";
+import { toast } from "react-toastify";
+import ResendOtp from "@/services/OtpService/ResendOtp.ts";
 
 const Signup: FC = () => {
   const axios = useAxiosContext();
   const [displayOtp, setDisplayOtp] = useState<boolean>(false);
   const [formData, sendFormData] = useState<FormData>({
+    fullname: "",
     email: "",
     password: "",
     phone: "",
@@ -38,6 +37,7 @@ const Signup: FC = () => {
 
   const [errorMessageDisplay, setErrorMessageDisplay] =
     useState<ErrorMessageDisplay>({
+      fullname: null,
       email: null,
       password: null,
       phone: null,
@@ -71,52 +71,62 @@ const Signup: FC = () => {
     }
 
     setErrorMessageDisplay({
+      fullname: null,
       email: null,
       password: null,
       verifyPassword: null,
       phone: null,
     });
 
-    const data: sendOtp = {
-      username: formData.email,
+    const data: SendOtpProps = {
+      fullname: formData.fullname,
+      email: formData.email,
       password: formData.password,
       phone: formData.phone,
     };
 
     if (displayOtp) {
       try {
-        await verifyOtpRequest(
-          { OTP: otp, phone: formData.phone, orderId },
+        const rep = await VerifyOtp(
+          {
+            OTP: otp,
+            phone: formData.phone,
+            orderId,
+          },
           axios
         );
+        if (rep.data.isOtpVerified) {
+          toast("Log in Successful.Navigating to login page");
+          setTimeout(() => {
+            navigate("/login");
+          }, 3000);
+        }
+
         // handle response by navigating to another page or so.
-      } catch (error) {
-        console.error("Error verifying OTP:", error);
-        // Handle the error via toast or other way
+      } catch (error: any) {
+        toast(error?.message);
       }
     } else {
       if (otpSent) {
-        handleResendOtp();
+        const newOrderId = await ResendOtp(
+          {
+            orderId: orderId,
+          },
+          axios
+        );
+        setOrderId(newOrderId.data.orderId);
+        toast("Otp resent successfully");
       } else {
         try {
-          const response = await sendOtpRequest(data, axios);
-          setOrderId(response.orderId);
+          const response = await SendOtp(data, axios);
+          setOrderId(response.data.orderId);
           setDisplayOtp(true);
           setOtpSent(true);
-        } catch (error) {
+        } catch (error: any) {
           console.error("Error sending OTP:", error);
-          // Handle the error via toast or other way
+          toast(error.message);
         }
       }
-    }
-  };
-
-  const handleResendOtp = async () => {
-    try {
-      const response = await resendOtpApiRequest(orderId, axios);
-      setOrderId(response.orderId);
-    } catch (error) {
-      console.error("Error resending OTP:", error);
     }
   };
 
@@ -137,11 +147,29 @@ const Signup: FC = () => {
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
               <label className="block text-xs font-medium text-gray-700 mb-1">
+                Full Name
+              </label>
+              <input
+                type="text"
+                name="fullname"
+                placeholder="Your fullname"
+                className="w-full px-3 py-2 border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                value={formData.fullname}
+                onChange={handleChange}
+              />
+              {errorMessageDisplay.fullname && (
+                <p className="text-red-500 text-xs">
+                  {errorMessageDisplay.fullname}
+                </p>
+              )}
+            </div>
+            <div className="mb-4">
+              <label className="block text-xs font-medium text-gray-700 mb-1">
                 Email Id
               </label>
               <input
                 type="text"
-                name="username"
+                name="email"
                 placeholder="Your email Id"
                 className="w-full px-3 py-2 border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
                 value={formData.email}

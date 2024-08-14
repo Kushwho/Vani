@@ -87,6 +87,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
     microphoneRef.current = microphone;
 
     socket?.onDeepGramConnectionOpen(async () => {
+      setIsDeepGramConnectionOpened(true);
       await OpenMicrophone(
         microphone,
         () => {

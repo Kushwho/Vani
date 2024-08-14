@@ -88,7 +88,7 @@ const Navbar: React.FC = () => {
             <ul className="flex flex-col justify-center items-center md:flex-row gap-6 text-md">
               <li>
                 <a
-                  href="#"
+                  href="/"
                   className="hover:text-primary-700 transition-colors duration-200"
                 >
                   Home
@@ -96,7 +96,7 @@ const Navbar: React.FC = () => {
               </li>
               <li>
                 <a
-                  href="#about-us"
+                  href="/#about-us"
                   className="hover:text-primary-700 transition-colors duration-200"
                 >
                   About Us
@@ -104,7 +104,7 @@ const Navbar: React.FC = () => {
               </li>
               <li>
                 <a
-                  href="#features"
+                  href="/#features"
                   className="hover:text-primary-700 transition-colors duration-200"
                 >
                   Features

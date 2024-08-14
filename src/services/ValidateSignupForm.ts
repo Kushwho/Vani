@@ -1,6 +1,7 @@
 // src/services/formValidation.ts
 
 export interface FormData {
+  fullname: string;
   email: string;
   password: string;
   phone: string;
@@ -8,6 +9,7 @@ export interface FormData {
 }
 
 export interface ErrorMessageDisplay {
+  fullname: string | null;
   email: string | null;
   password: string | null;
   phone: string | null;
@@ -18,6 +20,7 @@ export const validateFormData = (
   formData: FormData
 ): { isValid: boolean; errors: ErrorMessageDisplay } => {
   const errors: ErrorMessageDisplay = {
+    fullname: null,
     email: null,
     password: null,
     phone: null,
@@ -25,8 +28,16 @@ export const validateFormData = (
   };
   let isValid = true;
 
-  if (formData.email.trim().length === 0) {
-    errors.email = "Please enter a valid username";
+  if (formData.fullname.trim().length === 0) {
+    errors.fullname = "Please enter valid name";
+    isValid = false;
+  }
+
+  if (
+    formData.email.trim().length === 0 ||
+    formData.email.includes("@") === false
+  ) {
+    errors.email = "Please enter a valid Email";
     isValid = false;
   }
 

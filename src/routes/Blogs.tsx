@@ -52,19 +52,18 @@ const Blogs: FC = () => {
           })
         )
       );
-
-      client
-        .fetch(queryPopularPosts)
-        .then((fetchedPosts: PopularPostsResponse[]) => {
-          setPopularPostTitle(
-            fetchedPosts.map((post: PopularPostsResponse) => ({
-              title: post.title,
-              id: post._id,
-            }))
-          );
-        });
-      console.log(fetchedPosts);
     });
+
+    client
+      .fetch(queryPopularPosts)
+      .then((fetchedPosts: PopularPostsResponse[]) => {
+        setPopularPostTitle(
+          fetchedPosts.map((post: PopularPostsResponse) => ({
+            title: post.title,
+            id: post._id,
+          }))
+        );
+      });
   }, []);
 
   return (
