@@ -105,6 +105,7 @@ const Signup: FC = () => {
         );
         if (rep.data.isOTPVerified) {
           toast("Log in Successful. Navigating to login page");
+          setOtpSent(true);
           setTimeout(() => {
             navigate("/");
           }, 3000);
@@ -112,29 +113,18 @@ const Signup: FC = () => {
 
         // handle response by navigating to another page or so.
       } catch (error: any) {
+        setOtpSent(false);
         toast(error?.message);
       }
     } else {
-      if (otpSent) {
-        const newOrderId = await ResendOtp(
-          {
-            orderId: orderId,
-          },
-          axios
-        );
-        setOrderId(newOrderId.data.orderId);
-        toast("Otp resent successfully");
-      } else {
-        try {
-          toast.success("Sending otp")
-          const response = await SendOtp(data, axios);
-          setOrderId(response.data.orderId);
-          setDisplayOtp(true);
-          setOtpSent(true);
-        } catch (error: any) {
-          console.error("Error sending OTP:", error);
-          toast(error.message);
-        }
+      try {
+        toast.success("Sending otp");
+        const response = await SendOtp(data, axios);
+        setOrderId(response.data.orderId);
+        setDisplayOtp(true);
+      } catch (error: any) {
+        console.error("Error sending OTP:", error);
+        toast(error.message);
       }
     }
   };
@@ -219,7 +209,7 @@ const Signup: FC = () => {
               )}
             </div>
             {displayOtp && (
-              <div className="otp-section">
+              <div className="otp-section flex flex-row items-center ">
                 <div className="mb-4">
                   <label className="block text-xs font-medium text-gray-700 mb-1">
                     Enter OTP
@@ -233,6 +223,25 @@ const Signup: FC = () => {
                     onChange={handleOtpChange}
                   />
                 </div>
+                {displayOtp && !otpSent && (
+                  <button
+                    type="submit"
+                    className="w-full ml-2 py-2  bg-orange-500 text-white font-bold rounded-md hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    onClick={async () => {
+                      toast.success("Resending otp")
+                      const newOrderId = await ResendOtp(
+                        {
+                          orderId: orderId,
+                        },
+                        axios
+                      );
+                      setOrderId(newOrderId.data.orderId);
+                      toast("Otp resent successfully");
+                    }}
+                  >
+                    "Resend OTP"
+                  </button>
+                )}
               </div>
             )}
             <div className="mb-4">
