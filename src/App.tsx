@@ -21,7 +21,7 @@ const App: FC = () => {
     id: "",
   });
   const axiosInstance = axios.create({
-    baseURL: "https://backend.vanii.ai",
+    baseURL: "https://backend.vanii.ai/auth",
     withCredentials: true,
   });
 
