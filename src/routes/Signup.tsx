@@ -103,11 +103,10 @@ const Signup: FC = () => {
           },
           axios
         );
-        console.log(rep.data);
         if (rep.data.isOTPVerified) {
           toast("Log in Successful. Navigating to login page");
           setTimeout(() => {
-            navigate("/login");
+            navigate("/");
           }, 3000);
         }
 
@@ -127,6 +126,7 @@ const Signup: FC = () => {
         toast("Otp resent successfully");
       } else {
         try {
+          toast.success("Sending otp")
           const response = await SendOtp(data, axios);
           setOrderId(response.data.orderId);
           setDisplayOtp(true);

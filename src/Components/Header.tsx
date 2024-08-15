@@ -132,6 +132,10 @@ const Navbar: React.FC = () => {
                       Logout(axios)
                         .then(() => {
                           toast.success("Logged out successfully");
+                          authContext.setPrimaryValues({
+                            loggedIn:false,
+                            id:""
+                          })
                         })
                         .catch(() => {
                           toast.error("Failed to logout");
