@@ -1,4 +1,3 @@
-
 import ApiResponse from "@/types/ApiResponse";
 import UserDetails from "@/types/UserDetails";
 import { AxiosInstance } from "axios";
@@ -12,7 +11,7 @@ export interface VerifyPhoneOtpRequest {
 }
 
 export interface VerifyPhoneOtpResponse {
-  isOtpVerified: boolean;
+  isOTPVerified: boolean;
   userDetails: Omit<UserDetails, "password">;
 }
 
@@ -20,6 +19,7 @@ export default async (
   data: VerifyPhoneOtpRequest,
   axios: AxiosInstance
 ): Promise<ApiResponse<VerifyPhoneOtpResponse>> => {
+  data = { ...data, phone: data.phone };
   const response = await axios.post<ApiResponse<VerifyPhoneOtpResponse>>(
     URL,
     data

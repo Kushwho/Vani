@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Layout from "./Layout";
 import Login from "./Login";
@@ -8,8 +8,22 @@ import BlogDetail from "./BlogsDetail";
 import Record from "./Record";
 import Home from "./Home";
 import HealthCheck from "./HealthCheck";
+import useAuthContext from "@/Hooks/useAuthContext";
+import { useAxiosContext } from "@/Hooks/useAxiosContext";
+import GetUser from "@/services/Login/GetUser";
 
 const AppRoutes: FC = () => {
+  const auth = useAuthContext();
+  const axios = useAxiosContext();
+  useEffect(() => {
+    GetUser(undefined, axios).then((data) => {
+      auth?.setPrimaryValues({
+        loggedIn: true,
+        id: data.data._id,
+      });
+    });
+  });
+
   return (
     <>
       <BrowserRouter>

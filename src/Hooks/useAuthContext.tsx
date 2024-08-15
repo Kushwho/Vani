@@ -3,13 +3,13 @@ import React, { createContext, useContext } from "react";
 interface AuthContextType {
   primaryValues: {
     loggedIn: boolean;
-    username: string;
+    id: string;
   };
 
   setPrimaryValues: React.Dispatch<
     React.SetStateAction<{
       loggedIn: boolean;
-      username: string;
+      id: string;
     }>
   >;
 }
@@ -31,4 +31,4 @@ const useAuthContext = () => useContext(AuthContext);
 
 export default useAuthContext;
 export { AuthContextProvider, AuthContext };
-export type {AuthContextType}
+export type { AuthContextType };

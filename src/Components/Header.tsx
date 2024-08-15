@@ -2,6 +2,9 @@ import React, { useState, useEffect, useRef, useMemo } from "react";
 import { useNavigate } from "react-router";
 import useAuthContext from "../Hooks/useAuthContext";
 import useWindowDimensions from "../Hooks/useWindowDimensions";
+import Logout from "@/services/Login/Logout";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const Navbar: React.FC = () => {
   const [isActive, setIsActive] = useState(false);
@@ -122,10 +125,22 @@ const Navbar: React.FC = () => {
                 <button
                   id="btn-get-started"
                   className="py-2 px-5 rounded bg-primary-600 text-primary-50 hover:bg-primary-700 transition-colors duration-200"
-                  onClick={() => navigate("/signup")}
+                  onClick={() => {
+                    if (!authContext?.primaryValues.loggedIn) {
+                      navigate("/signup");
+                    } else {
+                      Logout(axios)
+                        .then(() => {
+                          toast.success("Logged out successfully");
+                        })
+                        .catch(() => {
+                          toast.error("Failed to logout");
+                        });
+                    }
+                  }}
                 >
                   {authContext?.primaryValues.loggedIn
-                    ? "Profile"
+                    ? "Logout"
                     : "Get started"}
                 </button>
               </li>

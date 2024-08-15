@@ -9,13 +9,26 @@ import {
 import bgImg from "../Images/bg.png";
 import { useAxiosContext } from "../Hooks/useAxiosContext";
 import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
+import login from "@/services/Login/Login";
+import useAuthContext from "@/Hooks/useAuthContext";
 
 const Login: FC = () => {
+  const auth = useAuthContext();
+
+  const navigate = useNavigate();
+
+  if (auth?.primaryValues.loggedIn) {
+    toast.success("You are already loggedIn. Navigating to Home Page");
+    setTimeout(() => {
+      navigate("/");
+    }, 3000);
+  }
   const [formData, setFormData] = useState<{ email: string; password: string }>(
     { email: "", password: "" }
   );
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const navigate = useNavigate();
+
   const axios = useAxiosContext();
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = (
@@ -34,11 +47,23 @@ const Login: FC = () => {
     setErrorMessage(null);
 
     try {
-      const response = await axios.post("/api/v1/user/login", formData);
-      // Handle successful login
-      console.log("Login successful:", response.data);
-    } catch (error) {
-      setErrorMessage("An unknown error occured");
+      const response = await login(formData, axios);
+
+      if (response.success) {
+        auth?.setPrimaryValues({
+          loggedIn: true,
+          id: response.data._id,
+        });
+        toast.success("Login Successful. Navigating to Home Page");
+        setTimeout(() => {
+          navigate("/");
+        }, 3000);
+      } else {
+        toast.error("An unknown error occured");
+        toast.error(response.message);
+      }
+    } catch (error: any) {
+      toast.error(error.message);
     }
   };
 

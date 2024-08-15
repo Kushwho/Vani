@@ -18,6 +18,7 @@ import SendOtp, { SendOtpProps } from "@/services/OtpService/SendOtp.ts";
 import VerifyOtp from "@/services/OtpService/VerifyOtp.ts";
 import { toast } from "react-toastify";
 import ResendOtp from "@/services/OtpService/ResendOtp.ts";
+import CountryCode from "@/Components/Signup/CountryCode.tsx";
 
 const Signup: FC = () => {
   const axios = useAxiosContext();
@@ -32,6 +33,7 @@ const Signup: FC = () => {
   const [orderId, setOrderId] = useState<string>("");
   const [otp, setOtp] = useState<string>("");
   const [otpSent, setOtpSent] = useState<boolean>(false);
+  const [countryCode, setCountryCode] = useState<string>("+1"); // Default country code
 
   const navigate = useNavigate();
 
@@ -51,6 +53,12 @@ const Signup: FC = () => {
       ...prevFormData,
       [event.target.name]: event.target.value,
     }));
+  };
+
+  const handleCountryCodeChange: ChangeEventHandler<HTMLSelectElement> = (
+    event: ChangeEvent<HTMLSelectElement>
+  ) => {
+    setCountryCode(event.target.value);
   };
 
   const handleOtpChange: ChangeEventHandler<HTMLInputElement> = (
@@ -82,7 +90,7 @@ const Signup: FC = () => {
       fullname: formData.fullname,
       email: formData.email,
       password: formData.password,
-      phone: formData.phone,
+      phone: `${countryCode}${formData.phone}`, // Include country code
     };
 
     if (displayOtp) {
@@ -90,13 +98,14 @@ const Signup: FC = () => {
         const rep = await VerifyOtp(
           {
             OTP: otp,
-            phone: formData.phone,
+            phone: `${countryCode}${formData.phone}`,
             orderId,
           },
           axios
         );
-        if (rep.data.isOtpVerified) {
-          toast("Log in Successful.Navigating to login page");
+        console.log(rep.data);
+        if (rep.data.isOTPVerified) {
+          toast("Log in Successful. Navigating to login page");
           setTimeout(() => {
             navigate("/login");
           }, 3000);
@@ -185,14 +194,24 @@ const Signup: FC = () => {
               <label className="block text-xs font-medium text-gray-700 mb-1">
                 Phone Number
               </label>
-              <input
-                type="number"
-                name="phone"
-                placeholder="10 digit phone number"
-                className="w-full px-3 py-2 border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
-                value={formData.phone}
-                onChange={handleChange}
-              />
+              <div className="flex">
+                <select
+                  value={countryCode}
+                  onChange={handleCountryCodeChange}
+                  className="w-20 px-2 py-2 border border-orange-300 rounded-l-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                >
+                  <CountryCode />
+                </select>
+                <input
+                  type="number"
+                  name="phone"
+                  placeholder="10 digit phone number"
+                  className="flex-1 px-3 py-2 border-t border-b border-r border-orange-300 rounded-r-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  value={formData.phone}
+                  onChange={handleChange}
+                />
+              </div>
+
               {errorMessageDisplay.phone && (
                 <p className="text-red-500 text-xs">
                   {errorMessageDisplay.phone}
@@ -234,9 +253,9 @@ const Signup: FC = () => {
                 </p>
               )}
             </div>
-            <div className="mb-6">
+            <div className="mb-4">
               <label className="block text-xs font-medium text-gray-700 mb-1">
-                Confirm password
+                Verify Password
               </label>
               <input
                 type="password"
@@ -252,21 +271,12 @@ const Signup: FC = () => {
                 </p>
               )}
             </div>
-            <div className="flex justify-between items-center mb-6">
-              <a
-                href="#"
-                className="text-base underline underline-offset-2 text-orange-500 hover:underline"
-                onClick={() => {
-                  navigate("/login");
-                }}
-              >
-                Already have an account?
-              </a>
+            <div className="flex justify-center mt-8">
               <button
                 type="submit"
-                className="px-4 bg-orange-500 text-white py-2 rounded-md hover:bg-orange-600 transition duration-200 text-sm"
+                className="w-48 py-2 bg-orange-500 text-white font-bold rounded-md hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500"
               >
-                Sign up
+                {displayOtp ? "Verify OTP" : otpSent ? "Resend OTP" : "Sign Up"}
               </button>
             </div>
           </form>
