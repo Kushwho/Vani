@@ -5,7 +5,7 @@ import useWindowDimensions from "../Hooks/useWindowDimensions";
 import Logout from "@/services/Login/Logout";
 
 import { toast } from "react-toastify";
-import { useaxiosContext } from "@/Hooks/useAxiosContext";
+import { useAxiosContext } from "@/Hooks/useAxiosContext";
 
 const Navbar: React.FC = () => {
   const [isActive, setIsActive] = useState(false);
