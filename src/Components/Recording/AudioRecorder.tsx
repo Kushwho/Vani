@@ -4,7 +4,7 @@ import { ChatHistoryProps } from "./Chat";
 import getMicrophone from "@/services/MicrophoneService/GetMicrophone";
 import { MySocket } from "@/services/socket";
 import OpenMicrophone from "@/services/MicrophoneService/OpenMicrophone";
-import useAuthContext, { AuthContext } from "@/Hooks/useAuthContext";
+import useAuthContext from "@/Hooks/useAuthContext";
 
 export type AudioRecorderProps = {
   setHistory: Dispatch<ChatHistoryProps>;
