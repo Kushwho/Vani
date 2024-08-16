@@ -3,8 +3,9 @@ import { useNavigate } from "react-router";
 import useAuthContext from "../Hooks/useAuthContext";
 import useWindowDimensions from "../Hooks/useWindowDimensions";
 import Logout from "@/services/Login/Logout";
-import axios from "axios";
+
 import { toast } from "react-toastify";
+import { useaxiosContext } from "@/Hooks/useAxiosContext";
 
 const Navbar: React.FC = () => {
   const [isActive, setIsActive] = useState(false);
@@ -14,6 +15,7 @@ const Navbar: React.FC = () => {
   const { dimensions } = useWindowDimensions();
   const navigate = useNavigate();
   const authContext = useAuthContext();
+  const axios = useAxiosContext()
 
   useEffect(() => {
     const handleResize = () => setIsMobile(dimensions.width < 768);
