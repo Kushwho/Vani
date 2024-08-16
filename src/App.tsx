@@ -7,13 +7,9 @@ import { WindowDimensionsProvider } from "./Hooks/useWindowDimensions";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ApiError } from "./types/ApiError";
-import  {
-  AuthContextProvider,
-  AuthContextType,
-} from "./Hooks/useAuthContext";
+import { AuthContextProvider, AuthContextType } from "./Hooks/useAuthContext";
 
 const App: FC = () => {
-
   const [primaryValues, setPrimaryValues] = useState<
     AuthContextType["primaryValues"]
   >({

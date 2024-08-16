@@ -19,6 +19,7 @@ import VerifyOtp from "@/services/OtpService/VerifyOtp.ts";
 import { toast } from "react-toastify";
 import ResendOtp from "@/services/OtpService/ResendOtp.ts";
 import CountryCode from "@/Components/Signup/CountryCode.tsx";
+import GetUser from "@/services/Login/GetUser.tsx";
 
 const Signup: FC = () => {
   const axios = useAxiosContext();
@@ -104,7 +105,8 @@ const Signup: FC = () => {
           axios
         );
         if (rep.data.isOTPVerified) {
-          toast("Log in Successful. Navigating to login page");
+          toast("Signup Successful. Navigating to Home page");
+          GetUser(undefined, axios);
           setOtpSent(true);
           setTimeout(() => {
             navigate("/");
@@ -228,7 +230,7 @@ const Signup: FC = () => {
                     type="submit"
                     className="w-full ml-2 py-2  bg-orange-500 text-white font-bold rounded-md hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500"
                     onClick={async () => {
-                      toast.success("Resending otp")
+                      toast.success("Resending otp");
                       const newOrderId = await ResendOtp(
                         {
                           orderId: orderId,
@@ -239,7 +241,7 @@ const Signup: FC = () => {
                       toast("Otp resent successfully");
                     }}
                   >
-                    "Resend OTP"
+                    Resend OTP
                   </button>
                 )}
               </div>
