@@ -7,9 +7,9 @@ const CTA: FC = () => {
   const navigate = useNavigate()
   return (
     <>
-      <section id="cta" className="px-24 py-0 bg-9">
+      <section id="cta" className="max-md:px-8 md:px-24 py-20 bg-9">
         <div
-          className="max-w-[78rem] mx-auto my-12 bg-gradient-to-t from-black/20 to-black/20 bg-[] bg-cover bg-no-repeat bg-[length:cover] rounded-md p-24 text-center"
+          className="max-w-screen-xl mx-auto my-12 bg-gradient-to-t from-black/20 to-black/20 bg-[] bg-cover bg-no-repeat bg-[length:cover] rounded-md p-24 text-center"
           style={{ backgroundImage: "url('/assets/images/3d-5.webp')" }}
         >
           <h2 className="mb-8 font-satoshi-bold text-primary-50 text-2xl">

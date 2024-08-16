@@ -4,6 +4,7 @@ import { ChatHistoryProps } from "./Chat";
 import getMicrophone from "@/services/MicrophoneService/GetMicrophone";
 import { MySocket } from "@/services/socket";
 import OpenMicrophone from "@/services/MicrophoneService/OpenMicrophone";
+import useAuthContext, { AuthContext } from "@/Hooks/useAuthContext";
 
 export type AudioRecorderProps = {
   setHistory: Dispatch<ChatHistoryProps>;
@@ -16,19 +17,15 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
   const [isRecording, setIsRecording] = useState(false);
   const [_audioQueue, setAudioQueue] = useState<ArrayBuffer[]>([]);
   const [isPlayingAudio, setIsPlayingAudio] = useState<boolean>(false);
-  const [isDeepGramConnectionOpened, setIsDeepGramConnectionOpened] =
-    useState<boolean>(false);
+  const [_, setIsDeepGramConnectionOpened] = useState<boolean>(false);
   const microphoneRef = useRef<MediaRecorder | null>(null);
-  const [sessionId, _setSessionId] = useState<string>("1");
+  const auth = useAuthContext();
+  const [sessionId, _setSessionId] = useState<string>(
+    auth?.primaryValues.id || "1"
+  );
   const [socket, setSocket] = useState<MySocket>();
 
-  
-
-
-  
   useEffect(() => {
-    
-
     setSocket(() => {
       const tempSock = MySocket.getInstance();
       console.log("Hello");
@@ -181,7 +178,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
     }
   };
   const handleRecordButtonClick = () => {
-    if (!isRecording && isDeepGramConnectionOpened) {
+    if (!isRecording) {
       socket?.emit("toggle_transcription", { action: "start", sessionId });
       startRecording().catch((error) =>
         console.error("Error starting recording:", error)

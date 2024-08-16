@@ -2,7 +2,6 @@ import { io, Socket } from "socket.io-client";
 
 // Define the socket port type as a constant
 
-
 export class MySocket {
   private static instance: MySocket;
   private socket: Socket;
@@ -39,8 +38,12 @@ export class MySocket {
 
   // Listen for the 'transcription_update' event
   public onTranscriptionUpdate(fxnToBeExecuted: Function): void {
-    this.socket.on("transcription_update", () => {
-      fxnToBeExecuted();
+    console.log("Hi");
+    
+    this.socket.on("transcription_update", (data) => {
+      console.log("Transcription being updated");
+
+      fxnToBeExecuted(data);
     });
   }
 

@@ -2,7 +2,7 @@ import ApiResponse from "@/types/ApiResponse";
 import UserDetails from "@/types/UserDetails";
 import { AxiosInstance } from "axios";
 
-const URL = "api/v1/get-user";
+const URL = "api/v1/user/get-user";
 type GetUserProps = void;
 
 type GetUserResponse = ApiResponse<Omit<UserDetails, "password">>;
