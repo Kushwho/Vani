@@ -22,7 +22,7 @@ const AppRoutes: FC = () => {
         id: data.data._id,
       });
     });
-  });
+  },[]);
 
   return (
     <>
