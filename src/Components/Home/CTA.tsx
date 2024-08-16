@@ -1,6 +1,10 @@
+import useAuthContext from "@/Hooks/useAuthContext";
 import { FC } from "react";
+import { useNavigate } from "react-router";
 
 const CTA: FC = () => {
+  const auth = useAuthContext()
+  const navigate = useNavigate()
   return (
     <>
       <section id="cta" className="px-24 py-0 bg-9">
@@ -11,9 +15,10 @@ const CTA: FC = () => {
           <h2 className="mb-8 font-satoshi-bold text-primary-50 text-2xl">
             Join the Vanii Community and Learn!
           </h2>
-          <button
+          {!auth?.primaryValues.loggedIn? <button
             id="btn-view-jobs"
             className="flex items-center justify-center gap-2 mx-auto px-5 py-3 bg-primary-600 text-primary-50 font-satoshi-medium text-md rounded-sm transition-transform duration-200 ease-in-out hover:bg-primary-700 hover:translate-x-1"
+            onClick={() => navigate("/signup")}
           >
             <span>Get started</span>
             <img
@@ -21,7 +26,7 @@ const CTA: FC = () => {
               alt="arrow icon"
               className="w-6 h-6 transition-transform duration-200 ease-in-out hover:translate-x-1"
             />
-          </button>
+          </button>:<></>}
         </div>
       </section>
     </>
