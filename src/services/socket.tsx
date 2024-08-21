@@ -8,7 +8,7 @@ export class MySocket {
 
   private constructor() {
     console.log("Instance Created");
-    this.socket = io("ws://localhost:5001");
+    this.socket = io("wss://backend.vanii.ai");
   }
 
   // Method to get the singleton instance

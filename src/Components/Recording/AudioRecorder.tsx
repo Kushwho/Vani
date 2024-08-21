@@ -11,7 +11,6 @@ export type AudioRecorderProps = {
 
 const AudioRecorder: React.FC<AudioRecorderProps> = ({
   setHistory,
-  history,
 }) => {
   const [isRecording, setIsRecording] = useState(false);
  
