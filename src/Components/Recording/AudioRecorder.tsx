@@ -23,7 +23,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
   const [sessionId] = useState<string>(auth?.primaryValues.id || "1");
 
   useEffect(() => {
-    socketRef.current = io("ws://localhost:5001");
+    socketRef.current = io("wss://backend.vanii.ai");
 
     socketRef.current.on("connect", () => {
       socketRef.current?.emit("session_start", { sessionId });
