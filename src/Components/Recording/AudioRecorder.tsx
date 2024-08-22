@@ -1,8 +1,10 @@
-import React, { useState, useEffect, useRef} from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Player } from "@lottiefiles/react-lottie-player";
 import { ChatHistoryProps } from "./Chat";
 import { io, Socket } from "socket.io-client";
 import useAuthContext from "@/Hooks/useAuthContext";
+import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
 
 export type AudioRecorderProps = {
   setHistory: React.Dispatch<React.SetStateAction<ChatHistoryProps>>;
@@ -14,11 +16,22 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
   const [currentAudio, setCurrentAudio] = useState<HTMLAudioElement | null>(
     null
   );
+  const navigate = useNavigate();
   const microphoneRef = useRef<MediaRecorder | null>(null);
   const socketRef = useRef<Socket | null>(null);
   const auth = useAuthContext();
+  if (!auth?.primaryValues.loggedIn) {
+    setTimeout(() => {
+      navigate("/");
+    }, 3000);
+    toast.success(
+      "You are not logged in.Please Log in to view this page.Navigating you to home page"
+    );
+  }
+  console.log(auth?.primaryValues.id);
+
   const [sessionId] = useState<string>(auth?.primaryValues.id || "1");
-  const [audioPlayer, _] = useState(new Audio());
+  const [audioPlayer] = useState(new Audio());
   useEffect(() => {
     socketRef.current = io("wss://backend.vanii.ai");
 
@@ -54,9 +67,12 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
 
     return () => {
       socketRef.current?.disconnect();
-      socketRef.current?.emit("toggle_transcription", { action: "stop", sessionId });
+      socketRef.current?.emit("toggle_transcription", {
+        action: "stop",
+        sessionId,
+      });
       socketRef.current?.emit("leave", { sessionId });
-      socketRef.current?.off()
+      socketRef.current?.off();
     };
   }, [sessionId]);
 
@@ -125,43 +141,32 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
 
   // ...
 
-  const playAudio = 
-    async (audioBinary: ArrayBuffer) => {
-   
+  const playAudio = async (audioBinary: ArrayBuffer) => {
+    try {
+      const audioBlob = new Blob([audioBinary], { type: "audio/mpeg" });
+      const audioUrl = URL.createObjectURL(audioBlob);
+      audioPlayer.pause();
+      audioPlayer.src = audioUrl;
+
+      audioPlayer.onpause = () => {
+        URL.revokeObjectURL(audioUrl);
+      };
+      audioPlayer.onended = () => {
+        URL.revokeObjectURL(audioUrl);
+      };
+      audioPlayer.oncancel = () => {
+        URL.revokeObjectURL(audioUrl);
+      };
 
       try {
-        const audioBlob = new Blob([audioBinary], { type: "audio/mpeg" });
-        const audioUrl = URL.createObjectURL(audioBlob);
-        audioPlayer.pause();
-        audioPlayer.src = audioUrl;
-
-
-        audioPlayer.onpause = () => {
-
-          URL.revokeObjectURL(audioUrl);
-        };
-        audioPlayer.onended = () => {
-
-          URL.revokeObjectURL(audioUrl);
-        };
-        audioPlayer.oncancel = () => {
-
-          URL.revokeObjectURL(audioUrl);
-        };
-
-        try {
-          await audioPlayer.play();
-        } catch (error) {
-
-          console.error("Error playing audio:", error);
-        }
+        await audioPlayer.play();
       } catch (error) {
-
         console.error("Error playing audio:", error);
       }
+    } catch (error) {
+      console.error("Error playing audio:", error);
     }
-
-
+  };
 
   // ...
 
@@ -170,7 +175,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
       socketRef.current?.emit("toggle_transcription", {
         action: "start",
         sessionId,
-        email: "aswanib133@gmail.com",
+        email: auth?.primaryValues.email || "",
         voice: "Deepgram",
       });
       startRecording()

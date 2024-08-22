@@ -20,6 +20,7 @@ const AppRoutes: FC = () => {
       auth?.setPrimaryValues({
         loggedIn: true,
         id: data.data._id,
+        email:data.data.email
       });
     });
   },[]);

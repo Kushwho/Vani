@@ -4,12 +4,14 @@ interface AuthContextType {
   primaryValues: {
     loggedIn: boolean;
     id: string;
+    email:string;
   };
 
   setPrimaryValues: React.Dispatch<
     React.SetStateAction<{
       loggedIn: boolean;
       id: string;
+      email:string;
     }>
   >;
 }
