@@ -34,6 +34,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
   const [audioPlayer] = useState(new Audio());
   useEffect(() => {
     socketRef.current = io("wss://backend.vanii.ai");
+console.log("SessionId", sessionId);
 
     socketRef.current.on("connect", () => {
       socketRef.current?.emit("session_start", { sessionId });
