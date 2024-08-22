@@ -136,7 +136,8 @@ const Navbar: React.FC = () => {
                           toast.success("Logged out successfully");
                           authContext.setPrimaryValues({
                             loggedIn:false,
-                            id:""
+                            id:"",
+                            email:""
                           })
                         })
                         .catch(() => {

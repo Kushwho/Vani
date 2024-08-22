@@ -15,6 +15,7 @@ const App: FC = () => {
   >({
     loggedIn: false,
     id: "",
+    email:"",
   });
   const axiosInstance = axios.create({
     baseURL: "https://backend.vanii.ai/auth",

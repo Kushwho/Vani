@@ -53,6 +53,7 @@ const Login: FC = () => {
         auth?.setPrimaryValues({
           loggedIn: true,
           id: response.data._id,
+          email:""
         });
         toast.success("Login Successful. Navigating to Home Page");
         setTimeout(() => {
