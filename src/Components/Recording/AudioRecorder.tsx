@@ -30,13 +30,24 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
 
   console.log(auth?.primaryValues.id);
 
-  const [sessionId] = useState<string>(auth?.primaryValues.id || "1");
+  
+  const [sessionId,setSessionId] = useState<string>( "1");
+  useEffect(() => {
+    if (auth?.primaryValues.loggedIn) {
+      setSessionId(auth.primaryValues.id || "1");
+    } else {
+      toast.success(
+        "You are not logged in. Please log in to view this page. Navigating you to the home page"
+      );
+    }
+  }, [auth]);
   const [audioPlayer] = useState(new Audio());
   useEffect(() => {
     socketRef.current = io("wss://backend.vanii.ai");
-console.log("SessionId", sessionId);
+
 
     socketRef.current.on("connect", () => {
+      console.log("SendingThisSessionId", sessionId);
       socketRef.current?.emit("session_start", { sessionId });
       socketRef.current?.emit("join", { sessionId });
     });
