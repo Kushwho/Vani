@@ -14,5 +14,8 @@ export default async (
   console.log(data);
   
   const resp = await axios.get<GetUserResponse>(URL);
+  console.log(resp.data);
+  
   return resp.data;
+  
 };
