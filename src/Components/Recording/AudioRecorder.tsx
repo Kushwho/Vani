@@ -28,6 +28,8 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
       "You are not logged in.Please Log in to view this page.Navigating you to home page"
     );
   }
+  console.log("auth primary values", auth?.primaryValues);
+
   console.log(auth?.primaryValues.id);
 
   const [sessionId] = useState<string>(auth?.primaryValues.id || "1");
