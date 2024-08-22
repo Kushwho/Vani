@@ -53,9 +53,12 @@ export class MySocket {
     });
   }
 
+  
+
   // Stop listening to an event
   public off(event: string): void {
     this.socket.off(event);
+    this.socket.disconnect
   }
 
   // Get the socket ID

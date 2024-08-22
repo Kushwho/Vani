@@ -282,7 +282,8 @@ const Signup: FC = () => {
                 </p>
               )}
             </div>
-            <div className="flex justify-center mt-8">
+            <div className="flex justify-between mt-8  items-center">
+            <a className="outline-none underline" href="/login">Already have an account</a>
               <button
                 type="submit"
                 className="w-48 py-2 bg-orange-500 text-white font-bold rounded-md hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500"

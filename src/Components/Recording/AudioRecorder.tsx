@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef} from "react";
 import { Player } from "@lottiefiles/react-lottie-player";
 import { ChatHistoryProps } from "./Chat";
 import { io, Socket } from "socket.io-client";
@@ -9,11 +9,8 @@ export type AudioRecorderProps = {
   history: ChatHistoryProps;
 };
 
-const AudioRecorder: React.FC<AudioRecorderProps> = ({
-  setHistory,
-}) => {
+const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
   const [isRecording, setIsRecording] = useState(false);
- 
   const [currentAudio, setCurrentAudio] = useState<HTMLAudioElement | null>(
     null
   );
@@ -21,7 +18,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
   const socketRef = useRef<Socket | null>(null);
   const auth = useAuthContext();
   const [sessionId] = useState<string>(auth?.primaryValues.id || "1");
-
+  const [audioPlayer, _] = useState(new Audio());
   useEffect(() => {
     socketRef.current = io("wss://backend.vanii.ai");
 
@@ -57,6 +54,9 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
 
     return () => {
       socketRef.current?.disconnect();
+      socketRef.current?.emit("toggle_transcription", { action: "stop", sessionId });
+      socketRef.current?.emit("leave", { sessionId });
+      socketRef.current?.off()
     };
   }, [sessionId]);
 
@@ -105,7 +105,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
         currentAudio.currentTime = 0;
         setCurrentAudio(null);
       }
-     
+
       microphoneRef.current.stop();
       microphoneRef.current.stream.getTracks().forEach((track) => track.stop());
       socketRef.current?.emit("toggle_transcription", {
@@ -120,35 +120,50 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
   };
 
   const enqueueAudio = (audioBinary: ArrayBuffer) => {
-
     playAudio(audioBinary);
-
   };
 
- 
+  // ...
 
-  const playAudio = async (audioBinary: ArrayBuffer) => {
-    try {
-      const audioBlob = new Blob([audioBinary], { type: "audio/mpeg" });
-      const audioUrl = URL.createObjectURL(audioBlob);
-      const audio = new Audio(audioUrl);
-      setCurrentAudio(audio);
-      return new Promise<void>((resolve) => {
-        audio.onended = () => {
+  const playAudio = 
+    async (audioBinary: ArrayBuffer) => {
+   
+
+      try {
+        const audioBlob = new Blob([audioBinary], { type: "audio/mpeg" });
+        const audioUrl = URL.createObjectURL(audioBlob);
+        audioPlayer.pause();
+        audioPlayer.src = audioUrl;
+
+
+        audioPlayer.onpause = () => {
+
           URL.revokeObjectURL(audioUrl);
-          resolve();
         };
-        audio.play().catch((error) => {
-          console.error("Error playing audio:", error);
-          resolve();
-        });
-      });
-    } catch (error) {
-      console.error("Error playing audio:", error);
-    }
-  };
+        audioPlayer.onended = () => {
 
- 
+          URL.revokeObjectURL(audioUrl);
+        };
+        audioPlayer.oncancel = () => {
+
+          URL.revokeObjectURL(audioUrl);
+        };
+
+        try {
+          await audioPlayer.play();
+        } catch (error) {
+
+          console.error("Error playing audio:", error);
+        }
+      } catch (error) {
+
+        console.error("Error playing audio:", error);
+      }
+    }
+
+
+
+  // ...
 
   const handleRecordButtonClick = () => {
     if (!isRecording) {
@@ -159,8 +174,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
         voice: "Deepgram",
       });
       startRecording()
-        .then(() => {
-        })
+        .then(() => {})
         .catch((error) => console.error("Error starting recording:", error));
     } else {
       stopRecording().catch((error) =>
@@ -174,7 +188,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
       className={`${
         isRecording
           ? "relative grid place-items-center p-8"
-          : "m-auto mt-16 h-40 aspect-square bg-primary-100 border border-primary-400 rounded-full font-satoshiMedium text-md"
+          : "m-auto mt-16 h-48 aspect-square bg-primary-100 border border-primary-400 rounded-full font-satoshiMedium text-md"
       }`}
       onClick={handleRecordButtonClick}
     >
@@ -184,16 +198,16 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({
             autoplay
             loop
             src="/assets/icons/circle-wave.json"
-            className="h-80 aspect-square"
+            className="h-[450px] aspect-square"
           />
           <img
             src="/assets/icons/mic-outline.svg"
             alt="Microphone icon"
-            className="absolute h-16 w-16"
+            className="absolute h-20 w-20"
           />
         </>
       ) : (
-        <p>START</p>
+        <p className="text-xl font-semibold ">START</p>
       )}
     </button>
   );

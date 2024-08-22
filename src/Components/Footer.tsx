@@ -2,9 +2,9 @@ import React from "react";
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-primary-50">
-      <div className=" py-16 max-w-6xl mx-auto  flex flex-row justify-between items-center w-full">
-        <div className="flex  items-center gap-6 text-md">
+    <footer className="bg-primary-50  bottom-0  w-screen">
+      <div className="max-lg:px-6 py-16 max-w-6xl mx-auto  flex flex-row justify-between items-center w-full">
+        <div className="flex flex-row justify-center items-center gap-6 text-md">
           <div className="w-20 aspect-square flex-shrink-0 flex items-center">
             <img src="/logo.png" alt="Logo" className="object-contain" />
           </div>
