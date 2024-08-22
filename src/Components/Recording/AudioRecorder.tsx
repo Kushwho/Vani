@@ -21,9 +21,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
   const socketRef = useRef<Socket | null>(null);
   const auth = useAuthContext();
   if (!auth?.primaryValues.loggedIn) {
-    setTimeout(() => {
-      navigate("/");
-    }, 3000);
+
     toast.success(
       "You are not logged in.Please Log in to view this page.Navigating you to home page"
     );
