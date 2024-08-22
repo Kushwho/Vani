@@ -5,7 +5,9 @@ import { AxiosInstance } from "axios";
 const URL = "api/v1/user/get-user";
 type GetUserProps = void;
 
-type GetUserResponse = ApiResponse<Omit<UserDetails, "password">>;
+type GetUserResponse = ApiResponse<{
+  user:UserDetails
+}>;
 
 export default async (
   data: GetUserProps,
@@ -15,6 +17,7 @@ export default async (
   
   const resp = await axios.get<GetUserResponse>(URL);
   console.log(resp.data);
+  
   
   return resp.data;
   

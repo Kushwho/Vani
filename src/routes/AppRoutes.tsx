@@ -19,8 +19,8 @@ const AppRoutes: FC = () => {
     GetUser(undefined, axios).then((data) => {
       auth?.setPrimaryValues({
         loggedIn: true,
-        id: data.data._id,
-        email:data.data.email
+        id: data.data.user._id,
+        email:data.data.user.email
       });
     });
   },[]);
