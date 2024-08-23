@@ -140,11 +140,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
 
       microphoneRef.current.stop();
       microphoneRef.current.stream.getTracks().forEach((track) => track.stop());
-      socketRef.current?.emit("toggle_transcription", {
-        action: "stop",
-        sessionId,
-      });
-      socketRef.current?.emit("leave", { sessionId });
+     
       microphoneRef.current = null;
       setIsRecording(false);
       document.body.classList.remove("recording");
