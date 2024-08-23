@@ -41,52 +41,53 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
   }, [auth]);
   const [audioPlayer] = useState(new Audio());
   useEffect(() => {
-    if (sessionId == "1") return;
-    if (auth?.primaryValues.id) {
-      setSessionId(auth?.primaryValues.id);
-    }
-    socketRef.current = io("wss://backend.vanii.ai");
-
-    socketRef.current.on("connect", () => {
-      console.log("SendingThisSessionId", sessionId);
-      socketRef.current?.emit("session_start", { sessionId });
-      socketRef.current?.emit("join", { sessionId });
-    });
-
-    socketRef.current.on("transcription_update", (data) => {
-      const {
-        transcription,
-        audioBinary,
-        sessionId: responseSessionId,
-        user,
-      } = data;
-      console.log(responseSessionId);
-      console.log(data);
-      if (responseSessionId === sessionId) {
-        const captionsElement = document.getElementById("captions");
-        if (captionsElement) {
-          captionsElement.innerHTML = transcription;
-        }
-        setHistory((prevHistory) => ({
-          messages: [
-            ...prevHistory.messages,
-            { id: sessionId, sender: "other", content: transcription },
-            { id: sessionId, sender: "me", content: user },
-          ],
-        }));
-        enqueueAudio(audioBinary);
+    if (sessionId !== "1") {
+      if (auth?.primaryValues.id) {
+        setSessionId(auth?.primaryValues.id);
       }
-    });
+      socketRef.current = io("wss://backend.vanii.ai");
 
-    return () => {
-      socketRef.current?.disconnect();
-      socketRef.current?.emit("toggle_transcription", {
-        action: "stop",
-        sessionId,
+      socketRef.current.on("connect", () => {
+        console.log("SendingThisSessionId", sessionId);
+        socketRef.current?.emit("session_start", { sessionId });
+        socketRef.current?.emit("join", { sessionId });
       });
-      socketRef.current?.emit("leave", { sessionId });
-      socketRef.current?.off();
-    };
+
+      socketRef.current.on("transcription_update", (data) => {
+        const {
+          transcription,
+          audioBinary,
+          sessionId: responseSessionId,
+          user,
+        } = data;
+        console.log(responseSessionId);
+        console.log(data);
+        if (responseSessionId === sessionId) {
+          const captionsElement = document.getElementById("captions");
+          if (captionsElement) {
+            captionsElement.innerHTML = transcription;
+          }
+          setHistory((prevHistory) => ({
+            messages: [
+              ...prevHistory.messages,
+              { id: sessionId, sender: "other", content: transcription },
+              { id: sessionId, sender: "me", content: user },
+            ],
+          }));
+          enqueueAudio(audioBinary);
+        }
+      });
+
+      return () => {
+        socketRef.current?.disconnect();
+        socketRef.current?.emit("toggle_transcription", {
+          action: "stop",
+          sessionId,
+        });
+        socketRef.current?.emit("leave", { sessionId });
+        socketRef.current?.off();
+      };
+    }
   }, [sessionId]);
 
   const getMicrophone = async () => {
@@ -126,7 +127,6 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
       await openMicrophone(microphone, socketRef.current!);
     });
   };
-
 
   const stopRecording = async () => {
     if (isRecording && microphoneRef.current) {
