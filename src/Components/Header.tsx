@@ -15,7 +15,7 @@ const Navbar: React.FC = () => {
   const { dimensions } = useWindowDimensions();
   const navigate = useNavigate();
   const authContext = useAuthContext();
-  const axios = useAxiosContext()
+  const axios = useAxiosContext();
 
   useEffect(() => {
     const handleResize = () => setIsMobile(dimensions.width < 768);
@@ -123,6 +123,18 @@ const Navbar: React.FC = () => {
                   Blog
                 </a>
               </li>
+              {authContext?.primaryValues.loggedIn ? (
+                <li>
+                  <a
+                    href="/blogs"
+                    className="hover:text-primary-700 transition-colors duration-200"
+                  >
+                    Blog
+                  </a>
+                </li>
+              ) : (
+                <> </>
+              )}
               <li className="mx-2">
                 <button
                   id="btn-get-started"
@@ -135,10 +147,10 @@ const Navbar: React.FC = () => {
                         .then(() => {
                           toast.success("Logged out successfully");
                           authContext.setPrimaryValues({
-                            loggedIn:false,
-                            id:"",
-                            email:""
-                          })
+                            loggedIn: false,
+                            id: "",
+                            email: "",
+                          });
                         })
                         .catch(() => {
                           toast.error("Failed to logout");
