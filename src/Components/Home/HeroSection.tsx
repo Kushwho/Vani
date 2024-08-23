@@ -1,6 +1,10 @@
+import useAuthContext from "@/Hooks/useAuthContext";
 import { FC } from "react";
+import { useNavigate } from "react-router";
 
 const HeroSection: FC = () => {
+  const auth = useAuthContext();
+  const navigate = useNavigate();
   return (
     <section id="hero" className="observe bg-primary-50 py-14">
       <div className="max-w-screen-xl mx-auto max-md:px-8 md:px-24 flex flex-col justify-center items-center gap-16">
@@ -13,11 +17,6 @@ const HeroSection: FC = () => {
             style={{ backgroundImage: "url('/assets/images/img-1.jpeg')" }}
           ></div>
           <div className="flex flex-col h-full w-full gap-8">
-            <img
-              src="/assets/images/3d-4.webp"
-              className="rounded-medium h-30 bg-cover bg-center"
-            />
-
             <div className="p-8 rounded-medium border bg-primary-100 flex flex-col items-start gap-6">
               <h3 className="font-satoshi-medium text-lg">
                 Quick Onboarding | Speaking with AI | Personalized Learning |
@@ -29,19 +28,24 @@ const HeroSection: FC = () => {
                 of their background or location.
               </p>
               <div className="flex flex-wrap gap-5">
-                <button className="py-2 px-5 rounded-small font-satoshi-medium text-md">
-                  Get started
-                </button>
                 <button
-                  className="py-2 px-5 rounded-small font-satoshi-medium text-md border-2 border-dashed border-primary-700 text-primary-700"
+                  className="py-2 px-5 animate-pulse transition-all rounded-small font-satoshi-medium text-md border-2 border-dashed border-primary-700 text-primary-700"
                   onClick={() =>
-                    document.getElementById("trusted-by")?.scrollIntoView()
+                    auth?.primaryValues.loggedIn
+                      ? navigate("/record")
+                      : navigate("#about-us")
                   }
                 >
-                  Learn more
+                  {auth?.primaryValues.loggedIn
+                    ? "Start Learning"
+                    : "Learn More"}
                 </button>
               </div>
             </div>
+            <img
+              src="/assets/images/3d-4.webp"
+              className="rounded-medium h-30 bg-cover bg-center"
+            />
           </div>
         </div>
       </div>
