@@ -85,12 +85,15 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
           enqueueAudio(audioBinary);
         }
       });
+      const handleBeforeUnload = () => {
+        socketRef.current?.emit("leave", { sessionId });
+        socketRef.current?.disconnect();
+      };
+
+      window.addEventListener("beforeunload", handleBeforeUnload);
 
       return () => {
-        socketRef.current?.disconnect();
-
-        socketRef.current?.emit("leave", { sessionId });
-        socketRef.current?.off();
+        window.removeEventListener("beforeunload", handleBeforeUnload);
       };
     }
   }, [sessionId]);
