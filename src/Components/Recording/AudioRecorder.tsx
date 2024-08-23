@@ -3,7 +3,7 @@ import { Player } from "@lottiefiles/react-lottie-player";
 import { ChatHistoryProps } from "./Chat";
 import { io, Socket } from "socket.io-client";
 import useAuthContext from "@/Hooks/useAuthContext";
-import { useNavigate } from "react-router";
+
 import { toast } from "react-toastify";
 
 export type AudioRecorderProps = {
@@ -16,19 +16,19 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
   const [currentAudio, setCurrentAudio] = useState<HTMLAudioElement | null>(
     null
   );
-  const navigate = useNavigate();
+
   const microphoneRef = useRef<MediaRecorder | null>(null);
   const socketRef = useRef<Socket | null>(null);
   const auth = useAuthContext();
-  if (auth?.primaryValues.loggedIn === false) {
-    setTimeout(() => {
-      navigate("/");
-    }, 3000);
+  // if (auth?.primaryValues.loggedIn === false) {
+  //   setTimeout(() => {
+  //     navigate("/");
+  //   }, 3000);
 
-    toast.success(
-      "You are not logged in.Please Log in to view this page.Navigating you to home page"
-    );
-  }
+  //   toast.success(
+  //     "You are not logged in.Please Log in to view this page.Navigating you to home page"
+  //   );
+  // }
   console.log("auth primary values", auth?.primaryValues);
 
   console.log(auth?.primaryValues.id);
