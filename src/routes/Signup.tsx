@@ -197,7 +197,7 @@ const Signup: FC = () => {
                 <input
                   type="number"
                   name="phone"
-                  placeholder="10 digit phone number"
+                  placeholder="Phone number"
                   className="flex-1 px-3 py-2 border-t border-b border-r border-orange-300 rounded-r-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
                   value={formData.phone}
                   onChange={handleChange}

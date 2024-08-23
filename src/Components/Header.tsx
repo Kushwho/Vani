@@ -85,7 +85,7 @@ const Navbar: React.FC = () => {
       ref={ref}
     >
       <nav className="flex max-w-6xl mx-auto items-center justify-between">
-        <a href="#" className="w-14">
+        <a href="/" className="w-14">
           <img src="/logo.png" alt="vanii logo" />
         </a>
         <div className={menuContainerClasses}>
