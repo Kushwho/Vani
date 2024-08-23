@@ -35,48 +35,48 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
 
   const [sessionId, setSessionId] = useState<string>("1");
   useEffect(() => {
-    
-      toast.success(
-        "You are not logged in. Please log in to view this page. Navigating you to the home page"
-      );
-
+    toast.success(
+      "You are not logged in. Please log in to view this page. Navigating you to the home page"
+    );
   }, [auth]);
   const [audioPlayer] = useState(new Audio());
   useEffect(() => {
     if (sessionId == "1") return;
-      socketRef.current = io("ws://localhost:5173");
+    if (auth?.primaryValues.id) {
+      setSessionId(auth?.primaryValues.id);
+    }
+    socketRef.current = io("ws://localhost:5173");
 
-      socketRef.current.on("connect", () => {
-        console.log("SendingThisSessionId", sessionId);
-        socketRef.current?.emit("session_start", { sessionId });
-        socketRef.current?.emit("join", { sessionId });
-      });
+    socketRef.current.on("connect", () => {
+      console.log("SendingThisSessionId", sessionId);
+      socketRef.current?.emit("session_start", { sessionId });
+      socketRef.current?.emit("join", { sessionId });
+    });
 
-      socketRef.current.on("transcription_update", (data) => {
-        const {
-          transcription,
-          audioBinary,
-          sessionId: responseSessionId,
-          user,
-        } = data;
-        console.log(responseSessionId);
-        console.log(data);
-        if (responseSessionId === sessionId) {
-          const captionsElement = document.getElementById("captions");
-          if (captionsElement) {
-            captionsElement.innerHTML = transcription;
-          }
-          setHistory((prevHistory) => ({
-            messages: [
-              ...prevHistory.messages,
-              { id: sessionId, sender: "other", content: transcription },
-              { id: sessionId, sender: "me", content: user },
-            ],
-          }));
-          enqueueAudio(audioBinary);
+    socketRef.current.on("transcription_update", (data) => {
+      const {
+        transcription,
+        audioBinary,
+        sessionId: responseSessionId,
+        user,
+      } = data;
+      console.log(responseSessionId);
+      console.log(data);
+      if (responseSessionId === sessionId) {
+        const captionsElement = document.getElementById("captions");
+        if (captionsElement) {
+          captionsElement.innerHTML = transcription;
         }
-      });
-    
+        setHistory((prevHistory) => ({
+          messages: [
+            ...prevHistory.messages,
+            { id: sessionId, sender: "other", content: transcription },
+            { id: sessionId, sender: "me", content: user },
+          ],
+        }));
+        enqueueAudio(audioBinary);
+      }
+    });
 
     return () => {
       socketRef.current?.disconnect();
