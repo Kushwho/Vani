@@ -3,7 +3,7 @@ import { Player } from "@lottiefiles/react-lottie-player";
 import { ChatHistoryProps } from "./Chat";
 import { io, Socket } from "socket.io-client";
 import useAuthContext from "@/Hooks/useAuthContext";
-// import { useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 
 export type AudioRecorderProps = {
@@ -16,11 +16,14 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
   const [currentAudio, setCurrentAudio] = useState<HTMLAudioElement | null>(
     null
   );
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const microphoneRef = useRef<MediaRecorder | null>(null);
   const socketRef = useRef<Socket | null>(null);
   const auth = useAuthContext();
-  if (!auth?.primaryValues.loggedIn) {
+  if (auth?.primaryValues.loggedIn === false) {
+    setTimeout(() => {
+      navigate("/");
+    }, 3000);
 
     toast.success(
       "You are not logged in.Please Log in to view this page.Navigating you to home page"
@@ -30,8 +33,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
 
   console.log(auth?.primaryValues.id);
 
-  
-  const [sessionId,setSessionId] = useState<string>( "1");
+  const [sessionId, setSessionId] = useState<string>("1");
   useEffect(() => {
     if (auth?.primaryValues.loggedIn) {
       setSessionId(auth.primaryValues.id || "1");
@@ -43,39 +45,40 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
   }, [auth]);
   const [audioPlayer] = useState(new Audio());
   useEffect(() => {
-    socketRef.current = io("wss://backend.vanii.ai");
+    if (sessionId == "1") return;
+      socketRef.current = io("ws://localhost:5173");
 
+      socketRef.current.on("connect", () => {
+        console.log("SendingThisSessionId", sessionId);
+        socketRef.current?.emit("session_start", { sessionId });
+        socketRef.current?.emit("join", { sessionId });
+      });
 
-    socketRef.current.on("connect", () => {
-      console.log("SendingThisSessionId", sessionId);
-      socketRef.current?.emit("session_start", { sessionId });
-      socketRef.current?.emit("join", { sessionId });
-    });
-
-    socketRef.current.on("transcription_update", (data) => {
-      const {
-        transcription,
-        audioBinary,
-        sessionId: responseSessionId,
-        user,
-      } = data;
-      console.log(responseSessionId);
-      console.log(data);
-      if (responseSessionId === sessionId) {
-        const captionsElement = document.getElementById("captions");
-        if (captionsElement) {
-          captionsElement.innerHTML = transcription;
+      socketRef.current.on("transcription_update", (data) => {
+        const {
+          transcription,
+          audioBinary,
+          sessionId: responseSessionId,
+          user,
+        } = data;
+        console.log(responseSessionId);
+        console.log(data);
+        if (responseSessionId === sessionId) {
+          const captionsElement = document.getElementById("captions");
+          if (captionsElement) {
+            captionsElement.innerHTML = transcription;
+          }
+          setHistory((prevHistory) => ({
+            messages: [
+              ...prevHistory.messages,
+              { id: sessionId, sender: "other", content: transcription },
+              { id: sessionId, sender: "me", content: user },
+            ],
+          }));
+          enqueueAudio(audioBinary);
         }
-        setHistory((prevHistory) => ({
-          messages: [
-            ...prevHistory.messages,
-            { id: sessionId, sender: "other", content: transcription },
-            { id: sessionId, sender: "me", content: user },
-          ],
-        }));
-        enqueueAudio(audioBinary);
-      }
-    });
+      });
+    
 
     return () => {
       socketRef.current?.disconnect();
