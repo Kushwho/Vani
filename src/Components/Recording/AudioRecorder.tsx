@@ -41,10 +41,11 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
   }, [auth]);
   const [audioPlayer] = useState(new Audio());
   useEffect(() => {
+    if (auth?.primaryValues.id) {
+      setSessionId(auth?.primaryValues.id);
+    }
     if (sessionId !== "1") {
-      if (auth?.primaryValues.id) {
-        setSessionId(auth?.primaryValues.id);
-      }
+      
       socketRef.current = io("wss://backend.vanii.ai");
 
       socketRef.current.on("connect", () => {
