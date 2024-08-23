@@ -197,7 +197,11 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
       className={`${
         isRecording
           ? "relative grid place-items-center p-8"
-          : "m-auto mt-16 h-48 aspect-square bg-primary-100 border border-primary-400 rounded-full font-satoshiMedium text-md"
+          : `m-auto mt-16 h-48 aspect-square border rounded-full font-satoshiMedium text-md ${
+              isDeepgramOpened
+                ? "bg-primary-100 border-primary-400"
+                : "bg-gray-200 border-gray-400 opacity-50 cursor-not-allowed"
+            }`
       }`}
       onClick={() => {
         console.log("Deepgram Connection", isDeepgramOpened);
