@@ -123,6 +123,18 @@ const Navbar: React.FC = () => {
                   Blog
                 </a>
               </li>
+              {authContext?.primaryValues.loggedIn ? (
+                <li>
+                  <a
+                    href="/record"
+                    className="hover:text-primary-700 transition-colors duration-200"
+                  >
+                    Start Learning
+                  </a>
+                </li>
+              ) : (
+                <> </>
+              )}
               <li className="mx-2">
                 <button
                   id="btn-get-started"
