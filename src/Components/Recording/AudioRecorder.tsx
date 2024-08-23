@@ -45,7 +45,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
     if (auth?.primaryValues.id) {
       setSessionId(auth?.primaryValues.id);
     }
-    socketRef.current = io("ws://localhost:5173");
+    socketRef.current = io("wss://backend.vanii.ai");
 
     socketRef.current.on("connect", () => {
       console.log("SendingThisSessionId", sessionId);
@@ -126,6 +126,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
       await openMicrophone(microphone, socketRef.current!);
     });
   };
+
 
   const stopRecording = async () => {
     if (isRecording && microphoneRef.current) {
