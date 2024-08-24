@@ -5,6 +5,8 @@ import { io, Socket } from "socket.io-client";
 import useAuthContext from "@/Hooks/useAuthContext";
 
 import { toast } from "react-toastify";
+import { DEFAULT_SESSION_ID, NOT_LOGGED_IN_EMAIL } from "@/util/constant";
+import { useNavigate } from "react-router";
 
 export type AudioRecorderProps = {
   setHistory: React.Dispatch<React.SetStateAction<ChatHistoryProps>>;
@@ -16,6 +18,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
   const [currentAudio, setCurrentAudio] = useState<HTMLAudioElement | null>(
     null
   );
+  const navigate = useNavigate();
   const [isDeepgramOpened, setIsDeepGramOpened] = useState<boolean>(false);
 
   const microphoneRef = useRef<MediaRecorder | null>(null);
@@ -34,18 +37,25 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
 
   console.log(auth?.primaryValues.id);
 
-  const [sessionId, setSessionId] = useState<string>("1");
+  const [sessionId, setSessionId] = useState<string>(DEFAULT_SESSION_ID);
   useEffect(() => {
     if (auth?.primaryValues.id) {
       setSessionId(auth?.primaryValues.id);
     }
-    toast.success(
-      "You are not logged in. Please log in to view this page. Navigating you to the home page"
-    );
-  }, [auth]);
+  }, [auth?.primaryValues.id]);
+  useEffect(() => {
+    if (auth?.primaryValues.email === NOT_LOGGED_IN_EMAIL) {
+      toast.success(
+        "You are not logged in. Please log in to view this page. Navigating you to the home page"
+      );
+      setTimeout(() => {
+        navigate("/");
+      }, 3000);
+    }
+  }, [auth?.primaryValues.email, navigate]);
   const [audioPlayer] = useState(new Audio());
   useEffect(() => {
-    if (sessionId !== "1") {
+    if (sessionId !== DEFAULT_SESSION_ID) {
       socketRef.current = io("wss://backend.vanii.ai");
 
       socketRef.current.on("connect", () => {

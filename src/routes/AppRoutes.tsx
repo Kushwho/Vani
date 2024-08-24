@@ -11,19 +11,29 @@ import HealthCheck from "./HealthCheck";
 import useAuthContext from "@/Hooks/useAuthContext";
 import { useAxiosContext } from "@/Hooks/useAxiosContext";
 import GetUser from "@/services/Login/GetUser";
+import { DEFAULT_SESSION_ID, NOT_LOGGED_IN_EMAIL } from "@/util/constant";
 
 const AppRoutes: FC = () => {
   const auth = useAuthContext();
   const axios = useAxiosContext();
   useEffect(() => {
-    GetUser(undefined, axios).then((data) => {
-      auth?.setPrimaryValues({
-        loggedIn: true,
-        id: data.data.user._id,
-        email:data.data.user.email
+    GetUser(undefined, axios)
+      .then((data) => {
+        auth?.setPrimaryValues({
+          loggedIn: true,
+          id: data.data.user._id,
+          email: data.data.user.email,
+        });
+      })
+      .catch((err: any) => {
+        console.log(err);
+        auth?.setPrimaryValues({
+          loggedIn: false,
+          id: DEFAULT_SESSION_ID,
+          email: NOT_LOGGED_IN_EMAIL,
+        });
       });
-    });
-  },[]);
+  }, []);
 
   return (
     <>

@@ -6,7 +6,7 @@ const URL = "api/v1/user/get-user";
 type GetUserProps = void;
 
 type GetUserResponse = ApiResponse<{
-  user:UserDetails
+  user: UserDetails;
 }>;
 
 export default async (
@@ -14,11 +14,9 @@ export default async (
   axios: AxiosInstance
 ): Promise<GetUserResponse> => {
   console.log(data);
-  
+
   const resp = await axios.get<GetUserResponse>(URL);
   console.log(resp.data);
-  
-  
+
   return resp.data;
-  
 };

@@ -8,13 +8,14 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ApiError } from "./types/ApiError";
 import { AuthContextProvider, AuthContextType } from "./Hooks/useAuthContext";
+import { DEFAULT_SESSION_ID } from "./util/constant";
 
 const App: FC = () => {
   const [primaryValues, setPrimaryValues] = useState<
     AuthContextType["primaryValues"]
   >({
     loggedIn: false,
-    id: "",
+    id: DEFAULT_SESSION_ID,
     email:"",
   });
   const axiosInstance = axios.create({
