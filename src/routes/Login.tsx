@@ -4,6 +4,7 @@ import {
   FC,
   FormEvent,
   FormEventHandler,
+  useEffect,
   useState,
 } from "react";
 import bgImg from "../Images/bg.png";
@@ -15,15 +16,23 @@ import useAuthContext from "@/Hooks/useAuthContext";
 
 const Login: FC = () => {
   const auth = useAuthContext();
-
   const navigate = useNavigate();
 
-  if (auth?.primaryValues.loggedIn) {
-    toast.success("You are already loggedIn. Navigating to Home Page");
-    setTimeout(() => {
-      navigate("/");
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (auth?.primaryValues.loggedIn) {
+        toast.success("You are already loggedIn. Navigating to Home Page");
+        setTimeout(() => {
+          navigate("/");
+        }, 3000);
+      }
     }, 3000);
-  }
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [auth]);
+
+  
   const [formData, setFormData] = useState<{ email: string; password: string }>(
     { email: "", password: "" }
   );
@@ -53,7 +62,7 @@ const Login: FC = () => {
         auth?.setPrimaryValues({
           loggedIn: true,
           id: response.data._id,
-          email:""
+          email: "",
         });
         toast.success("Login Successful. Navigating to Home Page");
         setTimeout(() => {
