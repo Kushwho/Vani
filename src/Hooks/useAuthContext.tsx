@@ -1,17 +1,20 @@
+import { VOICE_OPTIONS } from "@/util/constant";
 import React, { createContext, useContext } from "react";
 
 interface AuthContextType {
   primaryValues: {
     loggedIn: boolean;
     id: string;
-    email:string;
+    email: string;
+    voice: VOICE_OPTIONS
   };
 
   setPrimaryValues: React.Dispatch<
     React.SetStateAction<{
       loggedIn: boolean;
       id: string;
-      email:string;
+      email: string;
+      voice: VOICE_OPTIONS
     }>
   >;
 }

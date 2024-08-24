@@ -30,9 +30,9 @@ const Login: FC = () => {
     return () => {
       clearTimeout(timeoutId);
     };
-  }, [auth]);
+  }, [auth, navigate]);
 
-  
+
   const [formData, setFormData] = useState<{ email: string; password: string }>(
     { email: "", password: "" }
   );
@@ -63,6 +63,7 @@ const Login: FC = () => {
           loggedIn: true,
           id: response.data._id,
           email: "",
+          voice:""
         });
         toast.success("Login Successful. Navigating to Home Page");
         setTimeout(() => {

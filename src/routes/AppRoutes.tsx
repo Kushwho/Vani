@@ -23,6 +23,7 @@ const AppRoutes: FC = () => {
           loggedIn: true,
           id: data.data.user._id,
           email: data.data.user.email,
+          voice: data.data.user.voice
         });
       })
       .catch((err: any) => {
@@ -31,6 +32,7 @@ const AppRoutes: FC = () => {
           loggedIn: false,
           id: DEFAULT_SESSION_ID,
           email: NOT_LOGGED_IN_EMAIL,
+          voice:""
         });
       });
   }, []);

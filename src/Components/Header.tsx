@@ -150,6 +150,7 @@ const Navbar: React.FC = () => {
                             loggedIn: false,
                             id: "",
                             email: "",
+                            voice:""
                           });
                         })
                         .catch(() => {

@@ -1,0 +1,76 @@
+import { VOICE_OPTIONS } from "./constant";
+
+export class AudioHandler {
+  private static instance: AudioHandler | null = null;
+  private voice: VOICE_OPTIONS;
+  private audioContext: AudioContext;
+  private audio: HTMLAudioElement;
+
+  private constructor(voice: VOICE_OPTIONS) {
+    this.voice = voice;
+    this.audioContext = new (window.AudioContext ||
+      window.webkitAudioContext)();
+    this.audio = new Audio();
+  }
+
+  public static getInstance(voice: VOICE_OPTIONS): AudioHandler {
+    if (!AudioHandler.instance) {
+      AudioHandler.instance = new AudioHandler(voice);
+    }
+    return AudioHandler.instance;
+  }
+
+  public async playSound(audioBinary: ArrayBuffer) {
+    switch (this.voice) {
+      case "Deepgram": {
+        const audioBlob = new Blob([audioBinary], { type: "audio/mpeg" });
+        const audioUrl = URL.createObjectURL(audioBlob);
+        this.audio.pause();
+        this.audio.src = audioUrl;
+        this.audio.onpause = () => {
+          URL.revokeObjectURL(audioUrl);
+        };
+        this.audio.onended = () => {
+          URL.revokeObjectURL(audioUrl);
+        };
+        this.audio.oncancel = () => {
+          URL.revokeObjectURL(audioUrl);
+        };
+        try {
+          await this.audio.play();
+        } catch (error) {
+          console.error("Error playing audio:", error);
+        }
+
+        break;
+      }
+      case "Cartesia": {
+        this.audioContext.close();
+        const audioBuffer = await this.audioContext.decodeAudioData(
+          audioBinary
+        );
+        const bufferSource = this.audioContext.createBufferSource();
+        bufferSource.buffer = audioBuffer;
+        bufferSource.connect(this.audioContext.destination);
+
+        bufferSource.start();
+        bufferSource.onended = () => {
+          this.audioContext.close();
+        };
+        break;
+      }
+    }
+  }
+
+  public pauseAudio() {
+    switch (this.voice) {
+      case "Deepgram":
+        this.audio.pause();
+        break;
+      case "Cartesia":
+        this.audioContext.close();
+        break;
+    }
+  }
+  // Add additional methods as needed
+}

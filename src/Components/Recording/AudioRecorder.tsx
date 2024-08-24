@@ -5,8 +5,13 @@ import { io, Socket } from "socket.io-client";
 import useAuthContext from "@/Hooks/useAuthContext";
 
 import { toast } from "react-toastify";
-import { DEFAULT_SESSION_ID, NOT_LOGGED_IN_EMAIL } from "@/util/constant";
+import {
+  DEFAULT_SESSION_ID,
+  NOT_LOGGED_IN_EMAIL,
+  VOICE_OPTIONS,
+} from "@/util/constant";
 import { useNavigate } from "react-router";
+import { AudioHandler } from "@/util/AudioHandler";
 
 export type AudioRecorderProps = {
   setHistory: React.Dispatch<React.SetStateAction<ChatHistoryProps>>;
@@ -18,12 +23,18 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
   const [currentAudio, setCurrentAudio] = useState<HTMLAudioElement | null>(
     null
   );
+
+  const [voice, setVoice] = useState<VOICE_OPTIONS>("");
   const navigate = useNavigate();
   const [isDeepgramOpened, setIsDeepGramOpened] = useState<boolean>(false);
 
   const microphoneRef = useRef<MediaRecorder | null>(null);
   const socketRef = useRef<Socket | null>(null);
   const auth = useAuthContext();
+
+  const [audio] = useState<AudioHandler>(
+    AudioHandler.getInstance(auth?.primaryValues.voice || "Deepgram")
+  );
   // if (auth?.primaryValues.loggedIn === false) {
   //   setTimeout(() => {
   //     navigate("/");
@@ -165,30 +176,8 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
   // ...
 
   const playAudio = async (audioBinary: ArrayBuffer) => {
-    try {
-      const audioBlob = new Blob([audioBinary], { type: "audio/mpeg" });
-      const audioUrl = URL.createObjectURL(audioBlob);
-      audioPlayer.pause();
-      audioPlayer.src = audioUrl;
 
-      audioPlayer.onpause = () => {
-        URL.revokeObjectURL(audioUrl);
-      };
-      audioPlayer.onended = () => {
-        URL.revokeObjectURL(audioUrl);
-      };
-      audioPlayer.oncancel = () => {
-        URL.revokeObjectURL(audioUrl);
-      };
-
-      try {
-        await audioPlayer.play();
-      } catch (error) {
-        console.error("Error playing audio:", error);
-      }
-    } catch (error) {
-      console.error("Error playing audio:", error);
-    }
+      audio.playSound(audioBinary);
   };
 
   // ...
