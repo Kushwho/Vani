@@ -5,10 +5,7 @@ import { io, Socket } from "socket.io-client";
 import useAuthContext from "@/Hooks/useAuthContext";
 
 import { toast } from "react-toastify";
-import {
-  DEFAULT_SESSION_ID,
-  NOT_LOGGED_IN_EMAIL,
-} from "@/util/constant";
+import { DEFAULT_SESSION_ID, NOT_LOGGED_IN_EMAIL } from "@/util/constant";
 import { useNavigate } from "react-router";
 import { AudioHandler } from "@/util/AudioHandler";
 
@@ -22,7 +19,6 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
   const [currentAudio, setCurrentAudio] = useState<HTMLAudioElement | null>(
     null
   );
-
 
   const navigate = useNavigate();
   const [isDeepgramOpened, setIsDeepGramOpened] = useState<boolean>(false);
@@ -64,6 +60,17 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
     }
   }, [auth?.primaryValues.email, navigate]);
 
+  function setupAudioTrigger(audioBinary: ArrayBuffer) {
+    const handleMouseMove = (_: any) => {
+      enqueueAudio(audioBinary);
+      document.removeEventListener("mousemove", handleMouseMove);
+    };
+
+    document.addEventListener("mousemove", handleMouseMove, { once: true });
+  }
+
+  // Usage
+
   useEffect(() => {
     if (sessionId !== DEFAULT_SESSION_ID) {
       socketRef.current = io("wss://backend.vanii.ai");
@@ -102,7 +109,8 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
               { id: sessionId, sender: "me", content: user },
             ],
           }));
-          enqueueAudio(audioBinary);
+
+          setupAudioTrigger(audioBinary);
         }
       });
       const handleBeforeUnload = () => {
@@ -175,8 +183,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
   // ...
 
   const playAudio = async (audioBinary: ArrayBuffer) => {
-
-      audio.playSound(audioBinary);
+    audio.playSound(audioBinary);
   };
 
   // ...
