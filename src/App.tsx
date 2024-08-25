@@ -17,6 +17,7 @@ const App: FC = () => {
     loggedIn: false,
     id: DEFAULT_SESSION_ID,
     email:"",
+    voice:"Deepgram"
   });
   const axiosInstance = axios.create({
     baseURL: "https://backend.vanii.ai/auth",

@@ -91,7 +91,8 @@ const Signup: FC = () => {
       fullname: formData.fullname,
       email: formData.email,
       password: formData.password,
-      phone: `${countryCode}${formData.phone}`, // Include country code
+      phone: `${countryCode}${formData.phone}`,
+       // Include country code
     };
 
     if (displayOtp) {
@@ -283,7 +284,9 @@ const Signup: FC = () => {
               )}
             </div>
             <div className="flex justify-between mt-8  items-center">
-            <a className="outline-none underline" href="/login">Already have an account</a>
+              <a className="outline-none underline" href="/login">
+                Already have an account
+              </a>
               <button
                 type="submit"
                 className="w-48 py-2 bg-orange-500 text-white font-bold rounded-md hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500"

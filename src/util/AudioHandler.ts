@@ -6,10 +6,11 @@ export class AudioHandler {
   private audioContext: AudioContext;
   private audio: HTMLAudioElement;
 
+  
   private constructor(voice: VOICE_OPTIONS) {
     this.voice = voice;
-    this.audioContext = new (window.AudioContext ||
-      window.webkitAudioContext)();
+
+    this.audioContext = new (window.AudioContext)();
     this.audio = new Audio();
   }
 

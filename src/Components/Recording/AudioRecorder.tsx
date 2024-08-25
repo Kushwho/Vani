@@ -8,7 +8,6 @@ import { toast } from "react-toastify";
 import {
   DEFAULT_SESSION_ID,
   NOT_LOGGED_IN_EMAIL,
-  VOICE_OPTIONS,
 } from "@/util/constant";
 import { useNavigate } from "react-router";
 import { AudioHandler } from "@/util/AudioHandler";
@@ -24,7 +23,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
     null
   );
 
-  const [voice, setVoice] = useState<VOICE_OPTIONS>("");
+
   const navigate = useNavigate();
   const [isDeepgramOpened, setIsDeepGramOpened] = useState<boolean>(false);
 
@@ -64,7 +63,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
       }, 3000);
     }
   }, [auth?.primaryValues.email, navigate]);
-  const [audioPlayer] = useState(new Audio());
+
   useEffect(() => {
     if (sessionId !== DEFAULT_SESSION_ID) {
       socketRef.current = io("wss://backend.vanii.ai");
