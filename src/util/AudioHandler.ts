@@ -6,11 +6,10 @@ export class AudioHandler {
   private audioContext: AudioContext;
   private audio: HTMLAudioElement;
 
-  
   private constructor(voice: VOICE_OPTIONS) {
     this.voice = voice;
 
-    this.audioContext = new (window.AudioContext)();
+    this.audioContext = new window.AudioContext();
     this.audio = new Audio();
   }
 
@@ -47,9 +46,14 @@ export class AudioHandler {
       }
       case "Cartesia": {
         this.audioContext.close();
-        const audioBuffer = await this.audioContext.decodeAudioData(
-          audioBinary
+        const float32Array = new Float32Array(audioBinary);
+        const audioBuffer = this.audioContext.createBuffer(
+          1,
+          float32Array.length,
+          44100
         );
+        audioBuffer.copyToChannel(float32Array, 0);
+
         const bufferSource = this.audioContext.createBufferSource();
         bufferSource.buffer = audioBuffer;
         bufferSource.connect(this.audioContext.destination);
