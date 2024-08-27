@@ -1,6 +1,6 @@
 import { VOICE_OPTIONS } from "./constant";
 
-import Cartesia, { Source, WebPlayer } from "@cartesia/cartesia-js";
+import  { Source, WebPlayer } from "@cartesia/cartesia-js";
 
 export class AudioHandler {
   private static instance: AudioHandler | null = null;
@@ -15,7 +15,7 @@ export class AudioHandler {
 
     this.audioContext = new window.AudioContext();
     this.audio = new Audio();
-    this.webPlayer = new WebPlayer({ bufferDuration: 1000 });
+    this.webPlayer = new WebPlayer({ bufferDuration: 3000 });
     this.webPlayerSource = new Source({
       sampleRate: 44100,
       encoding: "pcm_f32le",
