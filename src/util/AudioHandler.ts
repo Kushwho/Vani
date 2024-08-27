@@ -75,7 +75,7 @@ export class AudioHandler {
         //   this.audioContext.close();
         // };
         this.webPlayerSource.enqueue(new Float32Array(audioBinary));
-        this.webPlayer.resume()
+      
 
         break;
       }
