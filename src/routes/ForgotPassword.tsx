@@ -35,7 +35,7 @@ const ForgotPassword: FC<ForgotPasswordProps> = (): ReactElement => {
       verifyPassword: "",
     },
   });
-  const [otpSent, setOtpSent] = useState<boolean>(true);
+  const [otpSent, setOtpSent] = useState<boolean>(false);
   const [OTP, setOTP] = useState<string>("");
   const [orderId, setOrderId] = useState<string | null>(null);
 
