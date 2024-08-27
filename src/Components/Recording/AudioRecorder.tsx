@@ -81,7 +81,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
         socketRef.current?.emit("join", {
           sessionId,
           email: auth?.primaryValues.email || "",
-          voice: "Cartesia",
+          voice: "Deepgram",
         });
       });
       socketRef.current.on("deepgram_connection_opened", () => {
