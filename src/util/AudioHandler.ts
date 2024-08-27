@@ -1,27 +1,16 @@
 import { VOICE_OPTIONS } from "./constant";
 
-import  { Source, WebPlayer } from "@cartesia/cartesia-js";
-
 export class AudioHandler {
   private static instance: AudioHandler | null = null;
   private voice: VOICE_OPTIONS;
   private audioContext: AudioContext;
   private audio: HTMLAudioElement;
-  private webPlayer: WebPlayer;
-  private webPlayerSource: Source;
 
   private constructor(voice: VOICE_OPTIONS) {
     this.voice = voice;
 
     this.audioContext = new window.AudioContext();
     this.audio = new Audio();
-    this.webPlayer = new WebPlayer({ bufferDuration: 3000 });
-    this.webPlayerSource = new Source({
-      sampleRate: 44100,
-      encoding: "pcm_f32le",
-      container: "raw",
-    });
-    this.webPlayer.play(this.webPlayerSource);
   }
 
   public static getInstance(voice: VOICE_OPTIONS): AudioHandler {
@@ -56,27 +45,24 @@ export class AudioHandler {
         break;
       }
       case "Cartesia": {
-        // this.audioContext.close();
+        this.audioContext.close();
 
-        // const float32Array = new Float32Array(audioBinary);
-        // const audioBuffer = this.audioContext.createBuffer(
-        //   1,
-        //   float32Array.length,
-        //   44100
-        // );
-        // audioBuffer.copyToChannel(float32Array, 0);
+        const float32Array = new Float32Array(audioBinary);
+        const audioBuffer = this.audioContext.createBuffer(
+          1,
+          float32Array.length,
+          44100
+        );
+        audioBuffer.copyToChannel(float32Array, 0);
 
-        // const bufferSource = this.audioContext.createBufferSource();
-        // bufferSource.buffer = audioBuffer;
-        // bufferSource.connect(this.audioContext.destination);
+        const bufferSource = this.audioContext.createBufferSource();
+        bufferSource.buffer = audioBuffer;
+        bufferSource.connect(this.audioContext.destination);
 
-        // bufferSource.start();
-        // bufferSource.onended = () => {
-        //   this.audioContext.close();
-        // };
-        this.webPlayerSource.enqueue(new Float32Array(audioBinary));
-      
-
+        bufferSource.start();
+        bufferSource.onended = () => {
+          this.audioContext.close();
+        };
         break;
       }
     }
