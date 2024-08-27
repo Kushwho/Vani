@@ -160,6 +160,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
   };
 
   const stopRecording = async () => {
+    audio.pauseAudio();
     if (isRecording && microphoneRef.current) {
       if (currentAudio) {
         currentAudio.pause();

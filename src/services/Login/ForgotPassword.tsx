@@ -45,7 +45,7 @@ export const SendPasswordWithOtp = async ({
       message: string;
     }>
   >("/api/v1/user/forgot-password", {
-    sendOTP: true,
+    sendOTP: false,
     phone: phone,
     orderId: orderId,
     OTP: OTP,
