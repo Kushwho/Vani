@@ -6,6 +6,7 @@ import Logout from "@/services/Login/Logout";
 
 import { toast } from "react-toastify";
 import { useAxiosContext } from "@/Hooks/useAxiosContext";
+import { Link } from "react-router-dom";
 
 const Navbar: React.FC = () => {
   const [isActive, setIsActive] = useState(false);
@@ -92,45 +93,45 @@ const Navbar: React.FC = () => {
           <div className={menuItemsClasses}>
             <ul className="flex flex-col justify-center items-center md:flex-row gap-6 text-md">
               <li>
-                <a
-                  href="/"
+                <Link
+                  to="/"
                   className="hover:text-primary-700 transition-colors duration-200"
                 >
                   Home
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="/#about-us"
+                <Link
+                  to="/#about-us"
                   className="hover:text-primary-700 transition-colors duration-200"
                 >
                   About Us
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="/#features"
+                <Link
+                  to="/#features"
                   className="hover:text-primary-700 transition-colors duration-200"
                 >
                   Features
-                </a>
+                </Link>
               </li>
               <li>
-                <a
-                  href="/blogs"
+                <Link
+                  to="/blogs"
                   className="hover:text-primary-700 transition-colors duration-200"
                 >
                   Blog
-                </a>
+                </Link>
               </li>
               {authContext?.primaryValues.loggedIn ? (
                 <li>
-                  <a
-                    href="/record"
+                  <Link
+                    to="/record"
                     className="hover:text-primary-700 transition-colors duration-200"
                   >
                     Start Learning
-                  </a>
+                  </Link>
                 </li>
               ) : (
                 <> </>

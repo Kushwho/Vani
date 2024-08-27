@@ -18,8 +18,10 @@ import SendOtp, { SendOtpProps } from "@/services/OtpService/SendOtp.ts";
 import VerifyOtp from "@/services/OtpService/VerifyOtp.ts";
 import { toast } from "react-toastify";
 import ResendOtp from "@/services/OtpService/ResendOtp.ts";
-import CountryCode from "@/Components/Signup/CountryCode.tsx";
+
 import GetUser from "@/services/Login/GetUser.tsx";
+import PhoneNumberInput from "@/Components/PhoneNo.tsx";
+import PasswordVerify from "@/Components/PasswordVerfiy.tsx";
 
 const Signup: FC = () => {
   const axios = useAxiosContext();
@@ -56,12 +58,6 @@ const Signup: FC = () => {
     }));
   };
 
-  const handleCountryCodeChange: ChangeEventHandler<HTMLSelectElement> = (
-    event: ChangeEvent<HTMLSelectElement>
-  ) => {
-    setCountryCode(event.target.value);
-  };
-
   const handleOtpChange: ChangeEventHandler<HTMLInputElement> = (
     event: ChangeEvent<HTMLInputElement>
   ) => {
@@ -92,7 +88,7 @@ const Signup: FC = () => {
       email: formData.email,
       password: formData.password,
       phone: `${countryCode}${formData.phone}`,
-       // Include country code
+      // Include country code
     };
 
     if (displayOtp) {
@@ -187,23 +183,19 @@ const Signup: FC = () => {
               <label className="block text-xs font-medium text-gray-700 mb-1">
                 Phone Number
               </label>
-              <div className="flex">
-                <select
-                  value={countryCode}
-                  onChange={handleCountryCodeChange}
-                  className="w-20 px-2 py-2 border border-orange-300 rounded-l-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
-                >
-                  <CountryCode />
-                </select>
-                <input
-                  type="number"
-                  name="phone"
-                  placeholder="Phone number"
-                  className="flex-1 px-3 py-2 border-t border-b border-r border-orange-300 rounded-r-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
-                  value={formData.phone}
-                  onChange={handleChange}
-                />
-              </div>
+              <PhoneNumberInput
+                countryCode={countryCode}
+                onCountryCodeChange={setCountryCode}
+                phoneNumber={formData.phone}
+                onPhoneNumberChange={(val: string) => {
+                  sendFormData((prevValues) => {
+                    return {
+                      ...prevValues,
+                      phone: val,
+                    };
+                  });
+                }}
+              />
 
               {errorMessageDisplay.phone && (
                 <p className="text-red-500 text-xs">
@@ -247,42 +239,30 @@ const Signup: FC = () => {
                 )}
               </div>
             )}
-            <div className="mb-4">
-              <label className="block text-xs font-medium text-gray-700 mb-1">
-                Password
-              </label>
-              <input
-                type="password"
-                name="password"
-                placeholder="********"
-                className="w-full px-3 py-2 border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
-                value={formData.password}
-                onChange={handleChange}
-              />
-              {errorMessageDisplay.password && (
-                <p className="text-red-500 text-xs">
-                  {errorMessageDisplay.password}
-                </p>
-              )}
-            </div>
-            <div className="mb-4">
-              <label className="block text-xs font-medium text-gray-700 mb-1">
-                Verify Password
-              </label>
-              <input
-                type="password"
-                name="verifyPassword"
-                placeholder="********"
-                className="w-full px-3 py-2 border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
-                value={formData.verifyPassword}
-                onChange={handleChange}
-              />
-              {errorMessageDisplay.verifyPassword && (
-                <p className="text-red-500 text-xs">
-                  {errorMessageDisplay.verifyPassword}
-                </p>
-              )}
-            </div>
+            <PasswordVerify
+              password={formData.password}
+              verifyPassword={formData.verifyPassword}
+              onPasswordChange={(val: string) => {
+                sendFormData((prevValues) => {
+                  return {
+                    ...prevValues,
+                    password: val,
+                  };
+                });
+              }}
+              onVerifyPasswordChange={(val: string) => {
+                sendFormData((prevValues) => {
+                  return {
+                    ...prevValues,
+                    verifyPassword: val,
+                  };
+                });
+              }}
+              errorMessageDisplay={{
+                password: errorMessageDisplay.password,
+                verifyPassword: errorMessageDisplay.verifyPassword,
+              }}
+            />
             <div className="flex justify-between mt-8  items-center">
               <a className="outline-none underline" href="/login">
                 Already have an account

@@ -12,6 +12,7 @@ import useAuthContext from "@/Hooks/useAuthContext";
 import { useAxiosContext } from "@/Hooks/useAxiosContext";
 import GetUser from "@/services/Login/GetUser";
 import { DEFAULT_SESSION_ID, NOT_LOGGED_IN_EMAIL } from "@/util/constant";
+import ForgotPassword from "./ForgotPassword";
 
 const AppRoutes: FC = () => {
   const auth = useAuthContext();
@@ -23,7 +24,7 @@ const AppRoutes: FC = () => {
           loggedIn: true,
           id: data.data.user._id,
           email: data.data.user.email,
-          voice: data.data.user.voice
+          voice: data.data.user.voice,
         });
       })
       .catch((err: any) => {
@@ -32,7 +33,7 @@ const AppRoutes: FC = () => {
           loggedIn: false,
           id: DEFAULT_SESSION_ID,
           email: NOT_LOGGED_IN_EMAIL,
-          voice:""
+          voice: "",
         });
       });
   }, []);
@@ -76,14 +77,8 @@ const AppRoutes: FC = () => {
               </Layout>
             }
           />
-          <Route
-            path="/health-check"
-            element={
-              <Layout>
-                <HealthCheck />
-              </Layout>
-            }
-          />
+          <Route path="/health-check" element={<HealthCheck />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
         </Routes>
       </BrowserRouter>
     </>
