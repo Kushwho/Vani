@@ -9,6 +9,7 @@ import { DEFAULT_SESSION_ID, NOT_LOGGED_IN_EMAIL } from "@/util/constant";
 import { useNavigate } from "react-router";
 import { AudioHandler } from "@/util/AudioHandler";
 
+
 export type AudioRecorderProps = {
   setHistory: React.Dispatch<React.SetStateAction<ChatHistoryProps>>;
   history: ChatHistoryProps;
@@ -81,7 +82,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
         socketRef.current?.emit("join", {
           sessionId,
           email: auth?.primaryValues.email || "",
-          voice: "Deepgram",
+          voice: "Cartesia",
         });
       });
       socketRef.current.on("deepgram_connection_opened", () => {
