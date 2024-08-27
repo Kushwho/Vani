@@ -32,7 +32,6 @@ const Login: FC = () => {
     };
   }, [auth, navigate]);
 
-
   const [formData, setFormData] = useState<{ email: string; password: string }>(
     { email: "", password: "" }
   );
@@ -63,7 +62,7 @@ const Login: FC = () => {
           loggedIn: true,
           id: response.data._id,
           email: "",
-          voice:""
+          voice: "",
         });
         toast.success("Login Successful. Navigating to Home Page");
         setTimeout(() => {
@@ -122,15 +121,26 @@ const Login: FC = () => {
                 </div>
               )}
               <div className="flex flex-row justify-between items-center mb-6">
-                <a
-                  href="#"
-                  className="text-md underline underline-offset-2 text-orange-500 hover:underline"
-                  onClick={() => {
-                    navigate("/signup");
-                  }}
-                >
-                  Create account
-                </a>
+                <div className="flex flex-col gap-2">
+                  <a
+                    href="#"
+                    className="text-sm underline underline-offset-2 text-orange-500 hover:underline"
+                    onClick={() => {
+                      navigate("/signup");
+                    }}
+                  >
+                    Create account
+                  </a>
+                  <a
+                    href="#"
+                    className="text-sm underline underline-offset-2 text-orange-500 hover:underline"
+                    onClick={() => {
+                      navigate("/forgot-password");
+                    }}
+                  >
+                    Forgot password
+                  </a>
+                </div>
                 <button
                   type="submit"
                   className="px-4 bg-orange-500 text-white py-2 rounded-md hover:bg-orange-600 transition duration-200"
