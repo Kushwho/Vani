@@ -221,8 +221,7 @@ const ForgotPassword: FC<ForgotPasswordProps> = (): ReactElement => {
                   
                   `}
                 disabled={
-                  otpSent ||
-                  (buttonStates.changePassword && buttonStates.sendOTP)
+                  (!buttonStates.changePassword || !buttonStates.sendOTP)
                 }
                 onClick={(event) => {
                   otpSent ? changePassword(event) : sendOTP(event);
