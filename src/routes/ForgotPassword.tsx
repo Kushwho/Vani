@@ -50,7 +50,7 @@ const ForgotPassword: FC<ForgotPasswordProps> = (): ReactElement => {
 
   const sendOTP = async (_: FormEvent) => {
     console.log("hello wolr");
-    
+
     setButtonStates({
       sendOTP: false,
       changePassword: false,
@@ -220,9 +220,7 @@ const ForgotPassword: FC<ForgotPasswordProps> = (): ReactElement => {
                   }
                   
                   `}
-                disabled={
-                  (!buttonStates.changePassword || !buttonStates.sendOTP)
-                }
+              
                 onClick={(event) => {
                   otpSent ? changePassword(event) : sendOTP(event);
                 }}
