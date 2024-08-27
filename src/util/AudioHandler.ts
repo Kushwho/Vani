@@ -46,8 +46,7 @@ export class AudioHandler {
         break;
       }
       case "Cartesia": {
- 
-      this.audioContext.resume();
+        this.audioContext.resume();
 
         const float32Array = new Float32Array(audioBinary);
         const audioBuffer = this.audioContext.createBuffer(
@@ -63,7 +62,7 @@ export class AudioHandler {
 
         bufferSource.start();
         bufferSource.onended = () => {
-          this.audioContext.close();
+          this.audioContext.suspend();
         };
         break;
       }
@@ -76,7 +75,7 @@ export class AudioHandler {
         this.audio.pause();
         break;
       case "Cartesia":
-        this.audioContext.close();
+        this.audioContext.suspend();
         break;
     }
   }
