@@ -175,9 +175,8 @@ const ForgotPassword: FC<ForgotPasswordProps> = (): ReactElement => {
                       onVerifyPasswordChange={(val: string) => {
                         if (
                           passwordData.password.length >= 8 &&
-                          passwordData.password ===
-                           val &&
-                          OTP.length>=8
+                          passwordData.password === val &&
+                          OTP.length >= 8
                         ) {
                           setButtonStates({
                             sendOTP: false,
@@ -224,7 +223,7 @@ const ForgotPassword: FC<ForgotPasswordProps> = (): ReactElement => {
                   (!buttonStates.changePassword && !buttonStates.sendOTP)
                 }
                 onClick={(event) => {
-                  otpSent ? sendOTP(event) : changePassword(event);
+                  otpSent ? changePassword(event) : sendOTP(event);
                 }}
               >
                 {otpSent ? "Change Password" : "Send OTP"}
