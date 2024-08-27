@@ -45,7 +45,8 @@ export class AudioHandler {
         break;
       }
       case "Cartesia": {
-        this.audioContext.close();
+ 
+      
 
         const float32Array = new Float32Array(audioBinary);
         const audioBuffer = this.audioContext.createBuffer(
