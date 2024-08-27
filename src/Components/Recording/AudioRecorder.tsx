@@ -29,7 +29,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
   const auth = useAuthContext();
 
   const [audio] = useState<AudioHandler>(
-    AudioHandler.getInstance("Cartesia")
+    AudioHandler.getInstance("Deepgram")
   );
   // if (auth?.primaryValues.loggedIn === false) {
   //   setTimeout(() => {
