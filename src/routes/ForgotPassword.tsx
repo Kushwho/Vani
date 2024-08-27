@@ -49,6 +49,8 @@ const ForgotPassword: FC<ForgotPasswordProps> = (): ReactElement => {
   const axios = useAxiosContext();
 
   const sendOTP = async (_: FormEvent) => {
+    console.log("hello wolr");
+    
     setButtonStates({
       sendOTP: false,
       changePassword: false,
@@ -205,7 +207,7 @@ const ForgotPassword: FC<ForgotPasswordProps> = (): ReactElement => {
                 )}
               </div>
               <button
-                type="submit"
+                type="button"
                 className={`w-48 py-2  font-bold rounded-md  focus:outline-none focus:ring-2 focus:ring-orange-500 
                   ${
                     otpSent
@@ -219,8 +221,8 @@ const ForgotPassword: FC<ForgotPasswordProps> = (): ReactElement => {
                   
                   `}
                 disabled={
-                  !otpSent ||
-                  (!buttonStates.changePassword && !buttonStates.sendOTP)
+                  otpSent ||
+                  (buttonStates.changePassword && buttonStates.sendOTP)
                 }
                 onClick={(event) => {
                   otpSent ? changePassword(event) : sendOTP(event);
