@@ -178,7 +178,7 @@ const ForgotPassword: FC<ForgotPasswordProps> = (): ReactElement => {
                         if (
                           passwordData.password.length >= 8 &&
                           passwordData.password === val &&
-                          OTP.length >= 8
+                          OTP.length >= 6
                         ) {
                           setButtonStates({
                             sendOTP: false,
