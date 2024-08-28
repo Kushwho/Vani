@@ -9,7 +9,6 @@ import { DEFAULT_SESSION_ID, NOT_LOGGED_IN_EMAIL } from "@/util/constant";
 import { useNavigate } from "react-router";
 import { AudioHandler } from "@/util/AudioHandler";
 
-
 export type AudioRecorderProps = {
   setHistory: React.Dispatch<React.SetStateAction<ChatHistoryProps>>;
   history: ChatHistoryProps;
@@ -28,9 +27,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
   const socketRef = useRef<Socket | null>(null);
   const auth = useAuthContext();
 
-  const [audio] = useState<AudioHandler>(
-    AudioHandler.getInstance("Deepgram")
-  );
+  const [audio] = useState<AudioHandler>(AudioHandler.getInstance("Deepgram"));
   // if (auth?.primaryValues.loggedIn === false) {
   //   setTimeout(() => {
   //     navigate("/");
@@ -62,8 +59,8 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
   }, [auth?.primaryValues.email, navigate]);
 
   async function setupAudioTrigger(audioBinary: ArrayBuffer) {
-    const handleMouseMove = (_: any) => {
-      await enqueueAudio(audioBinary);
+    const handleMouseMove = async (_: any) => {
+      enqueueAudio(audioBinary);
       document.removeEventListener("mousemove", handleMouseMove);
     };
 
