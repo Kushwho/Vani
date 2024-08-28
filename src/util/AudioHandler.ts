@@ -69,13 +69,13 @@ export class AudioHandler {
     }
   }
 
-  public pauseAudio() {
+  public async pauseAudio() {
     switch (this.voice) {
       case "Deepgram":
         this.audio.pause();
         break;
       case "Cartesia":
-        this.audioContext.suspend();
+        await this.audioContext.suspend();
         break;
     }
   }
