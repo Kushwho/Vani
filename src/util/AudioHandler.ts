@@ -10,7 +10,7 @@ export class AudioHandler {
     this.voice = voice;
 
     this.audioContext = new window.AudioContext();
-
+    this.audioContext.audioWorklet.addModule('my-audio-processor.js')
     this.audio = new Audio();
   }
 
@@ -47,6 +47,7 @@ export class AudioHandler {
       }
       case "Cartesia": {
         this.audioContext.resume();
+
 
         const float32Array = new Float32Array(audioBinary);
         const audioBuffer = this.audioContext.createBuffer(

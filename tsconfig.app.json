@@ -29,5 +29,5 @@
       "@assets/*": ["src/assets/*"]
     }
   },
-  "include": ["src"]
+  "include": ["src", "public/my-audio-processor.js"]
 }
