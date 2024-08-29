@@ -10,7 +10,7 @@ const Record: FC = () => {
 
   return (
     <main className="">
-      <div className="min-h-[480px] relative flex flex-col gap-16 justify-center items-center pb-16">
+      <div className="min-h-[480px] relative flex flex-col gap-16 justify-center items-center pb-16 ">
         <div className="relative">
           <AudioRecorder setHistory={setMessages} history={messages} />
         </div>
