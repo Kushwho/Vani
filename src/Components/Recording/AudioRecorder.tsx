@@ -27,7 +27,9 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
   const socketRef = useRef<Socket | null>(null);
   const auth = useAuthContext();
 
-  const [audio] = useState<AudioHandler>(AudioHandler.getInstance("Cartesia"));
+  const [audio] = useState<AudioHandler>(
+    AudioHandler.getInstance(auth?.primaryValues.voice || "Deepgram")
+  );
   // if (auth?.primaryValues.loggedIn === false) {
   //   setTimeout(() => {
   //     navigate("/");
@@ -60,7 +62,6 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
 
   async function setupAudioTrigger(audioBinary: ArrayBuffer) {
     const handleMouseMove = async (_: any) => {
-  
       document.removeEventListener("mousemove", handleMouseMove);
     };
     enqueueAudio(audioBinary);
@@ -79,7 +80,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
         socketRef.current?.emit("join", {
           sessionId,
           email: auth?.primaryValues.email || "",
-          voice: "Cartesia",
+          voice: audio,
         });
       });
       socketRef.current.on("deepgram_connection_opened", () => {
