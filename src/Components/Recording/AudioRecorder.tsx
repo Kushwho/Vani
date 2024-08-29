@@ -77,6 +77,8 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
       socketRef.current.on("connect", () => {
         console.log("SendingThisSessionId", sessionId);
         socketRef.current?.emit("session_start", { sessionId });
+        console.log(audio);
+
         socketRef.current?.emit("join", {
           sessionId,
           email: auth?.primaryValues.email || "",
