@@ -21,43 +21,47 @@ export class AudioHandler {
     return AudioHandler.instance;
   }
 
-  public async pcmToWav(
-    pcmData: ArrayBuffer,
-    sampleRate: number,
-    numChannels: number = 1
+  private async pcmFloatToWavBlob(
+    pcmData: Float32Array,
+    sampleRate: number
   ): Promise<Blob> {
-    const byteRate = sampleRate * numChannels * 2; // 16-bit audio, so 2 bytes per sample
-    const blockAlign = numChannels * 2; // 2 bytes per sample for each channel
+    const numChannels = 1; // Mono
+    const bitDepth = 32;
+    const bytesPerSample = bitDepth / 8;
+    const blockAlign = numChannels * bytesPerSample;
+    const byteRate = sampleRate * blockAlign;
+    const dataSize = pcmData.length * bytesPerSample;
+    const bufferSize = 44 + dataSize;
+    const buffer = new ArrayBuffer(bufferSize);
+    const view = new DataView(buffer);
 
-    const wavHeader = new ArrayBuffer(44);
-    const view = new DataView(wavHeader);
+    // Write WAV header
+    const writeString = (offset: number, string: string) => {
+      for (let i = 0; i < string.length; i++) {
+        view.setUint8(offset + i, string.charCodeAt(i));
+      }
+    };
 
-    // RIFF chunk descriptor
-    view.setUint32(0, 0x52494646, false); // "RIFF" in ASCII
-    view.setUint32(4, 36 + pcmData.byteLength, true); // file size minus first 8 bytes
-    view.setUint32(8, 0x57415645, false); // "WAVE" in ASCII
+    writeString(0, "RIFF");
+    view.setUint32(4, bufferSize - 8, true);
+    writeString(8, "WAVE");
+    writeString(12, "fmt ");
+    view.setUint32(16, 16, true);
+    view.setUint16(20, 3, true); // AudioFormat 3 for IEEE float
+    view.setUint16(22, numChannels, true);
+    view.setUint32(24, sampleRate, true);
+    view.setUint32(28, byteRate, true);
+    view.setUint16(32, blockAlign, true);
+    view.setUint16(34, bitDepth, true);
+    writeString(36, "data");
+    view.setUint32(40, dataSize, true);
 
-    // fmt subchunk
-    view.setUint32(12, 0x666d7420, false); // "fmt " in ASCII
-    view.setUint32(16, 16, true); // Subchunk1Size (16 for PCM)
-    view.setUint16(20, 1, true); // AudioFormat (1 for PCM)
-    view.setUint16(22, numChannels, true); // Number of channels
-    view.setUint32(24, sampleRate, true); // Sample rate
-    view.setUint32(28, byteRate, true); // Byte rate
-    view.setUint16(32, blockAlign, true); // Block align
-    view.setUint16(34, 16, true); // Bits per sample (16-bit)
+    // Write PCM data
+    for (let i = 0; i < pcmData.length; i++) {
+      view.setFloat32(44 + i * bytesPerSample, pcmData[i], true);
+    }
 
-    // data subchunk
-    view.setUint32(36, 0x64617461, false); // "data" in ASCII
-    view.setUint32(40, pcmData.byteLength, true); // Subchunk2Size (data size)
-
-    // Create a Uint8Array combining the header and the PCM data
-    const wavBuffer = new Uint8Array(wavHeader.byteLength + pcmData.byteLength);
-    wavBuffer.set(new Uint8Array(wavHeader), 0);
-    wavBuffer.set(new Uint8Array(pcmData), wavHeader.byteLength);
-
-    // Return the Blob object containing the WAV file
-    return new Blob([wavBuffer], { type: "audio/wav" });
+    return new Blob([buffer], { type: "audio/wav" });
   }
   public async playSound(audioBinary: ArrayBuffer) {
     switch (this.voice) {
@@ -84,18 +88,16 @@ export class AudioHandler {
         break;
       }
       case "Cartesia": {
-
         this.audioContext.resume();
 
-        this.audio.pause()
+        this.audio.pause();
         console.log("Playing audio");
-        
+
         const float32Array = new Float32Array(audioBinary);
-        const toPlayFile = await this.pcmToWav(float32Array, 44100, 1);
+        const toPlayFile = await this.pcmFloatToWavBlob(float32Array, 44100);
         const audioUrl = URL.createObjectURL(toPlayFile);
         this.audio.src = audioUrl;
 
-        
         this.audio.onpause = () => {
           URL.revokeObjectURL(audioUrl);
         };
@@ -107,8 +109,6 @@ export class AudioHandler {
         };
         try {
           await this.audio.play();
-          console.log("Playing audio 1");
-          
         } catch (error) {
           console.error("Error playing audio:", error);
         }
