@@ -77,7 +77,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
       socketRef.current.on("connect", () => {
         console.log("SendingThisSessionId", sessionId);
         socketRef.current?.emit("session_start", { sessionId });
-        console.log(auth?.primaryValues.voice);
+        console.log(audio.voice);
 
         socketRef.current?.emit("join", {
           sessionId,
@@ -149,7 +149,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
           socket.emit("audio_stream", { data: event.data, sessionId });
         }
       };
-      microphone.start(1000);
+      microphone.start(500);
     });
   };
 
