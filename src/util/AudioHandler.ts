@@ -86,6 +86,8 @@ export class AudioHandler {
       case "Cartesia": {
         this.audioContext.resume();
 
+        this.audio.pause()
+
         const float32Array = new Float32Array(audioBinary);
         const toPlayFile = await this.pcmToWav(float32Array, 44100, 1);
         const audioUrl = URL.createObjectURL(toPlayFile);
