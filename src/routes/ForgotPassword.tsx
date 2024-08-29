@@ -86,7 +86,7 @@ const ForgotPassword: FC<ForgotPasswordProps> = (): ReactElement => {
           })
         }
       }).catch((err) => {
-        toast(err.message);
+        toast.error(err.message);
       });
       console.log(resp);
       
