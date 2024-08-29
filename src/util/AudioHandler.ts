@@ -84,14 +84,18 @@ export class AudioHandler {
         break;
       }
       case "Cartesia": {
+
         this.audioContext.resume();
 
         this.audio.pause()
-
+        console.log("Playing audio");
+        
         const float32Array = new Float32Array(audioBinary);
         const toPlayFile = await this.pcmToWav(float32Array, 44100, 1);
         const audioUrl = URL.createObjectURL(toPlayFile);
         this.audio.src = audioUrl;
+
+        
         this.audio.onpause = () => {
           URL.revokeObjectURL(audioUrl);
         };
@@ -103,6 +107,8 @@ export class AudioHandler {
         };
         try {
           await this.audio.play();
+          console.log("Playing audio 1");
+          
         } catch (error) {
           console.error("Error playing audio:", error);
         }
