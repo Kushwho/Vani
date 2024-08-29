@@ -13,7 +13,7 @@ export interface ChatHistoryProps {
 
 const ChatHistory: React.FC<ChatHistoryProps> = ({ messages }) => {
   return (
-    <section className=" py-16 h-fit bg-primary-50">
+    <section className=" py-16 h-fit bg-primary-50 max-md:p-8">
       <h2 className="text-xl font-bold text-center w-full">Chat History</h2>
       <div className="flex flex-col p-4  rounded-lg  w-full max-w-6xl mx-auto h-[500px] h-full">
         {messages.length === 0 ? (

@@ -9,9 +9,9 @@ const Record: FC = () => {
   const [messages, setMessages] = useState<ChatHistoryProps>({ messages: [] });
 
   return (
-    <main className="max-md:p-8">
+    <main className="">
       <div className="min-h-[480px] relative flex flex-col gap-16 justify-center items-center pb-16 ">
-        <div className="relative">
+        <div className="relative max-md:p-8">
           <AudioRecorder setHistory={setMessages} history={messages} />
         </div>
 
