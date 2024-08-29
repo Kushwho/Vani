@@ -2,7 +2,7 @@ import { VOICE_OPTIONS } from "./constant";
 
 export class AudioHandler {
   private static instance: AudioHandler | null = null;
-  private voice: VOICE_OPTIONS;
+  public voice: VOICE_OPTIONS;
   private audioContext: AudioContext;
   private audio: HTMLAudioElement;
 
