@@ -140,6 +140,8 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
         };
 
         microphoneRef.current!.start(500);
+      }).catch((err) => {
+        console.log(err);
       });
     }
   };
