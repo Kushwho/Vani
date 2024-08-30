@@ -16,9 +16,6 @@ export type AudioRecorderProps = {
 
 const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
   const [isRecording, setIsRecording] = useState(false);
-  const [currentAudio, setCurrentAudio] = useState<HTMLAudioElement | null>(
-    null
-  );
 
   const navigate = useNavigate();
   const [isDeepgramOpened, setIsDeepGramOpened] = useState<boolean>(false);
