@@ -128,9 +128,6 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
   const openMicrophone = async (socket: Socket, createdNew: boolean) => {
     if (createdNew) {
    
-      microphoneRef.current!.onpause = () => console.log("Recording paused");
-      microphoneRef.current!.onresume = () => console.log("Recording resumed");
-
       return new Promise<void>((resolve) => {
         microphoneRef.current!.onstart = () => {
           console.log("Microphone opened");
@@ -166,7 +163,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
     audio.pauseAudio();
     if (isRecording && microphoneRef.current) {
       microphoneRef.current.pause();
-      microphoneRef.current.stream.getTracks().forEach((track) => track.stop());
+
 
       setIsRecording(false);
       document.body.classList.remove("recording");
