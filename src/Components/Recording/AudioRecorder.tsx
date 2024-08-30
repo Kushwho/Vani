@@ -117,7 +117,11 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
 
   const getMicrophone = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const stream = await navigator.mediaDevices
+        .getUserMedia({ audio: true })
+        .catch((err) => {
+          console.log(err);
+        });
       return new MediaRecorder(stream, { mimeType: "audio/webm" });
     } catch (error) {
       console.error("Error accessing microphone:", error);
@@ -127,6 +131,8 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
 
   const openMicrophone = async (socket: Socket) => {
     if (microphoneRef && microphoneRef.current) {
+      console.log(microphoneRef.current);
+
       return new Promise<void>((resolve) => {
         microphoneRef.current!.onstart = () => {
           console.log("Microphone opened");
