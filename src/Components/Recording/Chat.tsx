@@ -20,7 +20,7 @@ const ChatHistory: React.FC<ChatHistoryProps> = ({ messages }) => {
           <div className="text-gray-500 text-center">No messages yet</div>
         ) : (
           <div className="flex flex-col gap-2">
-            {messages.map((msg) => (
+            {messages.reverse().map((msg) => (
               <div
                 key={msg.id}
                 className={`p-3 rounded-lg ${
