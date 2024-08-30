@@ -60,14 +60,6 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
     }
   }, [auth?.primaryValues.email, navigate]);
 
-  async function setupAudioTrigger(audioBinary: ArrayBuffer) {
-    const handleMouseMove = async (_: any) => {
-      document.removeEventListener("mousemove", handleMouseMove);
-    };
-    enqueueAudio(audioBinary);
-    document.addEventListener("mousemove", handleMouseMove, { once: true });
-  }
-
   // Usage
 
   useEffect(() => {
@@ -110,8 +102,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
               { id: sessionId, sender: "me", content: user },
             ],
           }));
-
-          setupAudioTrigger(audioBinary);
+          enqueueAudio(audioBinary);
         }
       });
       const handleBeforeUnload = () => {
@@ -137,42 +128,41 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
     }
   };
 
-  const openMicrophone = async (microphone: MediaRecorder, socket: Socket) => {
-    return new Promise<void>((resolve) => {
-      microphone.onstart = () => {
-        console.log("Client: Microphone opened");
-        document.body.classList.add("recording");
-        resolve();
-      };
-      microphone.ondataavailable = async (event) => {
-        if (event.data.size > 0) {
-          socket.emit("audio_stream", { data: event.data, sessionId });
-        }
-      };
-      microphone.start(500);
-    });
+  const openMicrophone = async (socket: Socket) => {
+    if (microphoneRef && microphoneRef.current) {
+      return new Promise<void>((resolve) => {
+        microphoneRef.current!.onstart = () => {
+          console.log("Microphone opened");
+          document.body.classList.add("recording");
+          resolve();
+        };
+        microphoneRef.current!.ondataavailable = async (event) => {
+          if (event.data.size > 0) {
+            socket.emit("audio_stream", { data: event.data, sessionId });
+          }
+        };
+
+        microphoneRef.current!.start(500);
+      });
+    }
   };
 
   const startRecording = async () => {
     setIsRecording(true);
-    const microphone = await getMicrophone();
-    microphoneRef.current = microphone;
-    await openMicrophone(microphone, socketRef.current!);
+    if (!microphoneRef.current) {
+      const microphone = await getMicrophone();
+      microphoneRef.current = microphone;
+    }
+
+    await openMicrophone(socketRef.current!);
   };
 
   const stopRecording = async () => {
     audio.pauseAudio();
     if (isRecording && microphoneRef.current) {
-      if (currentAudio) {
-        currentAudio.pause();
-        currentAudio.currentTime = 0;
-        setCurrentAudio(null);
-      }
-
       microphoneRef.current.stop();
       microphoneRef.current.stream.getTracks().forEach((track) => track.stop());
 
-      microphoneRef.current = null;
       setIsRecording(false);
       document.body.classList.remove("recording");
     }
