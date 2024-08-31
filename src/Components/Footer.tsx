@@ -22,7 +22,7 @@ const Footer: React.FC = () => {
               <a href="#" className="flex items-center gap-2">
                 <img
                   src="/Mail.svg"
-                  alt="Email"
+                  alt="Email Icon"
                   className="w-8 h-8"
                 />
                 Email
@@ -32,7 +32,7 @@ const Footer: React.FC = () => {
               <a href="#" className="flex items-center gap-2">
                 <img
                   src="/XLogo.svg"
-                  alt="Twitter"
+                  alt="Twitter Icon"
                   className="w-8 h-8"
                 />
                 Twitter
@@ -42,7 +42,7 @@ const Footer: React.FC = () => {
               <a href="#" className="flex items-center gap-2">
                 <img
                   src="/LinkedinLogo.svg"
-                  alt="LinkedIn"
+                  alt="LinkedIn Icon"
                   className="w-8 h-8"
                 />
                 LinkedIn

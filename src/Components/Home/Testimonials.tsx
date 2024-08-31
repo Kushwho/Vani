@@ -10,7 +10,7 @@ const Testimonials: FC = () => {
           </h2>
           <div className="img-transition rounded-lg max-h-[18rem] w-full aspect-video">
             <img
-              src="/assets/images/3d-2.jpg"
+              src="/assets/images/3d-2.webp"
               alt="abstract 3d image of a building"
               className="transition-transform duration-1000 ease-in-out rounded-lg"
             />

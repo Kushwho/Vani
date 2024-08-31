@@ -14,7 +14,7 @@ const HeroSection: FC = () => {
         <div className="grid grid-cols-2 max-md:grid-cols-1 gap-8 items-center">
           <div
             className="rounded-medium h-full min-h-[29rem] bg-cover bg-center"
-            style={{ backgroundImage: "url('/assets/images/img-1.jpeg')" }}
+            style={{ backgroundImage: "url('/assets/images/img-1.webp')" }}
           ></div>
           <div className="flex flex-col h-full w-full gap-8">
             <div className="p-8 rounded-medium border bg-primary-100 flex flex-col items-start gap-6">
