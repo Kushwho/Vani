@@ -148,6 +148,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
     document.body.classList.remove("recording");
     audio.pauseAudio();
     microphoneRef.current?.pause();
+    microphoneRef.current?.stop();
     microphoneRef.current?.stream.getTracks().forEach((track) => track.stop());
     microphoneRef.current = null;
   };
