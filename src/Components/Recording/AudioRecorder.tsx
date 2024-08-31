@@ -3,26 +3,35 @@ import { Player } from "@lottiefiles/react-lottie-player";
 import { ChatHistoryProps } from "./Chat";
 import { io, Socket } from "socket.io-client";
 import useAuthContext from "@/Hooks/useAuthContext";
+
 import { toast } from "react-toastify";
 import { DEFAULT_SESSION_ID, NOT_LOGGED_IN_EMAIL } from "@/util/constant";
 import { useNavigate } from "react-router";
 import { AudioHandler } from "@/util/AudioHandler";
+
 export type AudioRecorderProps = {
   setHistory: React.Dispatch<React.SetStateAction<ChatHistoryProps>>;
   history: ChatHistoryProps;
 };
+
 const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
   const [isRecording, setIsRecording] = useState(false);
+
   const navigate = useNavigate();
   const [isDeepgramOpened, setIsDeepGramOpened] = useState<boolean>(false);
+
   const microphoneRef = useRef<MediaRecorder | null>(null);
   const socketRef = useRef<Socket | null>(null);
   const auth = useAuthContext();
+
   const [audio] = useState<AudioHandler>(
     AudioHandler.getInstance(auth?.primaryValues.voice || "Deepgram")
   );
+
   console.log("auth primary values", auth?.primaryValues);
+
   console.log(auth?.primaryValues.id);
+
   const [sessionId, setSessionId] = useState<string>(DEFAULT_SESSION_ID);
   useEffect(() => {
     if (auth?.primaryValues.id) {
@@ -39,14 +48,18 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
       }, 3000);
     }
   }, [auth?.primaryValues.email, navigate]);
+
   // Usage
+
   useEffect(() => {
     if (sessionId !== DEFAULT_SESSION_ID) {
       socketRef.current = io("wss://backend.vanii.ai");
+
       socketRef.current.on("connect", () => {
         console.log("SendingThisSessionId", sessionId);
         socketRef.current?.emit("session_start", { sessionId });
         console.log(audio.voice);
+
         socketRef.current?.emit("join", {
           sessionId,
           email: auth?.primaryValues.email || "",
@@ -56,6 +69,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
       socketRef.current.on("deepgram_connection_opened", () => {
         setIsDeepGramOpened(true);
       });
+
       socketRef.current.on("transcription_update", (data) => {
         const {
           transcription,
@@ -84,12 +98,15 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
         socketRef.current?.emit("leave", { sessionId });
         socketRef.current?.disconnect();
       };
+
       window.addEventListener("beforeunload", handleBeforeUnload);
+
       return () => {
         window.removeEventListener("beforeunload", handleBeforeUnload);
       };
     }
   }, [sessionId]);
+
   const getMicrophone = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -100,66 +117,53 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
     }
   };
 
-  const openMicrophone = async (socket: Socket, createdNew: boolean) => {
-    if (createdNew) {
-      return new Promise<void>((resolve) => {
-        microphoneRef.current!.onstart = () => {
-          console.log("Microphone opened");
-          document.body.classList.add("recording");
-          resolve();
-        };
-        microphoneRef.current!.ondataavailable = async (event) => {
-          if (event.data.size > 0) {
-            socket.emit("audio_stream", { data: event.data, sessionId });
-          }
-        };
+  const openMicrophone = async (socket: Socket) => {
+    return new Promise<void>((resolve) => {
+      microphoneRef.current!.onstart = () => {
+        console.log("Microphone opened");
+        document.body.classList.add("recording");
+        resolve();
+      };
+      microphoneRef.current!.ondataavailable = async (event) => {
+        if (event.data.size > 0) {
+          socket.emit("audio_stream", { data: event.data, sessionId });
+        }
+      };
 
-        microphoneRef.current!.start(500);
-      });
-    } else {
-      microphoneRef.current?.resume();
-    }
+      microphoneRef.current!.start(500);
+    });
   };
 
   const startRecording = async () => {
     setIsRecording(true);
-    if (!microphoneRef.current) {
-      const microphone = await getMicrophone();
-      microphoneRef.current = microphone;
-      await openMicrophone(socketRef.current!, true);
-      return;
-    }
 
-    await openMicrophone(socketRef.current!, false);
+    const microphone = await getMicrophone();
+    microphoneRef.current = microphone;
+    await openMicrophone(socketRef.current!);
+    return;
   };
 
   const stopRecording = async () => {
     setIsRecording(false);
+    document.body.classList.remove("recording");
     audio.pauseAudio();
     microphoneRef.current?.pause();
-    document.body.classList.remove("recording");
-
+    microphoneRef.current?.stream.getTracks().forEach((track) => track.stop());
+    microphoneRef.current = null;
   };
 
   const enqueueAudio = async (audioBinary: ArrayBuffer) => {
-
-    
-          
-            
-    
-
-          
-          Expand Down
-    
-    
-  
     await playAudio(audioBinary);
   };
+
   // ...
+
   const playAudio = async (audioBinary: ArrayBuffer) => {
     await audio.playSound(audioBinary);
   };
+
   // ...
+
   const handleRecordButtonClick = () => {
     if (!isRecording) {
       startRecording()
@@ -171,6 +175,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
       );
     }
   };
+
   return (
     <button
       className={`${
@@ -184,6 +189,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
       }`}
       onClick={() => {
         console.log("Deepgram Connection", isDeepgramOpened);
+
         if (isDeepgramOpened) handleRecordButtonClick();
       }}
     >
@@ -207,4 +213,5 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
     </button>
   );
 };
+
 export default AudioRecorder;
