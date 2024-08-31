@@ -64,68 +64,44 @@ export class AudioHandler {
     return new Blob([buffer], { type: "audio/wav" });
   }
   public async playSound(audioBinary: ArrayBuffer) {
+    let audioUrl: string;
+
+    this.audio.pause();
     switch (this.voice) {
-      case "Deepgram": {
-        const audioBlob = new Blob([audioBinary], { type: "audio/mpeg" });
-        const audioUrl = URL.createObjectURL(audioBlob);
-        this.audio.pause();
-        this.audio.src = audioUrl;
-        this.audio.onpause = () => {
-          URL.revokeObjectURL(audioUrl);
-        };
-        this.audio.onended = () => {
-          URL.revokeObjectURL(audioUrl);
-        };
-        this.audio.oncancel = () => {
-          URL.revokeObjectURL(audioUrl);
-        };
-        try {
-          await this.audio.play();
-        } catch (error) {
-          console.error("Error playing audio:", error);
-        }
-
-        break;
-      }
       case "Cartesia": {
-        this.audioContext.resume();
-
-        this.audio.pause();
-        console.log("Playing audio");
-
         const float32Array = new Float32Array(audioBinary);
         const toPlayFile = await this.pcmFloatToWavBlob(float32Array, 44100);
-        const audioUrl = URL.createObjectURL(toPlayFile);
-        this.audio.src = audioUrl;
-
-        this.audio.onpause = () => {
-          URL.revokeObjectURL(audioUrl);
-        };
-        this.audio.onended = () => {
-          URL.revokeObjectURL(audioUrl);
-        };
-        this.audio.oncancel = () => {
-          URL.revokeObjectURL(audioUrl);
-        };
-        try {
-          await this.audio.play();
-        } catch (error) {
-          console.error("Error playing audio:", error);
-        }
+        audioUrl = URL.createObjectURL(toPlayFile);
         break;
       }
+      default: {
+        // Default is set to Deepgram
+        const audioBlob = new Blob([audioBinary], { type: "audio/mpeg" });
+        audioUrl = URL.createObjectURL(audioBlob);
+        this.audio.pause();
+        break;
+      }
+    }
+    this.audio.src = audioUrl;
+
+    this.audio.onpause = () => {
+      URL.revokeObjectURL(audioUrl);
+    };
+    this.audio.onended = () => {
+      URL.revokeObjectURL(audioUrl);
+    };
+    this.audio.oncancel = () => {
+      URL.revokeObjectURL(audioUrl);
+    };
+    try {
+      await this.audio.play();
+    } catch (error) {
+      console.error("Error playing audio:", error);
     }
   }
 
   public async pauseAudio() {
-    switch (this.voice) {
-      case "Deepgram":
-        this.audio.pause();
-        break;
-      case "Cartesia":
-        await this.audioContext.suspend();
-        break;
-    }
+    this.audio.pause();
   }
   // Add additional methods as needed
 }
