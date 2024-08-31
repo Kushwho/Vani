@@ -18,10 +18,10 @@ const HeroSection: FC = () => {
           ></div>
           <div className="flex flex-col h-full w-full gap-8">
             <div className="p-8 rounded-medium border bg-primary-100 flex flex-col items-start gap-6">
-              <h3 className="font-satoshi-medium text-lg">
+              <h2 className="font-satoshi-medium text-lg">
                 Quick Onboarding | Speaking with AI | Personalized Learning |
                 Automated Processes
-              </h3>
+              </h2>
               <p className="text-md">
                 At Vanii, our mission is to make language learning accessible,
                 personalized, practical and enjoyable for everyone, regardless
@@ -45,6 +45,7 @@ const HeroSection: FC = () => {
             <img
               src="/assets/images/3d-4.webp"
               className="rounded-medium h-30 bg-cover bg-center"
+              alt="Webp image not found"
             />
           </div>
         </div>

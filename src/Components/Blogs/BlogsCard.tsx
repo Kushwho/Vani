@@ -51,7 +51,7 @@ const BlogsCard: FC<BlogsCardProps> = ({
       </div>
       {window.dimensions.width > 768 ? (
         <div className="flex items-center justify-center mx-6">
-          <img src={mainImage} className="w-[700px] h-32" />
+          <img src={mainImage} className="w-[700px] h-32" alt="Img not found" />
         </div>
       ) : (
         <></>

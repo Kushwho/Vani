@@ -39,6 +39,7 @@ const BlogDetail: FC = () => {
         <img
           src={urlFor(post.mainImage.asset._ref).url()}
           className="w-full  max-md:max-h-[40vh] md:max-h-[60vh] mx-auto"
+          alt="Hero Image"
         />
       ) : (
         <></>
@@ -53,6 +54,7 @@ const BlogDetail: FC = () => {
                 <img
                   src={urlFor(post.author.image.asset._ref).url()}
                   className="rounded-full h-10 w-10"
+                  alt="Avatar"
                 />
               </span>
               <span className="text-sm text-gray-500 flex flex-col ml-4 mb-4">
