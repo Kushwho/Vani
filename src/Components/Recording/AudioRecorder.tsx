@@ -1,4 +1,11 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  forwardRef,
+  useImperativeHandle,
+  Ref,
+} from "react";
 import { Player } from "@lottiefiles/react-lottie-player";
 import { ChatHistoryProps } from "./Chat";
 import { io, Socket } from "socket.io-client";
@@ -9,12 +16,17 @@ import { DEFAULT_SESSION_ID, NOT_LOGGED_IN_EMAIL } from "@/util/constant";
 import { useNavigate } from "react-router";
 import { AudioHandler } from "@/util/AudioHandler";
 
+export type RefProps = {
+  onClickEndSession: () => void;
+};
+
 export type AudioRecorderProps = {
   setHistory: React.Dispatch<React.SetStateAction<ChatHistoryProps>>;
   history: ChatHistoryProps;
+  ref: Ref<RefProps>;
 };
 
-const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
+function AudioRecorder({ setHistory, ref }: AudioRecorderProps) {
   const [isRecording, setIsRecording] = useState(false);
 
   const navigate = useNavigate();
@@ -56,6 +68,14 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
   }, [auth?.primaryValues.email, navigate]);
 
   // Usage
+  const onClickEndSession = () => {
+    socketRef.current?.emit("leave", { sessionId });
+    socketRef.current?.disconnect();
+  };
+
+  useImperativeHandle(ref, () => ({
+    onClickEndSession,
+  }));
 
   useEffect(() => {
     if (sessionId !== DEFAULT_SESSION_ID) {
@@ -230,10 +250,9 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
             src={`/assets/icons/${audioPlaying ? "pause.svg" : "play.svg"}`}
           />
         </button>
-        <button>End session</button>
       </div>
     </>
   );
-};
+}
 
-export default AudioRecorder;
+export default forwardRef(AudioRecorder);

@@ -77,7 +77,7 @@ const Navbar: React.FC = () => {
         <div className={menuContainerClasses}>
           <div className={menuItemsClasses}>
             <ul className="flex flex-col justify-center items-center md:flex-row gap-6 text-md">
-              {["Home", "About Us", "Features", "Blog"].map((item) => (
+              {["Home", "About Us", "Features"].map((item) => (
                 <li key={item}>
                   <Link
                     to={item === "Home" ? "/" : `/#${item.toLowerCase().replace(" ", "-")}`}
@@ -87,6 +87,14 @@ const Navbar: React.FC = () => {
                   </Link>
                 </li>
               ))}
+                <li key={4}>
+                  <Link
+                    to="/blogs"
+                    className="hover:text-primary-700 transition-colors duration-200"
+                  >
+                    Blogs
+                  </Link>
+                </li>
               {authContext?.primaryValues.loggedIn && (
                 <li>
                   <Link

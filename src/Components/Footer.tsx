@@ -62,7 +62,7 @@ const Footer: React.FC = () => {
               <a href="#features">Features</a>
             </li>
             <li className="transition duration-200 ease-custom hover:text-primary-700">
-              <a href="#">Blog</a>
+              <a href="/blogs">Blog</a>
             </li>
           </ul>
         </div>

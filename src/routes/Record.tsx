@@ -1,18 +1,22 @@
-import { FC, useState } from "react";
+import { FC, useRef, useState } from "react";
 
-import ChatHistory, {
-  ChatHistoryProps
-} from "@/Components/Recording/Chat";
-import AudioRecorder from "@/Components/Recording/AudioRecorder";
+import ChatHistory, { ChatHistoryProps } from "@/Components/Recording/Chat";
+import AudioRecorder, { RefProps } from "@/Components/Recording/AudioRecorder";
 
 const Record: FC = () => {
   const [messages, setMessages] = useState<ChatHistoryProps>({ messages: [] });
+  const onEndSessionRef = useRef<RefProps>(null);
+
 
   return (
     <main className="">
       <div className="min-h-[480px] relative flex flex-col gap-16 justify-center items-center pb-16 ">
         <div className="relative max-md:p-8">
-          <AudioRecorder setHistory={setMessages} history={messages} />
+          <AudioRecorder
+            setHistory={setMessages}
+            history={messages}
+            ref={onEndSessionRef}
+          />
         </div>
 
         <h1 className="heading font-semibold text-xl">Vanii</h1>
