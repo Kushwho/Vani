@@ -15,6 +15,7 @@ import { toast } from "react-toastify";
 import { DEFAULT_SESSION_ID, NOT_LOGGED_IN_EMAIL } from "@/util/constant";
 import { useNavigate } from "react-router";
 import { AudioHandler } from "@/util/AudioHandler";
+import { Buffer } from "buffer";
 
 export type RefProps = {
   onClickEndSession: () => void;
