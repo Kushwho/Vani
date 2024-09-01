@@ -16,7 +16,7 @@ export default async (
   axios: AxiosInstance
 ): Promise<ApiResponse<SendOtpResponse>> => {
   data = { ...data, phone: data.phone };
-  console.log(data);
+
   
   const response = await axios.post<ApiResponse<SendOtpResponse>>(URL, data);
   return response.data;

@@ -205,13 +205,17 @@ const CountryCode: FC = () => {
     "+994 🇦🇿", // Azerbaijan
     "+995 🇬🇪", // Georgia
     "+996 🇰🇬", // Kyrgyzstan
-    "+998 🇺🇿"  // Uzbekistan
+    "+998 🇺🇿", // Uzbekistan
   ];
 
+  const extractedCountryCodes = (code: string): string => {
+    const match = code.match(/^\+\d+/);
+    return match ? match[0] : "";
+  };
   return (
     <>
       {countryCodes.map((ele) => {
-        return <option value={ele}>{ele}</option>;
+        return <option value={extractedCountryCodes(ele)}>{ele}</option>;
       })}
     </>
   );
