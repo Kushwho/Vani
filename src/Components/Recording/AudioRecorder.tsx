@@ -42,12 +42,12 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
   }, [auth?.primaryValues.id]);
   useEffect(() => {
     if (auth?.primaryValues.email === NOT_LOGGED_IN_EMAIL) {
-      // toast.success(
-      //   "You are not logged in. Please log in to view this page. Navigating you to the home page"
-      // );
-      // setTimeout(() => {
-      //   navigate("/");
-      // }, 3000);
+      toast.success(
+        "You are not logged in. Please log in to view this page. Navigating you to the home page"
+      );
+      setTimeout(() => {
+        navigate("/");
+      }, 3000);
     }
   }, [auth?.primaryValues.email, navigate]);
 
