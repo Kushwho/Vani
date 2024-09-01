@@ -115,6 +115,8 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
         resolve();
       };
       microphoneRef.current!.ondataavailable = async (event) => {
+        console.log(event);
+
         if (event.data.size > 0) {
           socket.emit("audio_stream", { data: event.data, sessionId });
         }
