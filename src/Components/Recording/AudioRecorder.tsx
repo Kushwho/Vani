@@ -50,9 +50,8 @@ function AudioRecorder({ setHistory, ref }: AudioRecorderProps) {
   const socketRef = useRef<Socket | null>(null);
   const auth = useAuthContext();
   const silentAudioBuffer = useRef<Buffer>(SilentAudio());
-  const [stopSessionIntervalId, setStopSessionIntervalId] = useState<
-    number | null
-  >(null);
+  const [stopSessionIntervalId, setStopSessionIntervalId] =
+    useState<NodeJS.Timeout | null>(null);
 
   const [audioPlaying, setAudioPlaying] = useState<boolean>(false);
 
@@ -174,6 +173,7 @@ function AudioRecorder({ setHistory, ref }: AudioRecorderProps) {
     if (stopSessionIntervalId) {
       clearInterval(stopSessionIntervalId);
     }
+    setStopSessionIntervalId(null);
     setIsRecording(true);
 
     try {
@@ -194,7 +194,8 @@ function AudioRecorder({ setHistory, ref }: AudioRecorderProps) {
         data: silentAudioBuffer.current,
         sessionId,
       });
-    },500);
+    }, 500);
+    setStopSessionIntervalId(sessionId);
     setIsRecording(false);
     document.body.classList.remove("recording");
     audioPlayerRef.current.pauseAudio();
