@@ -24,6 +24,8 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
   const socketRef = useRef<Socket | null>(null);
   const auth = useAuthContext();
 
+  const [audioPlaying, setAudioPlaying] = useState<boolean>(false);
+
   const [audio] = useState<AudioHandler>(
     AudioHandler.getInstance(auth?.primaryValues.voice || "Deepgram")
   );
@@ -40,12 +42,12 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
   }, [auth?.primaryValues.id]);
   useEffect(() => {
     if (auth?.primaryValues.email === NOT_LOGGED_IN_EMAIL) {
-      toast.success(
-        "You are not logged in. Please log in to view this page. Navigating you to the home page"
-      );
-      setTimeout(() => {
-        navigate("/");
-      }, 3000);
+      // toast.success(
+      //   "You are not logged in. Please log in to view this page. Navigating you to the home page"
+      // );
+      // setTimeout(() => {
+      //   navigate("/");
+      // }, 3000);
     }
   }, [auth?.primaryValues.email, navigate]);
 
@@ -176,40 +178,55 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
   };
 
   return (
-    <button
-      className={`${
-        isRecording
-          ? "relative grid place-items-center p-8"
-          : `m-auto mt-16 h-48 aspect-square border rounded-full font-satoshiMedium text-md ${
-              isDeepgramOpened
-                ? "bg-primary-100 border-primary-400"
-                : "bg-gray-200 border-gray-400 opacity-50 cursor-not-allowed"
-            }`
-      }`}
-      onClick={() => {
-        console.log("Deepgram Connection", isDeepgramOpened);
+    <>
+      <button
+        className={`${
+          isRecording
+            ? "relative grid place-items-center p-8"
+            : `m-auto mt-16 h-48 aspect-square border rounded-full font-satoshiMedium text-md ${
+                isDeepgramOpened
+                  ? "bg-primary-100 border-primary-400"
+                  : "bg-gray-200 border-gray-400 opacity-50 cursor-not-allowed"
+              }`
+        }`}
+        onClick={() => {
+          console.log("Deepgram Connection", isDeepgramOpened);
 
-        if (isDeepgramOpened) handleRecordButtonClick();
-      }}
-    >
-      {isRecording ? (
-        <>
-          <Player
-            autoplay
-            loop
-            src="/assets/icons/circle-wave.json"
-            className="h-[450px] aspect-square"
-          />
+          if (isDeepgramOpened) handleRecordButtonClick();
+        }}
+      >
+        {isRecording ? (
+          <>
+            <Player
+              autoplay
+              loop
+              src="/assets/icons/circle-wave.json"
+              className="h-[450px] aspect-square"
+            />
+            <img
+              src="/assets/icons/mic-outline.svg"
+              alt="Microphone icon"
+              className="absolute h-20 w-20"
+            />
+          </>
+        ) : (
+          <p className="text-xl font-semibold ">START</p>
+        )}
+      </button>
+      <div className="flex flex-row">
+        <button
+          className="h-12 w-12 rounded-full border border-1  flex items-center justify-center p-2"
+          onClick={() => {
+            audioPlaying ? audio.pauseAudio() : audio.resumeAudio();
+          }}
+        >
           <img
-            src="/assets/icons/mic-outline.svg"
-            alt="Microphone icon"
-            className="absolute h-20 w-20"
+            src={`/assets/icons/${audioPlaying ? "pause.svg" : "play.svg"}`}
           />
-        </>
-      ) : (
-        <p className="text-xl font-semibold ">START</p>
-      )}
-    </button>
+        </button>
+        <button>End session</button>
+      </div>
+    </>
   );
 };
 

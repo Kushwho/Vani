@@ -1,22 +1,30 @@
+import { Dispatch, SetStateAction } from "react";
 import { VOICE_OPTIONS } from "./constant";
 
 export class AudioHandler {
   private static instance: AudioHandler | null = null;
   public voice: VOICE_OPTIONS;
-  private audioContext: AudioContext;
+
   private audio: HTMLAudioElement;
+  private audioUrl: string = "";
+
+  public audioStatus: boolean = false;
+  public setAudioStatus: Dispatch<SetStateAction<boolean>>;
 
   private constructor(voice: VOICE_OPTIONS) {
     this.voice = voice;
-
-    this.audioContext = new window.AudioContext();
-    this.audioContext.audioWorklet.addModule("my-audio-processor.js");
     this.audio = new Audio();
   }
 
-  public static getInstance(voice: VOICE_OPTIONS): AudioHandler {
+  public static getInstance(
+    voice: VOICE_OPTIONS,
+    audioStatus: boolean,
+    setAudioStatus: Dispatch<SetStateAction<boolean>>
+  ): AudioHandler {
     if (!AudioHandler.instance) {
       AudioHandler.instance = new AudioHandler(voice);
+      AudioHandler.instance.audioStatus = audioStatus;
+      AudioHandler.instance.setAudioStatus = setAudioStatus;
     }
     return AudioHandler.instance;
   }
@@ -64,34 +72,40 @@ export class AudioHandler {
     return new Blob([buffer], { type: "audio/wav" });
   }
   public async playSound(audioBinary: ArrayBuffer) {
-    let audioUrl: string;
-
     this.audio.pause();
     switch (this.voice) {
       case "Cartesia": {
         const float32Array = new Float32Array(audioBinary);
         const toPlayFile = await this.pcmFloatToWavBlob(float32Array, 44100);
-        audioUrl = URL.createObjectURL(toPlayFile);
+        this.audioUrl = URL.createObjectURL(toPlayFile);
         break;
       }
       default: {
         // Default is set to Deepgram
         const audioBlob = new Blob([audioBinary], { type: "audio/mpeg" });
-        audioUrl = URL.createObjectURL(audioBlob);
+        this.audioUrl = URL.createObjectURL(audioBlob);
         this.audio.pause();
         break;
       }
     }
-    this.audio.src = audioUrl;
+    this.audio.src = this.audioUrl;
 
+    this.audio.onplay = () =>{
+      this.setAudioStatus(true);
+      this.audioStatus = true;
+    }
     this.audio.onpause = () => {
-      URL.revokeObjectURL(audioUrl);
+      this.setAudioStatus(false)
+      this.audioStatus = false;
+      URL.revokeObjectURL(this.audioUrl);
     };
     this.audio.onended = () => {
-      URL.revokeObjectURL(audioUrl);
+      this.setAudioStatus(false)
+      this.audioStatus = false;
+      URL.revokeObjectURL(this.audioUrl);
     };
     this.audio.oncancel = () => {
-      URL.revokeObjectURL(audioUrl);
+      URL.revokeObjectURL(this.audioUrl);
     };
     try {
       await this.audio.play();
@@ -102,6 +116,10 @@ export class AudioHandler {
 
   public async pauseAudio() {
     this.audio.pause();
+  }
+
+  public async resumeAudio() {
+    this.audio.play()
   }
   // Add additional methods as needed
 }

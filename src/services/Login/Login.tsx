@@ -11,7 +11,7 @@ export interface LoginDataProps {
 
 export type LoginResponse = ApiResponse<Omit<UserDetails, "password">>;
 
-export default async (
+export default  async (
   data: LoginDataProps,
   axios: AxiosInstance
 ): Promise<LoginResponse> => {
