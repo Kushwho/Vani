@@ -9,7 +9,7 @@ export class AudioHandler {
   private audioUrl: string = "";
 
   public audioStatus: boolean = false;
-  public setAudioStatus: Dispatch<SetStateAction<boolean>>;
+  public setAudioStatus!: Dispatch<SetStateAction<boolean>>;
 
   private constructor(voice: VOICE_OPTIONS) {
     this.voice = voice;

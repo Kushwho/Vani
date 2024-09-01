@@ -26,8 +26,12 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
 
   const [audioPlaying, setAudioPlaying] = useState<boolean>(false);
 
-  const [audio] = useState<AudioHandler>(
-    AudioHandler.getInstance(auth?.primaryValues.voice || "Deepgram")
+  const audioPlayerRef = useRef<AudioHandler>(
+    AudioHandler.getInstance(
+      auth?.primaryValues.voice || "Deepgram",
+      audioPlaying,
+      setAudioPlaying
+    )
   );
 
   console.log("auth primary values", auth?.primaryValues);
@@ -60,12 +64,12 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
       socketRef.current.on("connect", () => {
         console.log("SendingThisSessionId", sessionId);
         socketRef.current?.emit("session_start", { sessionId });
-        console.log(audio.voice);
+        console.log(audioPlayerRef.current.voice);
 
         socketRef.current?.emit("join", {
           sessionId,
           email: auth?.primaryValues.email || "",
-          voice: audio.voice,
+          voice: audioPlayerRef.current.voice,
         });
       });
       socketRef.current.on("deepgram_connection_opened", () => {
@@ -146,7 +150,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
   const stopRecording = async () => {
     setIsRecording(false);
     document.body.classList.remove("recording");
-    audio.pauseAudio();
+    audioPlayerRef.current.pauseAudio();
     microphoneRef.current?.pause();
     microphoneRef.current?.stop();
     microphoneRef.current?.stream.getTracks().forEach((track) => track.stop());
@@ -160,7 +164,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
   // ...
 
   const playAudio = async (audioBinary: ArrayBuffer) => {
-    await audio.playSound(audioBinary);
+    await audioPlayerRef.current.playSound(audioBinary);
   };
 
   // ...
@@ -217,7 +221,9 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
         <button
           className="h-12 w-12 rounded-full border border-1  flex items-center justify-center p-2"
           onClick={() => {
-            audioPlaying ? audio.pauseAudio() : audio.resumeAudio();
+            audioPlaying
+              ? audioPlayerRef.current.pauseAudio()
+              : audioPlayerRef.current.resumeAudio();
           }}
         >
           <img
