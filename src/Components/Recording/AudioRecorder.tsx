@@ -15,7 +15,6 @@ import { toast } from "react-toastify";
 import { DEFAULT_SESSION_ID, NOT_LOGGED_IN_EMAIL } from "@/util/constant";
 import { useNavigate } from "react-router";
 import { AudioHandler } from "@/util/AudioHandler";
-import { Buffer } from "buffer";
 
 export type RefProps = {
   onClickEndSession: () => void;
@@ -27,20 +26,6 @@ export type AudioRecorderProps = {
   ref: Ref<RefProps>;
 };
 
-const SilentAudio = (): Buffer => {
-  const sampleRate = 16000; // typical sample rate for LINEAR16 audio
-  const durationInMilliseconds = 500; // 500ms of silence
-  const numChannels = 1; // mono audio
-  const bitDepth = 16; // 16 bits per sample
-
-  // Calculate the total number of samples for the duration
-  const totalSamples =
-    ((sampleRate * durationInMilliseconds) / 1000) * numChannels;
-
-  // Create a buffer filled with zeros (silent audio) only once
-  return Buffer.alloc(totalSamples * (bitDepth / 8));
-};
-
 function AudioRecorder({ setHistory, ref }: AudioRecorderProps) {
   const [isRecording, setIsRecording] = useState(false);
 
@@ -50,9 +35,6 @@ function AudioRecorder({ setHistory, ref }: AudioRecorderProps) {
   const microphoneRef = useRef<MediaRecorder | null>(null);
   const socketRef = useRef<Socket | null>(null);
   const auth = useAuthContext();
-  const silentAudioBuffer = useRef<Buffer>(SilentAudio());
-  const [stopSessionIntervalId, setStopSessionIntervalId] =
-    useState<NodeJS.Timeout | null>(null);
 
   const [audioPlaying, setAudioPlaying] = useState<boolean>(false);
 
@@ -171,10 +153,6 @@ function AudioRecorder({ setHistory, ref }: AudioRecorderProps) {
   };
 
   const startRecording = async () => {
-    if (stopSessionIntervalId) {
-      clearInterval(stopSessionIntervalId);
-    }
-    setStopSessionIntervalId(null);
     setIsRecording(true);
 
     try {
@@ -190,13 +168,6 @@ function AudioRecorder({ setHistory, ref }: AudioRecorderProps) {
   };
 
   const stopRecording = async () => {
-    const sessionId = setInterval(() => {
-      socketRef.current?.emit("audio_stream", {
-        data: silentAudioBuffer.current,
-        sessionId,
-      });
-    }, 500);
-    setStopSessionIntervalId(sessionId);
     setIsRecording(false);
     document.body.classList.remove("recording");
     audioPlayerRef.current.pauseAudio();
