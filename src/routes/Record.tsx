@@ -1,7 +1,7 @@
 import { FC,  useState } from "react";
 
 import ChatHistory, { ChatHistoryProps } from "@/Components/Recording/Chat";
-import AudioRecorder, { RefProps } from "@/Components/Recording/AudioRecorder";
+import AudioRecorder from "@/Components/Recording/AudioRecorder";
 
 const Record: FC = () => {
   const [messages, setMessages] = useState<ChatHistoryProps>({ messages: [] });
