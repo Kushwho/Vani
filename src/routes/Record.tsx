@@ -1,11 +1,11 @@
-import { FC, useRef, useState } from "react";
+import { FC,  useState } from "react";
 
 import ChatHistory, { ChatHistoryProps } from "@/Components/Recording/Chat";
 import AudioRecorder, { RefProps } from "@/Components/Recording/AudioRecorder";
 
 const Record: FC = () => {
   const [messages, setMessages] = useState<ChatHistoryProps>({ messages: [] });
-  const onEndSessionRef = useRef<RefProps>(null);
+
 
 
   return (
@@ -15,7 +15,7 @@ const Record: FC = () => {
           <AudioRecorder
             setHistory={setMessages}
             history={messages}
-            ref={onEndSessionRef}
+
           />
         </div>
 
