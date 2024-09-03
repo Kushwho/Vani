@@ -1,7 +1,7 @@
 import { defineConfig } from "vite";
 
 import react from "@vitejs/plugin-react";
-import VitePluginSitemap  from "vite-plugin-sitemap";
+import VitePluginSitemap from "vite-plugin-sitemap";
 
 import path from "path";
 
@@ -19,5 +19,8 @@ export default defineConfig({
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
+  },
+  server: {
+    host: "0.0.0.0",
   },
 });

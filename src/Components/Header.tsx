@@ -25,7 +25,7 @@ const Navbar: React.FC = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [handleScroll]);
 
-  const handleToggle = useCallback(() => setIsActive(prev => !prev), []);
+  const handleToggle = useCallback(() => setIsActive((prev) => !prev), []);
 
   const handleLogout = useCallback(() => {
     Logout(axios)
@@ -35,7 +35,7 @@ const Navbar: React.FC = () => {
           loggedIn: false,
           id: "",
           email: "",
-          voice: ""
+          voice: "",
         });
       })
       .catch(() => {
@@ -43,26 +43,48 @@ const Navbar: React.FC = () => {
       });
   }, [axios, authContext]);
 
-  const menuContainerClasses = useMemo(() => `
+  const menuContainerClasses = useMemo(
+    () => `
     menu-container flex items-center
-    ${isMobile ? "fixed inset-0 bg-primary-50 transform transition-all duration-300 ease-in-out justify-center" : "gap-10"}
-    ${isActive && isMobile ? "translate-x-0 z-50" : isMobile ? "translate-x-full" : ""}
-  `, [isActive, isMobile]);
+    ${
+      isMobile
+        ? "fixed inset-0 bg-primary-50 transform transition-all duration-300 ease-in-out justify-center"
+        : "gap-10"
+    }
+    ${
+      isActive && isMobile
+        ? "translate-x-0 z-50"
+        : isMobile
+        ? "translate-x-full"
+        : ""
+    }
+  `,
+    [isActive, isMobile]
+  );
 
-  const menuItemsClasses = useMemo(() => `
+  const menuItemsClasses = useMemo(
+    () => `
     menu-items flex flex-col md:flex-row md:items-center gap-10
     ${isMobile && isActive ? "block" : "hidden md:block"}
-  `, [isMobile, isActive]);
+  `,
+    [isMobile, isActive]
+  );
 
-  const hamburgerClasses = useMemo(() => `
+  const hamburgerClasses = useMemo(
+    () => `
     block w-8 h-1 bg-primary-700 rounded transition-all duration-300 ease-in-out
     ${isActive ? "transform rotate-45 translate-y-2" : "translate-y-2"}
-  `, [isActive]);
+  `,
+    [isActive]
+  );
 
-  const hamburgerClasses2 = useMemo(() => `
+  const hamburgerClasses2 = useMemo(
+    () => `
     block w-8 h-1 bg-primary-700 rounded transition-all duration-300 ease-in-out
     ${isActive ? "transform -rotate-45" : "-translate-y-2"}
-  `, [isActive]);
+  `,
+    [isActive]
+  );
 
   return (
     <header
@@ -80,21 +102,25 @@ const Navbar: React.FC = () => {
               {["Home", "About Us", "Features"].map((item) => (
                 <li key={item}>
                   <Link
-                    to={item === "Home" ? "/" : `/#${item.toLowerCase().replace(" ", "-")}`}
+                    to={
+                      item === "Home"
+                        ? "/"
+                        : `/#${item.toLowerCase().replace(" ", "-")}`
+                    }
                     className="hover:text-primary-700 transition-colors duration-200"
                   >
                     {item}
                   </Link>
                 </li>
               ))}
-                <li key={4}>
-                  <Link
-                    to="/blogs"
-                    className="hover:text-primary-700 transition-colors duration-200"
-                  >
-                    Blogs
-                  </Link>
-                </li>
+              <li key={4}>
+                <Link
+                  to="/blogs"
+                  className="hover:text-primary-700 transition-colors duration-200"
+                >
+                  Blogs
+                </Link>
+              </li>
               {authContext?.primaryValues.loggedIn && (
                 <li>
                   <Link
@@ -109,23 +135,36 @@ const Navbar: React.FC = () => {
                 <button
                   id="btn-get-started"
                   className="py-2 px-5 rounded bg-primary-600 text-primary-50 hover:bg-primary-700 transition-colors duration-200"
-                  onClick={() => authContext?.primaryValues.loggedIn ? handleLogout() : navigate("/signup")}
+                  onClick={() =>
+                    authContext?.primaryValues.loggedIn
+                      ? handleLogout()
+                      : navigate("/signup")
+                  }
                 >
-                  {authContext?.primaryValues.loggedIn ? "Logout" : "Get started"}
+                  {authContext?.primaryValues.loggedIn
+                    ? "Logout"
+                    : "Get started"}
                 </button>
               </li>
             </ul>
           </div>
         </div>
         {isMobile && (
-          <button
-            className="menu-hamburger cursor-pointer md:hidden z-50"
-            onClick={handleToggle}
-            aria-label="Toggle menu"
-          >
-            <span className={hamburgerClasses}></span>
-            <span className={hamburgerClasses2}></span>
-          </button>
+          <>
+            <a className="text-md flex items-center transition-all animate-pulse text-primary-700">
+              {authContext?.primaryValues.loggedIn
+                ? "Start Learning"
+                : "Get Started"}
+            </a>
+            <button
+              className="menu-hamburger cursor-pointer md:hidden z-50"
+              onClick={handleToggle}
+              aria-label="Toggle menu"
+            >
+              <span className={hamburgerClasses}></span>
+              <span className={hamburgerClasses2}></span>
+            </button>
+          </>
         )}
       </nav>
     </header>
