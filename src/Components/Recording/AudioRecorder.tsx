@@ -1,4 +1,11 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  Ref,
+  forwardRef,
+  useImperativeHandle,
+} from "react";
 import { Player } from "@lottiefiles/react-lottie-player";
 import { ChatHistoryProps } from "./Chat";
 import { io, Socket } from "socket.io-client";
@@ -14,7 +21,14 @@ export type AudioRecorderProps = {
   history: ChatHistoryProps;
 };
 
-const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
+export type RefProps = {
+  onClickEndSession: () => void;
+};
+
+const AudioRecorder: React.FC<AudioRecorderProps> = (
+  { setHistory },
+  ref: Ref<RefProps>
+) => {
   const [isRecording, setIsRecording] = useState(false);
 
   const navigate = useNavigate();
@@ -112,6 +126,14 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
       };
     }
   }, [sessionId]);
+
+  const onClickEndSession = () => {
+    socketRef.current?.emit("leave", { sessionId });
+    socketRef.current?.disconnect();
+  };
+  useImperativeHandle(ref, () => ({
+    onClickEndSession,
+  }));
 
   const openMicrophone = async (socket: Socket) => {
     return new Promise<void>((resolve) => {
@@ -217,7 +239,7 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
           <p className="text-xl font-semibold ">START</p>
         )}
       </button>
-      <div className="flex flex-row">
+      <div className="flex flex-row items-center justify-center mt-2">
         <button
           className="h-12 w-12 rounded-full border border-1  flex items-center justify-center p-2"
           onClick={() => {
@@ -230,10 +252,9 @@ const AudioRecorder: React.FC<AudioRecorderProps> = ({ setHistory }) => {
             src={`/assets/icons/${audioPlaying ? "pause.svg" : "play.svg"}`}
           />
         </button>
-        <button>End session</button>
       </div>
     </>
   );
 };
 
-export default AudioRecorder;
+export default forwardRef(AudioRecorder);
