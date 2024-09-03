@@ -22,7 +22,7 @@ const Record: FC = () => {
         isOpen={feedbackModalOpen}
         onSubmit={async () => {
           const resp = await axios.post<ApiResponse<any>>(
-            "http://localhost:4000/api/v1/user/post-review"
+            "/api/v1/user/post-review"
           );
           console.log(resp);
 
