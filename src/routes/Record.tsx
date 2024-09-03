@@ -22,7 +22,7 @@ const Record: FC = () => {
         isOpen={feedbackModalOpen}
         onSubmit={async () => {
           const resp = await axios.post<ApiResponse<any>>(
-            "/api/v1/user/post-review"
+            "https://backend.vanii.ai/auth/api/v1/user/post-review"
           );
           console.log(resp);
 
