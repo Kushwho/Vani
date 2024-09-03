@@ -5,6 +5,7 @@ import React, {
   Ref,
   forwardRef,
   useImperativeHandle,
+  ForwardRefRenderFunction,
 } from "react";
 import { Player } from "@lottiefiles/react-lottie-player";
 import { ChatHistoryProps } from "./Chat";
@@ -25,7 +26,7 @@ export type RefProps = {
   onClickEndSession: () => void;
 };
 
-const AudioRecorder: React.FC<AudioRecorderProps> = (
+const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
   { setHistory },
   ref: Ref<RefProps>
 ) => {
