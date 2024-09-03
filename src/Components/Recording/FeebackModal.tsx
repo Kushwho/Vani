@@ -8,7 +8,7 @@ interface FeedbackModalProps {
 
 interface FeedbackData {
   overallExperience: number;
-  aiUnderstanding: number;
+  personalisation: number;
   responseQuality: number;
   conversationQuality: number;
   textFeedback: string;
@@ -17,7 +17,7 @@ interface FeedbackData {
 const FeedbackModal: React.FC<FeedbackModalProps> = ({ isOpen, onSubmit }) => {
   const [feedback, setFeedback] = useState<FeedbackData>({
     overallExperience: 5,
-    aiUnderstanding: 5,
+    personalisation: 5,
     responseQuality: 5,
     conversationQuality: 5,
     textFeedback: "",
@@ -43,7 +43,7 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({ isOpen, onSubmit }) => {
 
         {[
           "overallExperience",
-          "aiUnderstanding",
+          "personalisation",
           "responseQuality",
           "conversationQuality",
         ].map((field) => (
@@ -53,22 +53,24 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({ isOpen, onSubmit }) => {
                 .replace(/([A-Z])/g, " $1")
                 .replace(/^./, (str) => str.toUpperCase())}
             </label>
-            <input
-              type="range"
-              min="1"
-              max="10"
-              value={feedback[field as keyof FeedbackData]}
-              onChange={(e) =>
-                handleChange(
-                  field as keyof FeedbackData,
-                  Number(e.target.value)
-                )
-              }
-              className="w-full"
-            />
-            <span className="text-sm text-gray-500">
-              Value: {feedback[field as keyof FeedbackData]}
-            </span>
+            <div className="flex flex-row gap-4">
+              <input
+                type="range"
+                min="1"
+                max="10"
+                value={feedback[field as keyof FeedbackData]}
+                onChange={(e) =>
+                  handleChange(
+                    field as keyof FeedbackData,
+                    Number(e.target.value)
+                  )
+                }
+                className="w-full"
+              />
+              <span className="text-sm text-gray-500">
+                {feedback[field as keyof FeedbackData]}
+              </span>
+            </div>
           </div>
         ))}
 
@@ -78,8 +80,9 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({ isOpen, onSubmit }) => {
           </label>
           <textarea
             value={feedback.textFeedback}
+       
             onChange={(e) => handleChange("textFeedback", e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded"
+            className="w-full p-2 border border-gray-300 rounded h-40"
           />
         </div>
 

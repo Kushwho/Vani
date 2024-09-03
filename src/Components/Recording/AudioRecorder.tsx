@@ -64,9 +64,9 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
       toast.success(
         "You are not logged in. Please log in to view this page. Navigating you to the home page"
       );
-      setTimeout(() => {
-        navigate("/");
-      }, 3000);
+      // setTimeout(() => {
+      //   navigate("/");
+      // }, 3000);
     }
   }, [auth?.primaryValues.email, navigate]);
 

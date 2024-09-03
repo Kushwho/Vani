@@ -88,12 +88,12 @@ const Navbar: React.FC = () => {
 
   return (
     <header
-      className={`p-4 px-16 w-full bg-primary-50 transition-all duration-300 ${
+      className={`p-4 px-16 max-md:px-8 w-full bg-primary-50 transition-all duration-300 ${
         isSticky ? "fixed top-0 w-full z-50 bg-opacity-50 backdrop-blur-sm" : ""
       }`}
     >
       <nav className="flex max-w-6xl mx-auto items-center justify-between">
-        <Link to="/" className="w-14">
+        <Link to="/" className="w-14 max-md:hidden">
           <img src="/logo.png" alt="vanii logo" />
         </Link>
         <div className={menuContainerClasses}>
@@ -151,7 +151,7 @@ const Navbar: React.FC = () => {
         </div>
         {isMobile && (
           <>
-            <a className="text-md flex items-center transition-all animate-pulse text-primary-700"  href={authContext?.primaryValues.loggedIn ? "/record":"signup"}>
+            <a className=" flex items-center py-2 px-5 rounded bg-primary-600 text-primary-50 hover:bg-primary-700 transition-colors duration-200"  href={authContext?.primaryValues.loggedIn ? "/record":"signup"}>
               {authContext?.primaryValues.loggedIn
                 ? "Start Learning"
                 : "Get Started"}
