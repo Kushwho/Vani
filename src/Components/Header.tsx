@@ -151,7 +151,7 @@ const Navbar: React.FC = () => {
         </div>
         {isMobile && (
           <>
-            <a className="text-md flex items-center transition-all animate-pulse text-primary-700">
+            <a className="text-md flex items-center transition-all animate-pulse text-primary-700"  href={authContext?.primaryValues.loggedIn ? "/record":"signup"}>
               {authContext?.primaryValues.loggedIn
                 ? "Start Learning"
                 : "Get Started"}
