@@ -8,12 +8,12 @@ const HeroSection: FC = () => {
   return (
     <section id="hero" className="observe bg-primary-50 py-14">
       <div className="max-w-screen-xl mx-auto max-md:px-8 md:px-24 flex flex-col justify-center items-center gap-16">
-        <h1 className="font-satoshi-medium text-4xl leading-tight text-center bg-gradient-to-r from-black to-primary-600 bg-clip-text text-transparent">
+        <h1 className="font-satoshi-medium text-4xl  leading-tight text-center bg-gradient-to-r from-black to-primary-600 bg-clip-text text-transparent">
           India’s AI for Spoken English Learning
         </h1>
-        <div className="grid grid-cols-2 max-md:grid-cols-1 gap-8 items-center">
+        <div className="grid grid-cols-2 max-md:grid-cols-1 max-md:flex max-md:flex-row-reverse  gap-8 items-center">
           <div
-            className="rounded-medium h-full min-h-[29rem] bg-cover bg-center"
+            className="rounded-medium h-full min-h-[29rem] bg-cover bg-center max-md:hidden"
             style={{ backgroundImage: "url('/assets/images/img-1.webp')" }}
           ></div>
           <div className="flex flex-col h-full w-full gap-8">
