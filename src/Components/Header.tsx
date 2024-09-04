@@ -125,6 +125,9 @@ const Navbar: React.FC = () => {
                 <li>
                   <Link
                     to="/record"
+                    onClick={() => {
+                      setIsActive(false);
+                    }}
                     className="hover:text-primary-700 transition-colors duration-200"
                   >
                     Start Learning
@@ -151,7 +154,10 @@ const Navbar: React.FC = () => {
         </div>
         {isMobile && (
           <>
-            <a className=" flex items-center py-2 px-5 rounded bg-primary-600 text-primary-50 hover:bg-primary-700 transition-colors duration-200"  href={authContext?.primaryValues.loggedIn ? "/record":"signup"}>
+            <a
+              className=" flex items-center py-2 px-5 rounded bg-primary-600 text-primary-50 hover:bg-primary-700 transition-colors duration-200"
+              href={authContext?.primaryValues.loggedIn ? "/record" : "signup"}
+            >
               {authContext?.primaryValues.loggedIn
                 ? "Start Learning"
                 : "Get Started"}
