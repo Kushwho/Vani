@@ -124,6 +124,7 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
       window.addEventListener("beforeunload", handleBeforeUnload);
 
       return () => {
+        handleBeforeUnload();
         window.removeEventListener("beforeunload", handleBeforeUnload);
       };
     }
