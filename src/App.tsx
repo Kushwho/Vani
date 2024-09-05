@@ -16,8 +16,8 @@ const App: FC = () => {
   >({
     loggedIn: false,
     id: DEFAULT_SESSION_ID,
-    email:"",
-    voice:"Deepgram"
+    email: "",
+    voice: "Deepgram",
   });
   const axiosInstance = axios.create({
     baseURL: "https://backend.vanii.ai/auth",
@@ -42,7 +42,7 @@ const App: FC = () => {
             <AppRoutes />
           </WindowDimensionsProvider>
         </AxiosContext.Provider>
-        <ToastContainer />
+        <ToastContainer autoClose={1500} />
       </QueryClientProvider>
     </AuthContextProvider>
   );
