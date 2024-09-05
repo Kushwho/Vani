@@ -106,8 +106,8 @@ const Signup: FC = () => {
           GetUser(undefined, axios);
           setOtpSent(true);
           setTimeout(() => {
-            navigate("/")
-          }, 3000);
+            navigate("/");
+          }, 1500);
         }
 
         // handle response by navigating to another page or so.

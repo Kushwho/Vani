@@ -78,18 +78,21 @@ const ForgotPassword: FC<ForgotPasswordProps> = (): ReactElement => {
         OTP: OTP,
         newPassword: passwordData.password,
         axios: axios,
-      }).then((msg) =>{
-        if(msg.success){
-          toast.success("Password changed successfully.Navigating to login page")
-          setTimeout(() =>{
-            navigate("/login")
-          })
-        }
-      }).catch((err) => {
-        toast.error(err.message);
-      });
+      })
+        .then((msg) => {
+          if (msg.success) {
+            toast.success(
+              "Password changed successfully.Navigating to login page"
+            );
+            setTimeout(() => {
+              navigate("/login");
+            }, 1500);
+          }
+        })
+        .catch((err) => {
+          toast.error(err.message);
+        });
       console.log(resp);
-      
     }
   };
 

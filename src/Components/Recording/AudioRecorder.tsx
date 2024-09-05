@@ -67,7 +67,7 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
       );
       setTimeout(() => {
         navigate("/");
-      }, 3000);
+      }, 1500);
     }
   }, [auth?.primaryValues.email, navigate]);
 

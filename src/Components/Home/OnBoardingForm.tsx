@@ -16,6 +16,7 @@ const steps: Step[] = [
       "Spanish",
       "Mandarin",
       "Arabic",
+      "English",
       "Other (please specify)",
     ],
     inputType: "radio",

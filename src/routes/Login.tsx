@@ -24,9 +24,9 @@ const Login: FC = () => {
         toast.success("You are already loggedIn. Navigating to Home Page");
         setTimeout(() => {
           navigate("/");
-        }, 3000);
+        }, 1500);
       }
-    }, 3000);
+    }, 1500);
     return () => {
       clearTimeout(timeoutId);
     };
@@ -67,7 +67,7 @@ const Login: FC = () => {
         toast.success("Login Successful. Navigating to Home Page");
         setTimeout(() => {
           navigate("/");
-        }, 3000);
+        }, 1500);
       } else {
         toast.error("An unknown error occured");
         toast.error(response.message);

@@ -47,7 +47,7 @@ const Record: FC = () => {
             toast("Thanks for using.Navigating to home page.");
             setTimeout(() => {
               navigate("/");
-            }, 3000);
+            }, 1500);
           } else {
             toast("Error Sending response");
           }
