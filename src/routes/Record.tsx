@@ -44,10 +44,10 @@ const Record: FC = () => {
 
           if (resp.data.success) {
             ref.current?.onClickEndSession();
-            toast("Thanks for using");
+            toast("Thanks for using.Navigating to home page.");
             setTimeout(() => {
-              navigate("");
-            });
+              navigate("/");
+            }, 3000);
           } else {
             toast("Error Sending response");
           }
