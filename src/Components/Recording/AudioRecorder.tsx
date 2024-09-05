@@ -14,7 +14,7 @@ import useAuthContext from "@/Hooks/useAuthContext";
 
 import { toast } from "react-toastify";
 import { DEFAULT_SESSION_ID, NOT_LOGGED_IN_EMAIL } from "@/util/constant";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { AudioHandler } from "@/util/AudioHandler";
 
 export type AudioRecorderProps = {
@@ -33,6 +33,14 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
   const [isRecording, setIsRecording] = useState(false);
 
   const navigate = useNavigate();
+  const location = useLocation();
+  useEffect(() => {
+    if (location.pathname !== "/record") {
+      socketRef.current?.emit("leave", { sessionId });
+      socketRef.current?.disconnect();
+    }
+    // Perform any action here when route changes
+  }, [location]);
   const [isDeepgramOpened, setIsDeepGramOpened] = useState<boolean>(false);
 
   const microphoneRef = useRef<MediaRecorder | null>(null);
