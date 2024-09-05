@@ -189,6 +189,7 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
   // ...
 
   const playAudio = async (audioBinary: ArrayBuffer) => {
+    setAudioPlaying(true);
     await audioPlayerRef.current.playSound(audioBinary);
   };
 
