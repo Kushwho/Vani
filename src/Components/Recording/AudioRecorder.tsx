@@ -14,7 +14,7 @@ import useAuthContext from "@/Hooks/useAuthContext";
 
 import { toast } from "react-toastify";
 import { DEFAULT_SESSION_ID, NOT_LOGGED_IN_EMAIL } from "@/util/constant";
-import { useLocation, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { AudioHandler } from "@/util/AudioHandler";
 
 export type AudioRecorderProps = {
@@ -33,14 +33,7 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
   const [isRecording, setIsRecording] = useState(false);
 
   const navigate = useNavigate();
-  const location = useLocation();
-  useEffect(() => {
-    if (location.pathname !== "/record") {
-      socketRef.current?.emit("leave", { sessionId });
-      socketRef.current?.disconnect();
-    }
-    // Perform any action here when route changes
-  }, [location]);
+
   const [isDeepgramOpened, setIsDeepGramOpened] = useState<boolean>(false);
 
   const microphoneRef = useRef<MediaRecorder | null>(null);
@@ -123,18 +116,21 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
           enqueueAudio(audioBinary);
         }
       });
-      const handleBeforeUnload = () => {
-        socketRef.current?.emit("leave", { sessionId });
-        socketRef.current?.disconnect();
-      };
-
-      window.addEventListener("beforeunload", handleBeforeUnload);
-
-      return () => {
-        window.removeEventListener("beforeunload", handleBeforeUnload);
-      };
     }
   }, [sessionId]);
+
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      socketRef.current?.emit("leave", { sessionId });
+      socketRef.current?.disconnect();
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
 
   const onClickEndSession = () => {
     socketRef.current?.emit("leave", { sessionId });
