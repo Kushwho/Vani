@@ -9,6 +9,15 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
 import useWindowDimensions from "@/Hooks/useWindowDimensions";
 
+/**
+ * The Record component is the entry point for the recording feature.
+ * It renders the audio recorder, chat history and a button to end the session.
+ * When the end session button is clicked, it opens a feedback modal.
+ * Once the feedback form is submitted, it sends a POST request to the backend with the user's feedback.
+ * If the request is successful, it displays a success toast and navigates the user back to the home page.
+ * If the request fails, it displays an error toast.
+ */
+
 const Record: FC = () => {
   const [messages, setMessages] = useState<ChatHistoryProps>({ messages: [] });
 
@@ -24,9 +33,12 @@ const Record: FC = () => {
     <main className=" flex flex-col items-center w-full">
       <FeedbackModal
         isOpen={feedbackModalOpen}
-        onSubmit={async () => {
+        onSubmit={async (data) => {
+          const toFed = { ...data, aiUnderstanding: data.personalisation };
+          delete toFed.personalisation;
           const resp = await axios.post<ApiResponse<any>>(
-            "https://backend.vanii.ai/auth/api/v1/user/post-review"
+            "https://backend.vanii.ai/auth/api/v1/user/post-review",
+            toFed
           );
           console.log(resp);
 

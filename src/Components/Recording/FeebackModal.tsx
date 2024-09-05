@@ -8,7 +8,7 @@ interface FeedbackModalProps {
 
 interface FeedbackData {
   overallExperience: number;
-  personalisation: number;
+  personalisation?: number;
   responseQuality: number;
   conversationQuality: number;
   textFeedback: string;
@@ -80,7 +80,6 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({ isOpen, onSubmit }) => {
           </label>
           <textarea
             value={feedback.textFeedback}
-       
             onChange={(e) => handleChange("textFeedback", e.target.value)}
             className="w-full p-2 border border-gray-300 rounded h-40"
           />
