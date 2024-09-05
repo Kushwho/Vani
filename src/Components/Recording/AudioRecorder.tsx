@@ -116,21 +116,19 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
           enqueueAudio(audioBinary);
         }
       });
+      const handleBeforeUnload = () => {
+        socketRef.current?.emit("leave", { sessionId });
+        socketRef.current?.disconnect();
+      };
+
+      window.addEventListener("beforeunload", handleBeforeUnload);
+
+      return () => {
+        handleBeforeUnload();
+        window.removeEventListener("beforeunload", handleBeforeUnload);
+      };
     }
   }, [sessionId]);
-
-  useEffect(() => {
-    const handleBeforeUnload = () => {
-      socketRef.current?.emit("leave", { sessionId });
-      socketRef.current?.disconnect();
-    };
-
-    window.addEventListener("beforeunload", handleBeforeUnload);
-
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-  }, []);
 
   const onClickEndSession = () => {
     socketRef.current?.emit("leave", { sessionId });
