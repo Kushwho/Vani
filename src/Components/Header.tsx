@@ -17,6 +17,8 @@ const Navbar: React.FC = () => {
   const isMobile = useMemo(() => dimensions.width < 768, [dimensions.width]);
 
   const handleScroll = useCallback(() => {
+    if (isActive) setIsSticky(false);
+    return;
     setIsSticky(window.scrollY > 0);
   }, []);
 

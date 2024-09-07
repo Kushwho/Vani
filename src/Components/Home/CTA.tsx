@@ -15,22 +15,21 @@ const CTA: FC = () => {
           <h2 className="mb-8 font-satoshi-bold text-primary-50 text-2xl">
             Join the Vanii Community and Learn!
           </h2>
-          {!auth?.primaryValues.loggedIn ? (
-            <button
-              id="btn-view-jobs"
-              className="flex items-center "
-              onClick={() => navigate("/signup")}
-            >
-              <span>Get started</span>
-              <img
-                src="/assets/icons/ArrowRight.svg"
-                alt="arrow icon"
-                className="w-6 h-6 transition-transform duration-200 ease-in-out hover:translate-x-1"
-              />
-            </button>
-          ) : (
-            <></>
-          )}
+
+          <button
+            id="btn-view-jobs"
+            className="flex items-center "
+            onClick={() =>
+              window.open("https://chat.whatsapp.com/L9i9d2ody5DCdb8Z6PJHT4")
+            }
+          >
+            <span>Get started</span>
+            <img
+              src="/assets/icons/ArrowRight.svg"
+              alt="arrow icon"
+              className="w-6 h-6 transition-transform duration-200 ease-in-out hover:translate-x-1"
+            />
+          </button>
         </div>
       </section>
     </>
