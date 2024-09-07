@@ -9,7 +9,7 @@ import { FC } from "react";
 const Home: FC = () => {
   return (
     <>
-      <main>
+      <main className="">
         {/* Hero Section */}
         <HeroSection />
 

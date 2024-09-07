@@ -1,10 +1,6 @@
-import useAuthContext from "@/Hooks/useAuthContext";
 import { FC } from "react";
-import { useNavigate } from "react-router";
 
 const CTA: FC = () => {
-  const auth = useAuthContext();
-  const navigate = useNavigate();
   return (
     <>
       <section id="cta" className="max-md:px-8 md:px-24 py-20 bg-9">
