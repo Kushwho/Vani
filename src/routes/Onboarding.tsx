@@ -119,7 +119,7 @@ const Onboarding: React.FC = () => {
         setFormData({ ...formData, nativeLanguage: otherInput });
       }
       axios
-        .post("/post-onboarding", formData)
+        .post("api/v1/user/post-onboarding", formData)
         .then((response) => {
           console.log(response);
 
@@ -130,7 +130,7 @@ const Onboarding: React.FC = () => {
         })
         .catch((error) => {
           console.log(error);
-          
+
           toast("An unknow error Occured. ");
           setTimeout(() => {
             navigate("/");
@@ -230,10 +230,7 @@ const Onboarding: React.FC = () => {
                 ? "opacity-50 cursor-not-allowed"
                 : ""
             }`}
-            disabled={
-         
-              formData[steps[currentStep].key] == undefined
-            }
+            disabled={formData[steps[currentStep].key] == undefined}
           >
             {currentStep === steps.length - 1 ? "Submit" : "Next"}
           </button>
