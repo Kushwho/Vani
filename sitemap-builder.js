@@ -11,7 +11,7 @@ const routes = [
   { path: "/signup", priority: "0.80", changefreq: "monthly" },
   { path: "/blogs", priority: "0.90", changefreq: "weekly" },
   { path: "/record", priority: "0.80", changefreq: "monthly" },
-  { path: "/health-check", priority: "0.80", changefreq: "monthly" },
+
   // Add dynamic routes here if necessary
 ];
 

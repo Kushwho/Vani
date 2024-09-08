@@ -13,6 +13,7 @@ import { useAxiosContext } from "@/Hooks/useAxiosContext";
 import GetUser from "@/services/Login/GetUser";
 import { DEFAULT_SESSION_ID, NOT_LOGGED_IN_EMAIL } from "@/util/constant";
 import ForgotPassword from "./ForgotPassword";
+import Onboarding from "./Onboarding";
 
 const AppRoutes: FC = () => {
   const auth = useAuthContext();
@@ -79,6 +80,7 @@ const AppRoutes: FC = () => {
           />
           <Route path="/health-check" element={<HealthCheck />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/onboarding" element={<Onboarding />} />
         </Routes>
       </BrowserRouter>
     </>

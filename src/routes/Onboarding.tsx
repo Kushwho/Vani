@@ -1,3 +1,4 @@
+import { useAxiosContext } from "@/Hooks/useAxiosContext";
 import { useState } from "react";
 
 // Define types for step data
@@ -26,7 +27,7 @@ const steps: Step[] = [
     question: "How would you rate your current English speaking ability?",
     options: ["Beginner", "Intermediate", "Advanced", "Near-native"],
     inputType: "radio",
-    key: "englishAbility",
+    key: "languageLevel",
   },
   {
     question: "What's your primary goal for using this app?",
@@ -37,7 +38,7 @@ const steps: Step[] = [
       "Practice conversation skills",
     ],
     inputType: "radio",
-    key: "primaryGoal",
+    key: "goal",
   },
   {
     question: "In which setting do you most often use English?",
@@ -49,7 +50,7 @@ const steps: Step[] = [
       "I rarely use English currently",
     ],
     inputType: "radio",
-    key: "englishUsage",
+    key: "purpose",
   },
   {
     question: "How much time can you dedicate to language learning daily?",
@@ -60,7 +61,7 @@ const steps: Step[] = [
       "More than 60 minutes",
     ],
     inputType: "radio",
-    key: "learningTime",
+    key: "timeToBeDedicated",
   },
   {
     question: "What's your preferred learning pace?",
@@ -82,7 +83,7 @@ const steps: Step[] = [
       "Using appropriate tone and intonation",
     ],
     inputType: "radio",
-    key: "challenge",
+    key: "challengingAspec",
   },
   {
     question: "How do you prefer to practice speaking?",
@@ -93,22 +94,37 @@ const steps: Step[] = [
       "A mix of structured and free-form practice",
     ],
     inputType: "radio",
-    key: "practicePreference",
+    key: "preferredPracticingWay",
   },
   {
     question: "Something you want the AI to know about you?",
     options: [],
     inputType: "text",
-    key: "additionalInfo",
+    key: "additionalText",
   },
 ];
 
 const Onboarding: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState<{ [key: string]: string }>({});
+  const [otherInput, setOtherInput] = useState(""); // Separate state for 'Other' input
+  const axios = useAxiosContext();
 
   const handleNext = () => {
     if (currentStep < steps.length - 1) setCurrentStep(currentStep + 1);
+    if (currentStep === steps.length - 1) {
+      if (formData["nativeLanguage"] === "Other (please specify)") {
+        setFormData({ ...formData, nativeLanguage: otherInput });
+      }
+      axios
+        .post("/post-onboarding", formData)
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
   };
 
   const handlePrevious = () => {
@@ -119,6 +135,10 @@ const Onboarding: React.FC = () => {
     setFormData({ ...formData, [key]: value });
   };
 
+  const handleOtherInputChange = (value: string) => {
+    setOtherInput(value);
+  };
+
   const handleBackgroundClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
       // Close modal when clicking outside the content
@@ -127,19 +147,35 @@ const Onboarding: React.FC = () => {
 
   const renderOptions = (step: Step) => {
     if (step.inputType === "radio") {
-      return step.options.map((option: string) => (
-        <label key={option} className="block my-2">
-          <input
-            type="radio"
-            name={step.key}
-            value={option}
-            checked={formData[step.key] === option}
-            onChange={(e) => handleChange(step.key, e.target.value)}
-            className="mr-2"
-          />
-          {option}
-        </label>
-      ));
+      return (
+        <>
+          {step.options.map((option: string) => {
+            return (
+              <label key={option} className="block my-2">
+                <input
+                  type="radio"
+                  name={step.key}
+                  value={option}
+                  checked={formData[step.key] === option}
+                  onChange={(e) => handleChange(step.key, e.target.value)}
+                  className="mr-2"
+                />
+                {option}
+                {formData[step.key] === "Other (please specify)" &&
+                  option === "Other (please specify)" && (
+                    <input
+                      type="text"
+                      value={otherInput}
+                      placeholder="Please enter your language"
+                      onChange={(e) => handleOtherInputChange(e.target.value)}
+                      className="ml-2"
+                    />
+                  )}
+              </label>
+            );
+          })}
+        </>
+      );
     } else if (step.inputType === "text") {
       return (
         <textarea
@@ -154,7 +190,7 @@ const Onboarding: React.FC = () => {
 
   return (
     <div
-      className="flex items-center justify-center w-screen h-screen bg-black bg-opacity-50 z-40"
+      className="flex items-center justify-center fixed inset-0 bg-black bg-opacity-50 z-40"
       onClick={handleBackgroundClick}
     >
       <div className="max-w-xl bg-white mx-auto h-fit my-auto p-8 border rounded shadow z-50 relative w-4/5">
@@ -172,18 +208,21 @@ const Onboarding: React.FC = () => {
             }`}
             disabled={currentStep === 0}
           >
-            Skip
+            Previous
           </button>
           <button
             onClick={handleNext}
             className={`px-4 py-2 bg-primary-500 text-white rounded ${
-              currentStep === steps.length - 1
+              formData[steps[currentStep].key] == undefined
                 ? "opacity-50 cursor-not-allowed"
                 : ""
             }`}
-            disabled={currentStep === steps.length - 1}
+            disabled={
+              currentStep === steps.length - 1 ||
+              formData[steps[currentStep].key] == undefined
+            }
           >
-            Next
+            {currentStep === steps.length - 1 ? "Submit" : "Next"}
           </button>
         </div>
       </div>
