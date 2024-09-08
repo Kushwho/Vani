@@ -226,7 +226,9 @@ const Onboarding: React.FC = () => {
           <button
             onClick={handleNext}
             className={`px-4 py-2 bg-primary-500 text-white rounded ${
-              formData[steps[currentStep].key] == undefined
+              currentStep === steps.length - 1
+                ? "opacity-100"
+                : formData[steps[currentStep].key] == undefined
                 ? "opacity-50 cursor-not-allowed"
                 : ""
             }`}
