@@ -102,11 +102,11 @@ const Signup: FC = () => {
           axios
         );
         if (rep.data.isOTPVerified) {
-          toast("Signup Successful. Navigating to Home page");
+          toast("Signup Successful. Please provide your preferences on next page");
           GetUser(undefined, axios);
           setOtpSent(true);
           setTimeout(() => {
-            navigate("/");
+            navigate("/onboarding");
           }, 1500);
         }
 
