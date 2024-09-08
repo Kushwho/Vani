@@ -20,21 +20,13 @@ const Footer: React.FC = () => {
           <ul className="flex flex-wrap gap-4 text-md">
             <li>
               <a href="#" className="flex items-center gap-2">
-                <img
-                  src="/Mail.svg"
-                  alt="Email Icon"
-                  className="w-8 h-8"
-                />
+                <img src="/Mail.svg" alt="Email Icon" className="w-8 h-8" />
                 Email
               </a>
             </li>
             <li>
               <a href="#" className="flex items-center gap-2">
-                <img
-                  src="/XLogo.svg"
-                  alt="Twitter Icon"
-                  className="w-8 h-8"
-                />
+                <img src="/XLogo.svg" alt="Twitter Icon" className="w-8 h-8" />
                 Twitter
               </a>
             </li>
