@@ -121,13 +121,17 @@ const Onboarding: React.FC = () => {
       axios
         .post("/post-onboarding", formData)
         .then((response) => {
+          console.log(response);
+
           toast("Thanks for submitting. Navigating you to home page");
           setTimeout(() => {
             navigate("/");
           }, 1500);
         })
         .catch((error) => {
-          toast("An unknow error Occured. ")
+          console.log(error);
+          
+          toast("An unknow error Occured. ");
           setTimeout(() => {
             navigate("/");
           }, 1500);

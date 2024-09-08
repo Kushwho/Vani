@@ -3,7 +3,7 @@ import CTA from "@/Components/Home/CTA";
 import Features from "@/Components/Home/Features";
 import HeroSection from "@/Components/Home/HeroSection";
 import Onboarding from "@/Components/Home/OnBoardingForm";
-import Testimonials from "@/Components/Home/Testimonials";
+
 import { FC } from "react";
 
 const Home: FC = () => {
