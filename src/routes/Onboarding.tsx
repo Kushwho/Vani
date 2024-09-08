@@ -230,7 +230,11 @@ const Onboarding: React.FC = () => {
                 ? "opacity-50 cursor-not-allowed"
                 : ""
             }`}
-            disabled={formData[steps[currentStep].key] == undefined}
+            disabled={
+              currentStep === steps.length - 1
+                ? false
+                : formData[steps[currentStep].key] == undefined
+            }
           >
             {currentStep === steps.length - 1 ? "Submit" : "Next"}
           </button>
