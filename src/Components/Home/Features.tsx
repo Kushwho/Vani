@@ -6,7 +6,7 @@ const Features: FC = () => {
       <section id="features" className="bg-primary-50 py-20">
         <div className="max-w-screen-xl mx-auto max-md:px-8 md:px-24">
           <div className="grid max-md:grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-            <h2 className="font-satoshi-medium text-2xl text-primary-700 max-w-xl">
+            <h2 className="font-satoshi-medium text-2xl text-primary-700 max-w-xl  max-md:mb-1 font-semibold">
               Bridging Language Barriers, Opening Doors
             </h2>
             <p className="text-md">
@@ -21,11 +21,11 @@ const Features: FC = () => {
 
           <div className="grid max-md:grid-cols-1 md:grid-cols-2 gap-8">
             <article className="grid grid-cols-[auto_auto] gap-4 items-center p-8 bg-primary-100 border rounded-medium transition duration-200 hover:bg-primary-600 hover:text-neutral-50">
-              <div className="grid place-items-center max-w-20 aspect-square p-4 rounded-full bg-primary-600 transition duration-200 hover:border-primary-50">
+              <div className="grid place-items-center max-w-20 aspect-square p-4 rounded-full bg-primary-600 transition duration-200 hover:border-primary-50 max-md:hidden">
                 <img src="/assets/icons/Curate.svg" alt="curate icon" />
               </div>
               <div>
-                <h3 className="font-satoshi-medium text-lg">
+                <h3 className="font-satoshi-medium text-lg  max-md:mb-1 font-semibold">
                   Hyper-Realistic Language Teacher
                 </h3>
                 <p className="align-self-start text-md">
@@ -37,14 +37,14 @@ const Features: FC = () => {
             </article>
 
             <article className="grid grid-cols-[auto_auto] gap-4 items-center p-8 bg-primary-100 border rounded-medium transition duration-200 hover:bg-primary-600 hover:text-neutral-50">
-              <div className="grid place-items-center max-w-20 aspect-square p-4 rounded-full bg-primary-600 transition duration-200 hover:border-primary-50">
+              <div className="grid place-items-center max-w-20 aspect-square p-4 rounded-full bg-primary-600 transition duration-200 hover:border-primary-50 max-md:hidden">
                 <img
                   src="/assets/icons/Personalize.svg"
                   alt="personalize icon"
                 />
               </div>
               <div>
-                <h3 className="font-satoshi-medium text-lg">
+                <h3 className="font-satoshi-medium text-lg  max-md:mb-1 font-semibold">
                   Personalized Feedback
                 </h3>
                 <p className="align-self-start text-md">
@@ -56,14 +56,14 @@ const Features: FC = () => {
             </article>
 
             <article className="grid grid-cols-[auto_auto] gap-4 items-center p-8 bg-primary-100 border rounded-medium transition duration-200 hover:bg-primary-600 hover:text-neutral-50">
-              <div className="grid place-items-center max-w-20 aspect-square p-4 rounded-full bg-primary-600 transition duration-200 hover:border-primary-50">
+              <div className="grid place-items-center max-w-20 aspect-square p-4 rounded-full bg-primary-600 transition duration-200 hover:border-primary-50 max-md:hidden">
                 <img src="/assets/icons/Culture.svg" alt="culture icon" />
               </div>
               <div>
-                <h3 className="font-satoshi-medium text-lg">
+                <h3 className="font-satoshi-medium text-lg  max-md:mb-1 font-semibold">
                   Interactive Sessions
                 </h3>
-                <p className="align-self-start text-md">
+                <p className="align-self-start text-md ">
                   Engage in interactive learning sessions for dynamic education.
                   Gain confidence through real-world scenarios and practice
                   activities.
@@ -72,11 +72,11 @@ const Features: FC = () => {
             </article>
 
             <article className="grid grid-cols-[auto_auto] gap-4 items-center p-8 bg-primary-100 border rounded-medium transition duration-200 hover:bg-primary-600 hover:text-neutral-50">
-              <div className="grid place-items-center max-w-20 aspect-square p-4 rounded-full bg-primary-600 transition duration-200 hover:border-primary-50">
+              <div className="grid place-items-center max-w-20 aspect-square p-4 rounded-full bg-primary-600 transition duration-200 hover:border-primary-50 max-md:hidden">
                 <img src="/assets/icons/Community.svg" alt="community icon" />
               </div>
               <div>
-                <h3 className="font-satoshi-medium text-lg">
+                <h3 className="font-satoshi-medium text-lg  max-md:mb-1 font-semibold">
                   Community Support
                 </h3>
                 <p className="align-self-start text-md">
