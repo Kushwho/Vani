@@ -218,7 +218,7 @@ const Onboarding: React.FC = () => {
                 : ""
             }`}
             disabled={
-              currentStep === steps.length - 1 ||
+   
               formData[steps[currentStep].key] == undefined
             }
           >
