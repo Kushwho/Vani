@@ -1,5 +1,7 @@
 import { useAxiosContext } from "@/Hooks/useAxiosContext";
 import { useState } from "react";
+import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
 
 // Define types for step data
 interface Step {
@@ -119,10 +121,16 @@ const Onboarding: React.FC = () => {
       axios
         .post("/post-onboarding", formData)
         .then((response) => {
-          console.log(response.data);
+          toast("Thanks for submitting. Navigating you to home page");
+          setTimeout(() => {
+            navigate("/");
+          }, 1500);
         })
         .catch((error) => {
-          console.error(error);
+          toast("An unknow error Occured. ")
+          setTimeout(() => {
+            navigate("/");
+          }, 1500);
         });
     }
   };
@@ -130,6 +138,7 @@ const Onboarding: React.FC = () => {
   const handlePrevious = () => {
     if (currentStep > 0) setCurrentStep(currentStep - 1);
   };
+  const navigate = useNavigate();
 
   const handleChange = (key: string, value: string) => {
     setFormData({ ...formData, [key]: value });
@@ -190,10 +199,10 @@ const Onboarding: React.FC = () => {
 
   return (
     <div
-      className="flex items-center justify-center fixed inset-0 bg-black bg-opacity-50 z-40"
+      className="flex flex-col items-center justify-center w-screen h-screen bg-black bg-opacity-50 z-40 gap-4"
       onClick={handleBackgroundClick}
     >
-      <div className="max-w-xl bg-white mx-auto h-fit my-auto p-8 border rounded shadow z-50 relative w-4/5">
+      <div className="max-w-xl bg-white mx-auto h-fit  p-8 border rounded shadow z-50 relative w-4/5">
         <h2 className="text-lg font-bold mb-4">
           Step {currentStep + 1} of {steps.length}
         </h2>
@@ -218,13 +227,22 @@ const Onboarding: React.FC = () => {
                 : ""
             }`}
             disabled={
-   
+              !(currentStep === steps.length - 1) ||
               formData[steps[currentStep].key] == undefined
             }
           >
             {currentStep === steps.length - 1 ? "Submit" : "Next"}
           </button>
         </div>
+      </div>
+
+      <div
+        className="flex items-center justify-centerpx-4 px-4 py-2 bg-primary-500 text-white rounded"
+        onClick={() => {
+          navigate("/");
+        }}
+      >
+        Skip
       </div>
     </div>
   );

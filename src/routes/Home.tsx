@@ -18,7 +18,7 @@ const Home: FC = () => {
         {/* Features Section */}
         <Features />
         {/* Testimonials Section */}
-        <Testimonials />
+        {/* <Testimonials /> */}
         <Onboarding />
 
         <CTA />
