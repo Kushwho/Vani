@@ -4,7 +4,7 @@ const Footer: React.FC = () => {
   return (
     <footer className="bg-primary-50  bottom-0  w-screen">
       <div className="max-lg:px-6 max-md:px-4 py-16 max-w-6xl mx-auto  flex flex-row max-md:flex-col justify-between items-center w-full gap-6">
-        <div className="flex flex-row justify-center items-center gap-6 text-md ">
+        <div className="flex flex-row justify-center items-center gap-6 text-md  max-md:gap-12">
           <div className="w-20  aspect-square flex-shrink-0 flex items-center">
             <img src="/logo.png" alt="Logo" className="object-contain" />
           </div>
@@ -13,7 +13,7 @@ const Footer: React.FC = () => {
             <br /> with Vanii Today!
           </p>
         </div>
-        <div className="max-md:flex max-md:flex-row gap-6">
+        <div className="max-md:flex max-md:flex-row gap-6 max-md:gap-12">
           <h3 className="max-w-xs text-lg max-md:text-md  text-primary-700 mb-6">
             We'd Like &<br /> Love to Help
           </h3>
