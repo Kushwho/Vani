@@ -53,10 +53,10 @@ const Signup: FC = () => {
 
   useEffect(() => {
     axios
-      .get("https://api.country.is/")
+      .get("https://api.country.is/", { withCredentials: false })
       .then((data) => {
         console.log(data);
-        
+
         if (data.data.country) {
           for (const countryCodeKey in Object.keys(countryCodesObject)) {
             if (data.data.country === countryCodesObject[countryCodeKey].code) {
