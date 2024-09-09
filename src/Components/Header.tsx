@@ -124,7 +124,7 @@ const Navbar: React.FC = () => {
                     to={
                       item === "Home"
                         ? "/"
-                        : `/#${item.toLowerCase().replace(" ", "-")}`
+                        : `#${item.toLowerCase().replace(" ", "-")}`
                     }
                     className="hover:text-primary-700 transition-colors duration-200"
                     onClick={() => isMobile && setIsActive(false)}
