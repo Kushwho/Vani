@@ -185,7 +185,7 @@ const Navbar: React.FC = () => {
                 : "Get Started"}
             </a>
             <button
-              className="menu-hamburger cursor-pointer md:hidden z-50"
+              className="fixed right-6 menu-hamburger cursor-pointer md:hidden z-50"
               onClick={handleToggle}
               aria-label="Toggle menu"
             >
