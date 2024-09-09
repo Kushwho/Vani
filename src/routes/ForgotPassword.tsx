@@ -1,4 +1,4 @@
-import { FC, FormEvent, ReactElement, useState } from "react";
+import { FC, FormEvent, ReactElement, useEffect, useState } from "react";
 import bgImg from "../Images/bg.png";
 import PhoneNumberInput from "@/Components/PhoneNo";
 import PasswordVerify, {
@@ -12,6 +12,7 @@ import {
 import { useAxiosContext } from "@/Hooks/useAxiosContext";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
+import { countryCodesObject } from "@/Components/Signup/CountryCode";
 
 interface ForgotPasswordProps {}
 interface PhoneNo {
@@ -20,6 +21,26 @@ interface PhoneNo {
 }
 
 const ForgotPassword: FC<ForgotPasswordProps> = (): ReactElement => {
+  useEffect(() => {
+    axios
+      .get("https://api.country.is/", { withCredentials: false })
+      .then((data) => {
+        if (data.data.country) {
+          for (const countryCodeKey of Object.keys(countryCodesObject)) {
+            if (data.data.country === countryCodesObject[countryCodeKey].code) {
+              setPhoneData({
+                ...phoneData,
+                countryCode: countryCodeKey,
+              });
+              break;
+            }
+          }
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
   const [phoneData, setPhoneData] = useState<PhoneNo>({
     countryCode: "",
     phoneNo: "",

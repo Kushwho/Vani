@@ -19,13 +19,13 @@ const Footer: React.FC = () => {
           </h3>
           <ul className="flex flex-wrap gap-4 text-md max-md:text-sm">
             <li>
-              <a href="#" className="flex items-center gap-2">
+              <a href="mailto:aryan@vanii.ai" className="flex items-center gap-2">
                 <img src="/Mail.svg" alt="Email Icon" className="w-8 h-8" />
                 Email
               </a>
             </li>
             <li>
-              <a href="#" className="flex items-center gap-2">
+              <a href="https://www.linkedin.com/company/vanii-ai" className="flex items-center gap-2">
                 <img
                   src="/LinkedinLogo.svg"
                   alt="LinkedIn Icon"
