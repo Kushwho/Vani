@@ -120,8 +120,8 @@ const Navbar: React.FC = () => {
             <ul className="flex flex-col justify-center items-center md:flex-row gap-6 text-md">
               {["Home", "About Us", "Features"].map((item) => (
                 <li key={item}>
-                  <Link
-                    to={
+                  <a
+                    href={
                       item === "Home"
                         ? "/"
                         : `#${item.toLowerCase().replace(" ", "-")}`
@@ -130,7 +130,7 @@ const Navbar: React.FC = () => {
                     onClick={() => isMobile && setIsActive(false)}
                   >
                     {item}
-                  </Link>
+                  </a>
                 </li>
               ))}
               <li key={4}>
