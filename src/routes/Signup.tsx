@@ -30,7 +30,7 @@ const Signup: FC = () => {
   const [displayOtp, setDisplayOtp] = useState<boolean>(false);
   const [formData, sendFormData] = useState<FormData>({
     fullname: "",
-    email: "",
+
     password: "",
     phone: "",
     verifyPassword: "",
@@ -45,7 +45,7 @@ const Signup: FC = () => {
   const [errorMessageDisplay, setErrorMessageDisplay] =
     useState<ErrorMessageDisplay>({
       fullname: null,
-      email: null,
+
       password: null,
       phone: null,
       verifyPassword: null,
@@ -55,11 +55,8 @@ const Signup: FC = () => {
     axios
       .get("https://api.country.is/", { withCredentials: false })
       .then((data) => {
-    
-
         if (data.data.country) {
           for (const countryCodeKey of Object.keys(countryCodesObject)) {
-            
             if (data.data.country === countryCodesObject[countryCodeKey].code) {
               setCountryCode(countryCodeKey);
               break;
@@ -100,7 +97,7 @@ const Signup: FC = () => {
 
     setErrorMessageDisplay({
       fullname: null,
-      email: null,
+
       password: null,
       verifyPassword: null,
       phone: null,
@@ -108,7 +105,7 @@ const Signup: FC = () => {
 
     const data: SendOtpProps = {
       fullname: formData.fullname,
-      email: formData.email,
+
       password: formData.password,
       phone: `${countryCode}${formData.phone}`,
       // Include country code
@@ -186,24 +183,7 @@ const Signup: FC = () => {
                 </p>
               )}
             </div>
-            <div className="mb-4">
-              <label className="block text-xs font-medium text-gray-700 mb-1">
-                Email Id
-              </label>
-              <input
-                type="text"
-                name="email"
-                placeholder="Your email Id"
-                className="w-full px-3 py-2 border border-orange-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
-                value={formData.email}
-                onChange={handleChange}
-              />
-              {errorMessageDisplay.email && (
-                <p className="text-red-500 text-xs">
-                  {errorMessageDisplay.email}
-                </p>
-              )}
-            </div>
+
             <div className="mb-4">
               <label className="block text-xs font-medium text-gray-700 mb-1">
                 Phone Number

@@ -5,7 +5,7 @@ import { AxiosInstance, AxiosResponse } from "axios";
 const URL = "/api/v1/user/login";
 
 export interface LoginDataProps {
-  email: string;
+  phone: string;
   password: string;
 }
 

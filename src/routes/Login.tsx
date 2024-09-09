@@ -13,10 +13,13 @@ import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import login from "@/services/Login/Login";
 import useAuthContext from "@/Hooks/useAuthContext";
+import { countryCodesObject } from "@/Components/Signup/CountryCode";
+import PhoneNumberInput from "@/Components/PhoneNo";
 
 const Login: FC = () => {
   const auth = useAuthContext();
   const navigate = useNavigate();
+  const [countryCode, setCountryCode] = useState<string>("+1");
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
@@ -32,10 +35,26 @@ const Login: FC = () => {
     };
   }, [auth, navigate]);
 
+  useEffect(() => {
+    axios
+      .get("https://api.country.is/", { withCredentials: false })
+      .then((data) => {
+        if (data.data.country) {
+          for (const countryCodeKey of Object.keys(countryCodesObject)) {
+            if (data.data.country === countryCodesObject[countryCodeKey].code) {
+              setCountryCode(countryCodeKey);
+              break;
+            }
+          }
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
-
-  const [formData, setFormData] = useState<{ email: string; password: string }>(
-    { email: "", password: "" }
+  const [formData, setFormData] = useState<{ phone: string; password: string }>(
+    { phone: "", password: "" }
   );
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -57,7 +76,10 @@ const Login: FC = () => {
     setErrorMessage(null);
 
     try {
-      const response = await login(formData, axios);
+      const response = await login(
+        { ...formData, phone: `${countryCode}${formData.phone}` },
+        axios
+      );
 
       if (response.success) {
         auth?.setPrimaryValues({
@@ -92,16 +114,21 @@ const Login: FC = () => {
             </h2>
             <form onSubmit={handleSubmit}>
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Email address
+                <label className="block text-xs font-medium text-gray-700 mb-1">
+                  Phone Number
                 </label>
-                <input
-                  type="email"
-                  name="email"
-                  placeholder="example@gmail.com"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
-                  value={formData.email}
-                  onChange={handleChange}
+                <PhoneNumberInput
+                  countryCode={countryCode}
+                  onCountryCodeChange={setCountryCode}
+                  phoneNumber={formData.phone}
+                  onPhoneNumberChange={(val: string) => {
+                    setFormData((prevValues) => {
+                      return {
+                        ...prevValues,
+                        phone: val,
+                      };
+                    });
+                  }}
                 />
               </div>
               <div className="mb-6">
