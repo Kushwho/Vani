@@ -123,9 +123,9 @@ const Onboarding: React.FC = () => {
         .then((response) => {
           console.log(response);
 
-          toast("Thanks for submitting. Navigating you to home page");
+          toast("Thanks for submitting.Navigating you to the learning page");
           setTimeout(() => {
-            navigate("/");
+            navigate("/record");
           }, 1500);
         })
         .catch((error) => {

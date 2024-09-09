@@ -32,6 +32,8 @@ const Login: FC = () => {
     };
   }, [auth, navigate]);
 
+
+
   const [formData, setFormData] = useState<{ email: string; password: string }>(
     { email: "", password: "" }
   );

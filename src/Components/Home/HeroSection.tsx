@@ -33,12 +33,12 @@ const HeroSection: FC = () => {
                   onClick={() =>
                     auth?.primaryValues.loggedIn
                       ? navigate("/record")
-                      : navigate("#about-us")
+                      : navigate("/signup")
                   }
                 >
                   {auth?.primaryValues.loggedIn
                     ? "Start Learning"
-                    : "Learn More"}
+                    : "Get Started"}
                 </button>
               </div>
             </div>

@@ -19,11 +19,11 @@ const CTA: FC = () => {
               window.open("https://chat.whatsapp.com/L9i9d2ody5DCdb8Z6PJHT4")
             }
           >
-            <span className="text-white">Get started</span>
+            <span className="text-white text-nowrap">Join Community</span>
             <img
               src="/assets/icons/ArrowRight.svg"
               alt="arrow icon"
-              className="w-6 h-6 transition-transform duration-200 ease-in-out hover:translate-x-1"
+              className="ml-2 mr-2 w-6 h-6 transition-transform duration-200 ease-in-out hover:translate-x-1"
             />
           </button>
         </div>

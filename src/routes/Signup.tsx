@@ -4,6 +4,7 @@ import {
   FC,
   FormEvent,
   FormEventHandler,
+  useEffect,
   useState,
 } from "react";
 import bgImg from "../Images/bg.png";
@@ -22,6 +23,7 @@ import ResendOtp from "@/services/OtpService/ResendOtp.ts";
 import GetUser from "@/services/Login/GetUser.tsx";
 import PhoneNumberInput from "@/Components/PhoneNo.tsx";
 import PasswordVerify from "@/Components/PasswordVerfiy.tsx";
+import { countryCodesObject } from "@/Components/Signup/CountryCode.tsx";
 
 const Signup: FC = () => {
   const axios = useAxiosContext();
@@ -48,6 +50,19 @@ const Signup: FC = () => {
       phone: null,
       verifyPassword: null,
     });
+
+  useEffect(() => {
+    axios.get("https://api.country.is/").then((data) => {
+      if (data.data.country) {
+        for (const countryCodeKey in Object.keys(countryCodesObject)) {
+          if (data.data.country === countryCodesObject[countryCodeKey].code) {
+            setCountryCode(countryCodeKey);
+            break;
+          }
+        }
+      }
+    });
+  }, []);
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = (
     event: ChangeEvent<HTMLInputElement>
@@ -102,7 +117,9 @@ const Signup: FC = () => {
           axios
         );
         if (rep.data.isOTPVerified) {
-          toast("Signup Successful. Please provide your preferences on next page");
+          toast(
+            "Signup Successful. Please provide your preferences on next page"
+          );
           GetUser(undefined, axios);
           setOtpSent(true);
           setTimeout(() => {
