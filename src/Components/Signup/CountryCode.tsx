@@ -6,212 +6,250 @@ interface countryCode {
   };
 }
 export const countryCodesObject: countryCode = {
-  "+1": { flag: "🇺🇸", code: "US" }, // United States, Canada
-  "+7": { flag: "🇷🇺", code: "RU" }, // Russia
-  "+20": { flag: "🇪🇬", code: "EG" }, // Egypt
-  "+27": { flag: "🇿🇦", code: "ZA" }, // South Africa
-  "+30": { flag: "🇬🇷", code: "GR" }, // Greece
-  "+31": { flag: "🇳🇱", code: "NL" }, // Netherlands
-  "+32": { flag: "🇧🇪", code: "BE" }, // Belgium
-  "+33": { flag: "🇫🇷", code: "FR" }, // France
-  "+34": { flag: "🇪🇸", code: "ES" }, // Spain
-  "+36": { flag: "🇭🇺", code: "HU" }, // Hungary
-  "+39": { flag: "🇮🇹", code: "IT" }, // Italy
-  "+40": { flag: "🇷🇴", code: "RO" }, // Romania
-  "+41": { flag: "🇨🇭", code: "CH" }, // Switzerland
-  "+44": { flag: "🇬🇧", code: "GB" }, // United Kingdom
-  "+45": { flag: "🇩🇰", code: "DK" }, // Denmark
-  "+46": { flag: "🇸🇪", code: "SE" }, // Sweden
-  "+47": { flag: "🇳🇴", code: "NO" }, // Norway
-  "+48": { flag: "🇵🇱", code: "PL" }, // Poland
-  "+49": { flag: "🇩🇪", code: "DE" }, // Germany
-  "+51": { flag: "🇵🇪", code: "PE" }, // Peru
-  "+52": { flag: "🇲🇽", code: "MX" }, // Mexico
-  "+53": { flag: "🇨🇺", code: "CU" }, // Cuba
-  "+54": { flag: "🇦🇷", code: "AR" }, // Argentina
-  "+55": { flag: "🇧🇷", code: "BR" }, // Brazil
-  "+56": { flag: "🇨🇱", code: "CL" }, // Chile
-  "+57": { flag: "🇨🇴", code: "CO" }, // Colombia
-  "+58": { flag: "🇻🇪", code: "VE" }, // Venezuela
-  "+60": { flag: "🇲🇾", code: "MY" }, // Malaysia
-  "+61": { flag: "🇦🇺", code: "AU" }, // Australia
-  "+62": { flag: "🇮🇩", code: "ID" }, // Indonesia
-  "+63": { flag: "🇵🇭", code: "PH" }, // Philippines
-  "+64": { flag: "🇳🇿", code: "NZ" }, // New Zealand
-  "+65": { flag: "🇸🇬", code: "SG" }, // Singapore
-  "+66": { flag: "🇹🇭", code: "TH" }, // Thailand
-  "+81": { flag: "🇯🇵", code: "JP" }, // Japan
-  "+82": { flag: "🇰🇷", code: "KR" }, // South Korea
-  "+84": { flag: "🇻🇳", code: "VN" }, // Vietnam
-  "+86": { flag: "🇨🇳", code: "CN" }, // China
-  "+90": { flag: "🇹🇷", code: "TR" }, // Turkey
-  "+91": { flag: "🇮🇳", code: "IN" }, // India
-  "+92": { flag: "🇵🇰", code: "PK" }, // Pakistan
-  "+93": { flag: "🇦🇫", code: "AF" }, // Afghanistan
-  "+94": { flag: "🇱🇰", code: "LK" }, // Sri Lanka
-  "+95": { flag: "🇲🇲", code: "MM" }, // Myanmar
-  "+98": { flag: "🇮🇷", code: "IR" }, // Iran
-  "+212": { flag: "🇲🇦", code: "MA" }, // Morocco
-  "+213": { flag: "🇩🇿", code: "DZ" }, // Algeria
-  "+216": { flag: "🇹🇳", code: "TN" }, // Tunisia
-  "+218": { flag: "🇱🇾", code: "LY" }, // Libya
-  "+220": { flag: "🇬🇲", code: "GM" }, // Gambia
-  "+221": { flag: "🇸🇳", code: "SN" }, // Senegal
-  "+222": { flag: "🇲🇷", code: "MR" }, // Mauritania
-  "+223": { flag: "🇲🇱", code: "ML" }, // Mali
-  "+224": { flag: "🇬🇳", code: "GN" }, // Guinea
-  "+225": { flag: "🇨🇮", code: "CI" }, // Ivory Coast
-  "+226": { flag: "🇧🇫", code: "BF" }, // Burkina Faso
-  "+227": { flag: "🇳🇪", code: "NE" }, // Niger
-  "+228": { flag: "🇹🇬", code: "TG" }, // Togo
-  "+229": { flag: "🇧🇯", code: "BJ" }, // Benin
-  "+230": { flag: "🇲🇺", code: "MU" }, // Mauritius
-  "+231": { flag: "🇱🇷", code: "LR" }, // Liberia
-  "+232": { flag: "🇸🇱", code: "SL" }, // Sierra Leone
-  "+233": { flag: "🇬🇭", code: "GH" }, // Ghana
-  "+234": { flag: "🇳🇬", code: "NG" }, // Nigeria
-  "+235": { flag: "🇹🇩", code: "TD" }, // Chad
-  "+236": { flag: "🇨🇫", code: "CF" }, // Central African Republic
-  "+237": { flag: "🇨🇲", code: "CM" }, // Cameroon
-  "+238": { flag: "🇨🇻", code: "CV" }, // Cape Verde
-  "+239": { flag: "🇸🇹", code: "ST" }, // São Tomé and Príncipe
-  "+240": { flag: "🇬🇶", code: "GQ" }, // Equatorial Guinea
-  "+241": { flag: "🇬🇦", code: "GA" }, // Gabon
-  "+242": { flag: "🇨🇬", code: "CG" }, // Republic of the Congo
-  "+243": { flag: "🇨🇩", code: "CD" }, // Democratic Republic of the Congo
-  "+244": { flag: "🇦🇴", code: "AO" }, // Angola
-  "+245": { flag: "🇬🇼", code: "GW" }, // Guinea-Bissau
-  "+246": { flag: "🇮🇴", code: "IO" }, // British Indian Ocean Territory
-  "+247": { flag: "🇦🇨", code: "AC" }, // Ascension Island
-  "+248": { flag: "🇸🇨", code: "SC" }, // Seychelles
-  "+249": { flag: "🇸🇩", code: "SD" }, // Sudan
-  "+250": { flag: "🇷🇼", code: "RW" }, // Rwanda
-  "+251": { flag: "🇪🇹", code: "ET" }, // Ethiopia
-  "+252": { flag: "🇸🇴", code: "SO" }, // Somalia
-  "+253": { flag: "🇩🇯", code: "DJ" }, // Djibouti
-  "+254": { flag: "🇰🇪", code: "KE" }, // Kenya
-  "+255": { flag: "🇹🇿", code: "TZ" }, // Tanzania
-  "+256": { flag: "🇺🇬", code: "UG" }, // Uganda
-  "+257": { flag: "🇧🇮", code: "BI" }, // Burundi
-  "+258": { flag: "🇲🇿", code: "MZ" }, // Mozambique
-  "+260": { flag: "🇿🇲", code: "ZM" }, // Zambia
-  "+261": { flag: "🇲🇬", code: "MG" }, // Madagascar
-  "+262": { flag: "🇷🇪", code: "RE" }, // Réunion
-  "+263": { flag: "🇿🇼", code: "ZW" }, // Zimbabwe
-  "+264": { flag: "🇳🇦", code: "NA" }, // Namibia
-  "+265": { flag: "🇲🇼", code: "MW" }, // Malawi
-  "+266": { flag: "🇱🇸", code: "LS" }, // Lesotho
-  "+267": { flag: "🇧🇼", code: "BW" }, // Botswana
-  "+268": { flag: "🇸🇿", code: "SZ" }, // Eswatini
-  "+269": { flag: "🇰🇲", code: "KM" }, // Comoros
-  "+290": { flag: "🇸🇭", code: "SH" }, // Saint Helena
-  "+291": { flag: "🇪🇷", code: "ER" }, // Eritrea
-  "+297": { flag: "🇦🇼", code: "AW" }, // Aruba
-  "+298": { flag: "🇫🇴", code: "FO" }, // Faroe Islands
-  "+299": { flag: "🇬🇱", code: "GL" }, // Greenland
-  "+350": { flag: "🇬🇮", code: "GI" }, // Gibraltar
-  "+351": { flag: "🇵🇹", code: "PT" }, // Portugal
-  "+352": { flag: "🇱🇺", code: "LU" }, // Luxembourg
-  "+353": { flag: "🇮🇪", code: "IE" }, // Ireland
-  "+354": { flag: "🇮🇸", code: "IS" }, // Iceland
-  "+355": { flag: "🇦🇱", code: "AL" }, // Albania
-  "+356": { flag: "🇲🇹", code: "MT" }, // Malta
-  "+357": { flag: "🇨🇾", code: "CY" }, // Cyprus
-  "+358": { flag: "🇫🇮", code: "FI" }, // Finland
-  "+359": { flag: "🇧🇬", code: "BG" }, // Bulgaria
-  "+370": { flag: "🇱🇹", code: "LT" }, // Lithuania
-  "+371": { flag: "🇱🇻", code: "LV" }, // Latvia
-  "+372": { flag: "🇪🇪", code: "EE" }, // Estonia
-  "+373": { flag: "🇲🇩", code: "MD" }, // Moldova
-  "+374": { flag: "🇦🇲", code: "AM" }, // Armenia
-  "+375": { flag: "🇧🇾", code: "BY" }, // Belarus
-  "+376": { flag: "🇦🇩", code: "AD" }, // Andorra
-  "+377": { flag: "🇲🇨", code: "MC" }, // Monaco
-  "+378": { flag: "🇸🇲", code: "SM" }, // San Marino
-  "+379": { flag: "🇻🇦", code: "VA" }, // Vatican City
-  "+380": { flag: "🇺🇦", code: "UA" }, // Ukraine
-  "+381": { flag: "🇷🇸", code: "RS" }, // Serbia
-  "+382": { flag: "🇲🇪", code: "ME" }, // Montenegro
-  "+383": { flag: "🇽🇰", code: "XK" }, // Kosovo
-  "+385": { flag: "🇭🇷", code: "HR" }, // Croatia
-  "+386": { flag: "🇸🇮", code: "SI" }, // Slovenia
-  "+387": { flag: "🇧🇦", code: "BA" }, // Bosnia and Herzegovina
-  "+389": { flag: "🇲🇰", code: "MK" }, // North Macedonia
-  "+420": { flag: "🇨🇿", code: "CZ" }, // Czech Republic
-  "+421": { flag: "🇸🇰", code: "SK" }, // Slovakia
-  "+423": { flag: "🇱🇮", code: "LI" }, // Liechtenstein
-  "+500": { flag: "🇫🇰", code: "FK" }, // Falkland Islands
-  "+501": { flag: "🇧🇿", code: "BZ" }, // Belize
-  "+502": { flag: "🇬🇹", code: "GT" }, // Guatemala
-  "+503": { flag: "🇸🇻", code: "SV" }, // El Salvador
-  "+504": { flag: "🇭🇳", code: "HN" }, // Honduras
-  "+505": { flag: "🇳🇮", code: "NI" }, // Nicaragua
-  "+506": { flag: "🇨🇷", code: "CR" }, // Costa Rica
-  "+507": { flag: "🇵🇦", code: "PA" }, // Panama
-  "+508": { flag: "🇵🇲", code: "PM" }, // Saint Pierre and Miquelon
-  "+509": { flag: "🇭🇹", code: "HT" }, // Haiti
-  "+590": { flag: "🇬🇵", code: "GP" }, // Guadeloupe
-  "+591": { flag: "🇧🇴", code: "BO" }, // Bolivia
-  "+592": { flag: "🇬🇾", code: "GY" }, // Guyana
-  "+593": { flag: "🇪🇨", code: "EC" }, // Ecuador
-  "+594": { flag: "🇫🇷", code: "GF" }, // French Guiana
-  "+595": { flag: "🇵🇾", code: "PY" }, // Paraguay
-  "+596": { flag: "🇲🇶", code: "MQ" }, // Martinique
-  "+597": { flag: "🇸🇷", code: "SR" }, // Suriname
-  "+598": { flag: "🇺🇾", code: "UY" }, // Uruguay
-  "+599": { flag: "🇨🇼", code: "CW" }, // Curaçao
-  "+670": { flag: "🇹🇱", code: "TL" }, // East Timor
-  "+672": { flag: "🇦🇶", code: "AQ" }, // Antarctica
-  "+673": { flag: "🇧🇳", code: "BN" }, // Brunei
-  "+674": { flag: "🇳🇷", code: "NR" }, // Nauru
-  "+675": { flag: "🇵🇬", code: "PG" }, // Papua New Guinea
-  "+676": { flag: "🇹🇴", code: "TO" }, // Tonga
-  "+677": { flag: "🇸🇧", code: "SB" }, // Solomon Islands
-  "+678": { flag: "🇻🇺", code: "VU" }, // Vanuatu
-  "+679": { flag: "🇫🇯", code: "FJ" }, // Fiji
-  "+680": { flag: "🇵🇼", code: "PW" }, // Palau
-  "+681": { flag: "🇼🇫", code: "WF" }, // Wallis and Futuna
-  "+682": { flag: "🇨🇰", code: "CK" }, // Cook Islands
-  "+683": { flag: "🇳🇺", code: "NU" }, // Niue
-  "+685": { flag: "🇼🇸", code: "WS" }, // Samoa
-  "+686": { flag: "🇰🇮", code: "KI" }, // Kiribati
-  "+687": { flag: "🇳🇨", code: "NC" }, // New Caledonia
-  "+688": { flag: "🇹🇻", code: "TV" }, // Tuvalu
-  "+689": { flag: "🇵🇫", code: "PF" }, // French Polynesia
-  "+690": { flag: "🇹🇰", code: "TK" }, // Tokelau
-  "+691": { flag: "🇫🇲", code: "FM" }, // Micronesia
-  "+692": { flag: "🇲🇭", code: "MH" }, // Marshall Islands
-  "+850": { flag: "🇰🇵", code: "KP" }, // North Korea
-  "+852": { flag: "🇭🇰", code: "HK" }, // Hong Kong
-  "+853": { flag: "🇲🇴", code: "MO" }, // Macau
-  "+855": { flag: "🇰🇭", code: "KH" }, // Cambodia
-  "+856": { flag: "🇱🇦", code: "LA" }, // Laos
-  "+880": { flag: "🇧🇩", code: "BD" }, // Bangladesh
-  "+886": { flag: "🇹🇼", code: "TW" }, // Taiwan
-  "+960": { flag: "🇲🇻", code: "MV" }, // Maldives
-  "+961": { flag: "🇱🇧", code: "LB" }, // Lebanon
-  "+962": { flag: "🇯🇴", code: "JO" }, // Jordan
-  "+963": { flag: "🇸🇾", code: "SY" }, // Syria
-  "+964": { flag: "🇮🇶", code: "IQ" }, // Iraq
-  "+965": { flag: "🇰🇼", code: "KW" }, // Kuwait
-  "+966": { flag: "🇸🇦", code: "SA" }, // Saudi Arabia
-  "+967": { flag: "🇾🇪", code: "YE" }, // Yemen
-  "+968": { flag: "🇴🇲", code: "OM" }, // Oman
-  "+970": { flag: "🇵🇸", code: "PS" }, // Palestinian Territories
-  "+971": { flag: "🇦🇪", code: "AE" }, // United Arab Emirates
-  "+972": { flag: "🇮🇱", code: "IL" }, // Israel
-  "+973": { flag: "🇧🇭", code: "BH" }, // Bahrain
-  "+974": { flag: "🇶🇦", code: "QA" }, // Qatar
-  "+975": { flag: "🇧🇹", code: "BT" }, // Bhutan
-  "+976": { flag: "🇲🇳", code: "MN" }, // Mongolia
-  "+977": { flag: "🇳🇵", code: "NP" }, // Nepal
-  "+992": { flag: "🇹🇯", code: "TJ" }, // Tajikistan
-  "+993": { flag: "🇹🇲", code: "TM" }, // Turkmenistan
-  "+994": { flag: "🇦🇿", code: "AZ" }, // Azerbaijan
-  "+995": { flag: "🇬🇪", code: "GE" }, // Georgia
-  "+996": { flag: "🇰🇬", code: "KG" }, // Kyrgyzstan
-  "+998": { flag: "🇺🇿", code: "UZ" }, // Uzbekistan
+  ZW: { flag: "🇿🇼", code: "+263" },
+  AX: { flag: "🇦🇽", code: "+358" },
+  AL: { flag: "🇦🇱", code: "+355" },
+  DZ: { flag: "🇩🇿", code: "+213" },
+  AS: { flag: "🇦🇸", code: "+1-684" },
+  AD: { flag: "🇦🇩", code: "+376" },
+  AO: { flag: "🇦🇴", code: "+244" },
+  AI: { flag: "🇦🇮", code: "+1-264" },
+  AQ: { flag: "🇦🇶", code: "+672" },
+  AG: { flag: "🇦🇬", code: "+1-268" },
+  AR: { flag: "🇦🇷", code: "+54" },
+  AM: { flag: "🇦🇲", code: "+374" },
+  AW: { flag: "🇦🇼", code: "+297" },
+  AU: { flag: "🇦🇺", code: "+61" },
+  AT: { flag: "🇦🇹", code: "+43" },
+  AZ: { flag: "🇦🇿", code: "+994" },
+  BS: { flag: "🇧🇸", code: "+1-242" },
+  BH: { flag: "🇧🇭", code: "+973" },
+  BD: { flag: "🇧🇩", code: "+880" },
+  BB: { flag: "🇧🇧", code: "+1-246" },
+  BY: { flag: "🇧🇾", code: "+375" },
+  BE: { flag: "🇧🇪", code: "+32" },
+  BZ: { flag: "🇧🇿", code: "+501" },
+  BJ: { flag: "🇧🇯", code: "+229" },
+  BM: { flag: "🇧🇲", code: "+1-441" },
+  BT: { flag: "🇧🇹", code: "+975" },
+  BO: { flag: "🇧🇴", code: "+591" },
+  BQ: { flag: "🇧🇶", code: "+599" },
+  BA: { flag: "🇧🇦", code: "+387" },
+  BW: { flag: "🇧🇼", code: "+267" },
+  BV: { flag: "🇧🇻", code: "+47" },
+  BR: { flag: "🇧🇷", code: "+55" },
+  IO: { flag: "🇮🇴", code: "+246" },
+  BN: { flag: "🇧🇳", code: "+673" },
+  BG: { flag: "🇧🇬", code: "+359" },
+  BF: { flag: "🇧🇫", code: "+226" },
+  BI: { flag: "🇧🇮", code: "+257" },
+  KH: { flag: "🇰🇭", code: "+855" },
+  CM: { flag: "🇨🇲", code: "+237" },
+  CA: { flag: "🇨🇦", code: "+1" },
+  CV: { flag: "🇨🇻", code: "+238" },
+  KY: { flag: "🇰🇾", code: "+1-345" },
+  CF: { flag: "🇨🇫", code: "+236" },
+  TD: { flag: "🇹🇩", code: "+235" },
+  CL: { flag: "🇨🇱", code: "+56" },
+  CN: { flag: "🇨🇳", code: "+86" },
+  CX: { flag: "🇨🇽", code: "+61" },
+  CC: { flag: "🇨🇨", code: "+61" },
+  CO: { flag: "🇨🇴", code: "+57" },
+  KM: { flag: "🇰🇲", code: "+269" },
+  CG: { flag: "🇨🇬", code: "+242" },
+  CD: { flag: "🇨🇩", code: "+243" },
+  CK: { flag: "🇨🇰", code: "+682" },
+  CR: { flag: "🇨🇷", code: "+506" },
+  CI: { flag: "🇨🇮", code: "+225" },
+  HR: { flag: "🇭🇷", code: "+385" },
+  CU: { flag: "🇨🇺", code: "+53" },
+  CW: { flag: "🇨🇼", code: "+599" },
+  CY: { flag: "🇨🇾", code: "+357" },
+  CZ: { flag: "🇨🇿", code: "+420" },
+  DK: { flag: "🇩🇰", code: "+45" },
+  DJ: { flag: "🇩🇯", code: "+253" },
+  DM: { flag: "🇩🇲", code: "+1-767" },
+  DO: { flag: "🇩🇴", code: "+1-809" },
+  EC: { flag: "🇪🇨", code: "+593" },
+  EG: { flag: "🇪🇬", code: "+20" },
+  SV: { flag: "🇸🇻", code: "+503" },
+  GQ: { flag: "🇬🇶", code: "+240" },
+  ER: { flag: "🇪🇷", code: "+291" },
+  EE: { flag: "🇪🇪", code: "+372" },
+  ET: { flag: "🇪🇹", code: "+251" },
+  FK: { flag: "🇲🇸", code: "+500" },
+  FO: { flag: "🇫🇴", code: "+298" },
+  FJ: { flag: "🇫🇯", code: "+679" },
+  FI: { flag: "🇫🇮", code: "+358" },
+  FR: { flag: "🇫🇷", code: "+33" },
+  GF: { flag: "🇬🇫", code: "+594" },
+  PF: { flag: "🇵🇫", code: "+689" },
+  TF: { flag: "🇹🇫", code: "+262" },
+  GA: { flag: "🇲🇬", code: "+241" },
+  GM: { flag: "🇬🇲", code: "+220" },
+  GE: { flag: "🇬🇪", code: "+995" },
+  DE: { flag: "🇩🇪", code: "+49" },
+  GH: { flag: "🇬🇭", code: "+233" },
+  GI: { flag: "🇬🇮", code: "+350" },
+  GR: { flag: "🇬🇷", code: "+30" },
+  GL: { flag: "🇬🇱", code: "+299" },
+  GD: { flag: "🇬🇩", code: "+1-473" },
+  GP: { flag: "🇲🇫", code: "+590" },
+  GU: { flag: "🇬🇺", code: "+1-671" },
+  GT: { flag: "🇵🇪", code: "+502" },
+  GG: { flag: "🇬🇬", code: "+44" },
+  GN: { flag: "🇲🇱", code: "+224" },
+  GW: { flag: "🇬🇼", code: "+245" },
+  GY: { flag: "🇬🇾", code: "+592" },
+  HT: { flag: "🇭🇹", code: "+509" },
+  VA: { flag: "🇻🇦", code: "+379" },
+  HN: { flag: "🇭🇳", code: "+504" },
+  HK: { flag: "🇭🇰", code: "+852" },
+  HU: { flag: "🇭🇺", code: "+36" },
+  IS: { flag: "🇮🇸", code: "+354" },
+  IN: { flag: "🇮🇳", code: "+91" },
+  ID: { flag: "🇮🇩", code: "+62" },
+  IR: { flag: "🇮🇷", code: "+98" },
+  IQ: { flag: "🇮🇶", code: "+964" },
+  IE: { flag: "🇮🇪", code: "+353" },
+  IM: { flag: "🇮🇲", code: "+44" },
+  IL: { flag: "🇮🇱", code: "+972" },
+  IT: { flag: "🇮🇹", code: "+39" },
+  JM: { flag: "🇯🇲", code: "+1-876" },
+  JP: { flag: "🇯🇵", code: "+81" },
+  JE: { flag: "🇯🇪", code: "+44" },
+  JO: { flag: "🇯🇴", code: "+962" },
+  KZ: { flag: "🇰🇿", code: "+7" },
+  KE: { flag: "🇰🇪", code: "+254" },
+  KI: { flag: "🇰🇮", code: "+686" },
+  XK: { flag: "🇽🇰", code: "+383" },
+  KW: { flag: "🇰🇼", code: "+965" },
+  KG: { flag: "🇰🇬", code: "+996" },
+  LA: { flag: "🇱🇦", code: "+856" },
+  LV: { flag: "🇱🇻", code: "+371" },
+  LB: { flag: "🇱🇧", code: "+961" },
+  LS: { flag: "🇱🇸", code: "+266" },
+  LR: { flag: "🇱🇷", code: "+231" },
+  LY: { flag: "🇱🇾", code: "+218" },
+  LI: { flag: "🇱🇮", code: "+423" },
+  LT: { flag: "🇱🇹", code: "+370" },
+  LU: { flag: "🇱🇺", code: "+352" },
+  MO: { flag: "🇲🇴", code: "+853" },
+  MK: { flag: "🇲🇰", code: "+389" },
+  MG: { flag: "🇲🇬", code: "+261" },
+  MW: { flag: "🇲🇼", code: "+265" },
+  MY: { flag: "🇲🇾", code: "+60" },
+  MV: { flag: "🇲🇻", code: "+960" },
+  ML: { flag: "🇲🇱", code: "+223" },
+  MT: { flag: "🇲🇹", code: "+356" },
+  MH: { flag: "🇲🇭", code: "+692" },
+  MQ: { flag: "🇲🇶", code: "+596" },
+  MR: { flag: "🇲🇷", code: "+222" },
+  MU: { flag: "🇲🇺", code: "+230" },
+  YT: { flag: "🇾🇹", code: "+262" },
+  MX: { flag: "🇲🇽", code: "+52" },
+  FM: { flag: "🇫🇲", code: "+691" },
+  MD: { flag: "🇲🇩", code: "+373" },
+  MC: { flag: "🇲🇨", code: "+377" },
+  MN: { flag: "🇲🇳", code: "+976" },
+  ME: { flag: "🇲🇪", code: "+382" },
+  MS: { flag: "🇲🇸", code: "+1-664" },
+  MA: { flag: "🇲🇦", code: "+212" },
+  MZ: { flag: "🇲🇿", code: "+258" },
+  MM: { flag: "🇲🇲", code: "+95" },
+  NA: { flag: "🇳🇦", code: "+264" },
+  NR: { flag: "🇳🇷", code: "+674" },
+  NP: { flag: "🇳🇵", code: "+977" },
+  NL: { flag: "🇳🇱", code: "+31" },
+  NC: { flag: "🇳🇨", code: "+687" },
+  NZ: { flag: "🇳🇿", code: "+64" },
+  NI: { flag: "🇳🇮", code: "+505" },
+  NE: { flag: "🇳🇪", code: "+227" },
+  NG: { flag: "🇳🇬", code: "+234" },
+  NU: { flag: "🇳🇺", code: "+683" },
+  NF: { flag: "🇳🇫", code: "+672" },
+  MP: { flag: "🇲🇵", code: "+1-670" },
+  NO: { flag: "🇳🇴", code: "+47" },
+  OM: { flag: "🇴🇲", code: "+968" },
+  PK: { flag: "🇵🇰", code: "+92" },
+  PW: { flag: "🇵🇼", code: "+680" },
+  PS: { flag: "🇵🇸", code: "+970" },
+  PA: { flag: "🇵🇦", code: "+507" },
+  PG: { flag: "🇵🇬", code: "+675" },
+  PY: { flag: "🇵🇾", code: "+595" },
+  PE: { flag: "🇵🇪", code: "+51" },
+  PH: { flag: "🇵🇭", code: "+63" },
+  PN: { flag: "🇵🇳", code: "+64" },
+  PL: { flag: "🇵🇱", code: "+48" },
+  PT: { flag: "🇵🇹", code: "+351" },
+  PR: { flag: "🇵🇷", code: "+1-787" },
+  QA: { flag: "🇶🇦", code: "+974" },
+  RO: { flag: "🇷🇴", code: "+40" },
+  RU: { flag: "🇷🇺", code: "+7" },
+  RW: { flag: "🇷🇼", code: "+250" },
+  BL: { flag: "🇧🇱", code: "+590" },
+  SH: { flag: "🇸🇭", code: "+290" },
+  KN: { flag: "🇰🇳", code: "+1-869" },
+  LC: { flag: "🇱🇨", code: "+1-758" },
+  MF: { flag: "🇲🇵", code: "+590" },
+  PM: { flag: "🇸🇵", code: "+508" },
+  VC: { flag: "🇻🇨", code: "+1-784" },
+  WS: { flag: "🇼🇸", code: "+685" },
+  SM: { flag: "🇸🇲", code: "+378" },
+  ST: { flag: "🇸🇹", code: "+239" },
+  SA: { flag: "🇸🇦", code: "+966" },
+  SN: { flag: "🇸🇳", code: "+221" },
+  RS: { flag: "🇷🇸", code: "+381" },
+  SC: { flag: "🇸🇨", code: "+248" },
+  SL: { flag: "🇸🇱", code: "+232" },
+  SG: { flag: "🇸🇬", code: "+65" },
+  SX: { flag: "🇸🇽", code: "+1-721" },
+  SK: { flag: "🇸🇰", code: "+421" },
+  SI: { flag: "🇸🇮", code: "+386" },
+  SB: { flag: "🇸🇧", code: "+677" },
+  SO: { flag: "🇸🇴", code: "+252" },
+  ZA: { flag: "🇿🇦", code: "+27" },
+  KR: { flag: "🇰🇷", code: "+82" },
+  ES: { flag: "🇪🇸", code: "+34" },
+  LK: { flag: "🇱🇰", code: "+94" },
+  SD: { flag: "🇸🇩", code: "+249" },
+  SR: { flag: "🇸🇷", code: "+597" },
+  SJ: { flag: "🇸🇯", code: "+47" },
+  SZ: { flag: "🇸🇿", code: "+268" },
+  SE: { flag: "🇸🇪", code: "+46" },
+  CH: { flag: "🇨🇭", code: "+41" },
+  SY: { flag: "🇸🇾", code: "+963" },
+  TW: { flag: "🇹🇼", code: "+886" },
+  TJ: { flag: "🇹🇯", code: "+992" },
+  TZ: { flag: "🇹🇿", code: "+255" },
+  TH: { flag: "🇹🇭", code: "+66" },
+  TL: { flag: "🇹🇱", code: "+670" },
+  TG: { flag: "🇹🇬", code: "+228" },
+  TK: { flag: "🇹🇰", code: "+690" },
+  TO: { flag: "🇹🇴", code: "+676" },
+  TT: { flag: "🇹🇹", code: "+1-868" },
+  TN: { flag: "🇹🇳", code: "+216" },
+  TR: { flag: "🇹🇷", code: "+90" },
+  TM: { flag: "🇹🇲", code: "+993" },
+  TC: { flag: "🇹🇨", code: "+1-649" },
+  TV: { flag: "🇹🇻", code: "+688" },
+  UG: { flag: "🇺🇬", code: "+256" },
+  UA: { flag: "🇺🇦", code: "+380" },
+  AE: { flag: "🇦🇪", code: "+971" },
+  GB: { flag: "🇬🇧", code: "+44" },
+  US: { flag: "🇺🇸", code: "+1" },
+  UY: { flag: "🇺🇾", code: "+598" },
+  UZ: { flag: "🇺🇿", code: "+998" },
+  VU: { flag: "🇻🇺", code: "+678" },
+  VE: { flag: "🇻🇪", code: "+58" },
+  VN: { flag: "🇻🇳", code: "+84" },
+  WF: { flag: "🇼🇫", code: "+681" },
+  YE: { flag: "🇾🇪", code: "+967" },
+  ZM: { flag: "🇿🇲", code: "+260" },
 };
+
+
+
 const CountryCode: FC = () => {
   return (
     <>
@@ -219,8 +257,8 @@ const CountryCode: FC = () => {
         (ele: Extract<keyof countryCode, string>) => {
           const currCountry = countryCodesObject[ele];
           return (
-            <option value={ele}>
-              {ele} {currCountry.flag}
+            <option value={currCountry.code}>
+              {currCountry.code} {currCountry.flag}
             </option>
           );
         }

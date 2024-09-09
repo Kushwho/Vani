@@ -55,14 +55,7 @@ const Signup: FC = () => {
     axios
       .get("https://api.country.is/", { withCredentials: false })
       .then((data) => {
-        if (data.data.country) {
-          for (const countryCodeKey of Object.keys(countryCodesObject)) {
-            if (data.data.country === countryCodesObject[countryCodeKey].code) {
-              setCountryCode(countryCodeKey);
-              break;
-            }
-          }
-        }
+        setCountryCode(countryCodesObject[data.data.country].code);
       })
       .catch((err) => {
         console.log(err);

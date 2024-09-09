@@ -25,22 +25,16 @@ const ForgotPassword: FC<ForgotPasswordProps> = (): ReactElement => {
     axios
       .get("https://api.country.is/", { withCredentials: false })
       .then((data) => {
-        if (data.data.country) {
-          for (const countryCodeKey of Object.keys(countryCodesObject)) {
-            if (data.data.country === countryCodesObject[countryCodeKey].code) {
-              setPhoneData({
-                ...phoneData,
-                countryCode: countryCodeKey,
-              });
-              break;
-            }
-          }
-        }
+        setPhoneData({
+          countryCode: countryCodesObject[data.data.country].code,
+          phoneNo: phoneData.phoneNo,
+        });
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
+
   const [phoneData, setPhoneData] = useState<PhoneNo>({
     countryCode: "",
     phoneNo: "",
