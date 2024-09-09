@@ -46,7 +46,6 @@ const Login: FC = () => {
       });
   }, []);
 
-
   const [formData, setFormData] = useState<{ phone: string; password: string }>(
     { phone: "", password: "" }
   );
@@ -83,6 +82,13 @@ const Login: FC = () => {
           voice: "",
         });
         toast.success("Login Successful. Navigating to Home Page");
+        // @ts-expect-error - it may exists 
+        if (window.dataLayer) {
+            // @ts-expect-error - it may exists 
+          window.dataLayer.push({
+            user_id: response.data._id,
+          });
+        }
         setTimeout(() => {
           navigate("/");
         }, 1500);
