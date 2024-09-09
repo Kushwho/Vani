@@ -17,17 +17,34 @@ const Navbar: React.FC = () => {
   const isMobile = useMemo(() => dimensions.width < 768, [dimensions.width]);
 
   const handleScroll = useCallback(() => {
-    if (isActive) setIsSticky(false);
-    return;
-    setIsSticky(window.scrollY > 0);
-  }, []);
+    if (isActive) {
+      setIsSticky(false);
+    } else {
+      setIsSticky(window.scrollY > 0);
+    }
+  }, [isActive]);
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [handleScroll]);
 
-  const handleToggle = useCallback(() => setIsActive((prev) => !prev), []);
+  useEffect(() => {
+    if (isActive && isMobile) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'visible';
+    }
+
+    return () => {
+      document.body.style.overflow = 'visible';
+    };
+  }, [isActive, isMobile]);
+
+  const handleToggle = useCallback(() => {
+    setIsActive((prev) => !prev);
+    setIsSticky(false);
+  }, []);
 
   const handleLogout = useCallback(() => {
     Logout(axios)
@@ -91,7 +108,7 @@ const Navbar: React.FC = () => {
   return (
     <header
       className={`p-4 px-16 max-md:px-8 w-full bg-primary-50 transition-all duration-300 ${
-        isSticky ? "fixed top-0 w-full z-50 bg-opacity-50 backdrop-blur-sm" : ""
+        isSticky && !isActive ? "fixed top-0 w-full z-50 bg-opacity-50 backdrop-blur-sm" : ""
       }`}
     >
       <nav className="flex max-w-6xl mx-auto items-center justify-between">
@@ -110,6 +127,7 @@ const Navbar: React.FC = () => {
                         : `/#${item.toLowerCase().replace(" ", "-")}`
                     }
                     className="hover:text-primary-700 transition-colors duration-200"
+                    onClick={() => isMobile && setIsActive(false)}
                   >
                     {item}
                   </Link>
@@ -119,6 +137,7 @@ const Navbar: React.FC = () => {
                 <Link
                   to="/blogs"
                   className="hover:text-primary-700 transition-colors duration-200"
+                  onClick={() => isMobile && setIsActive(false)}
                 >
                   Blogs
                 </Link>
@@ -140,11 +159,12 @@ const Navbar: React.FC = () => {
                 <button
                   id="btn-get-started"
                   className="py-2 px-5 rounded bg-primary-600 text-primary-50 hover:bg-primary-700 transition-colors duration-200"
-                  onClick={() =>
+                  onClick={() => {
                     authContext?.primaryValues.loggedIn
                       ? handleLogout()
-                      : navigate("/signup")
-                  }
+                      : navigate("/signup");
+                    isMobile && setIsActive(false);
+                  }}
                 >
                   {authContext?.primaryValues.loggedIn
                     ? "Logout"
@@ -157,7 +177,7 @@ const Navbar: React.FC = () => {
         {isMobile && (
           <>
             <a
-              className=" flex items-center py-2 px-5 rounded bg-primary-600 text-primary-50 hover:bg-primary-700 transition-colors duration-200"
+              className="flex items-center py-2 px-5 rounded bg-primary-600 text-primary-50 hover:bg-primary-700 transition-colors duration-200"
               href={authContext?.primaryValues.loggedIn ? "/record" : "signup"}
             >
               {authContext?.primaryValues.loggedIn
