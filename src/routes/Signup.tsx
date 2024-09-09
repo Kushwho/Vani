@@ -52,16 +52,21 @@ const Signup: FC = () => {
     });
 
   useEffect(() => {
-    axios.get("https://api.country.is/").then((data) => {
-      if (data.data.country) {
-        for (const countryCodeKey in Object.keys(countryCodesObject)) {
-          if (data.data.country === countryCodesObject[countryCodeKey].code) {
-            setCountryCode(countryCodeKey);
-            break;
+    axios
+      .get("https://api.country.is/")
+      .then((data) => {
+        if (data.data.country) {
+          for (const countryCodeKey in Object.keys(countryCodesObject)) {
+            if (data.data.country === countryCodesObject[countryCodeKey].code) {
+              setCountryCode(countryCodeKey);
+              break;
+            }
           }
         }
-      }
-    });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = (

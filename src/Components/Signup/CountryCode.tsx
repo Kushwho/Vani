@@ -220,7 +220,7 @@ const CountryCode: FC = () => {
           const currCountry = countryCodesObject[ele];
           return (
             <option value={ele}>
-              {currCountry.code} {currCountry.flag}
+              {ele} {currCountry.flag}
             </option>
           );
         }
