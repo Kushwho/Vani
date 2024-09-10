@@ -90,17 +90,17 @@ export class AudioHandler {
     }
     this.audio.src = this.audioUrl;
 
-    this.audio.onplay = () =>{
+    this.audio.onplay = () => {
       this.setAudioStatus(true);
       this.audioStatus = true;
-    }
+    };
     this.audio.onpause = () => {
-      this.setAudioStatus(false)
+      this.setAudioStatus(false); 
       this.audioStatus = false;
       URL.revokeObjectURL(this.audioUrl);
     };
     this.audio.onended = () => {
-      this.setAudioStatus(false)
+      this.setAudioStatus(false);
       this.audioStatus = false;
       URL.revokeObjectURL(this.audioUrl);
     };
@@ -109,10 +109,10 @@ export class AudioHandler {
     };
 
     this.audio.onerror = () => {
-      this.setAudioStatus(false)
+      this.setAudioStatus(false);
       this.audioStatus = false;
       URL.revokeObjectURL(this.audioUrl);
-    }
+    };
     try {
       await this.audio.play();
     } catch (error) {
@@ -122,15 +122,15 @@ export class AudioHandler {
 
   public async pauseAudio() {
     this.audio.pause();
-    
   }
 
   public async resumeAudio() {
-    this.audio.play()
+    this.audio.play();
   }
 
-  public async replayAudio(){
-    this.audio.currentTime = 0
+  public async replayAudio() {
+    this.audio.currentTime = 0;
+    this.audio.src = this.audioUrl;
     this.resumeAudio();
   }
   // Add additional methods as needed
