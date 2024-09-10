@@ -129,9 +129,23 @@ export class AudioHandler {
   }
 
   public async replayAudio() {
+    this.pauseAudio();
+
     this.audio.currentTime = 0;
+
+    URL.revokeObjectURL(this.audioUrl);
+
+    // Load the audio source again
     this.audio.src = this.audioUrl;
-    this.resumeAudio();
+    try {
+      await this.audio.play();
+      this.setAudioStatus(true);
+      this.audioStatus = true;
+    } catch (error) {
+      console.error("Error playing audio:", error);
+      this.setAudioStatus(false);
+      this.audioStatus = false;
+    }
   }
   // Add additional methods as needed
 }
