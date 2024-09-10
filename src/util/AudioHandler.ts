@@ -105,6 +105,8 @@ export class AudioHandler {
       URL.revokeObjectURL(this.audioUrl);
     };
     this.audio.oncancel = () => {
+      this.setAudioStatus(false)
+      this.audioStatus = false;
       URL.revokeObjectURL(this.audioUrl);
     };
 
