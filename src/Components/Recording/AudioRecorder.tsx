@@ -118,9 +118,9 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
       });
 
       socketRef.current.on("speech_started", (data) => {
-        if (data.is_started === true) {
-          audioPlayerRef.current.pauseAudio();
-        }
+        console.log(data);
+
+        audioPlayerRef.current.pauseAudio();
       });
       const handleBeforeUnload = () => {
         socketRef.current?.emit("leave", { sessionId });
