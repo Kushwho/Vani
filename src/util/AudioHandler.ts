@@ -7,7 +7,7 @@ export class AudioHandler {
 
   private audio: HTMLAudioElement;
   private audioUrl: string = "";
-  private audioBinary: Blob;
+  private audioBinary: Blob = new Blob(); 
 
   public audioStatus: boolean = false;
   public setAudioStatus!: Dispatch<SetStateAction<boolean>>;
