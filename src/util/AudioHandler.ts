@@ -7,6 +7,7 @@ export class AudioHandler {
 
   private audio: HTMLAudioElement;
   private audioUrl: string = "";
+  private audioBinary: Blob;
 
   public audioStatus: boolean = false;
   public setAudioStatus!: Dispatch<SetStateAction<boolean>>;
@@ -77,12 +78,15 @@ export class AudioHandler {
       case "Cartesia": {
         const float32Array = new Float32Array(audioBinary);
         const toPlayFile = await this.pcmFloatToWavBlob(float32Array, 44100);
+        this.audioBinary = toPlayFile;
         this.audioUrl = URL.createObjectURL(toPlayFile);
         break;
       }
       default: {
         // Default is set to Deepgram
+
         const audioBlob = new Blob([audioBinary], { type: "audio/mpeg" });
+        this.audioBinary = audioBlob;
         this.audioUrl = URL.createObjectURL(audioBlob);
         this.audio.pause();
         break;
@@ -129,15 +133,23 @@ export class AudioHandler {
   }
 
   public async replayAudio() {
-    this.pauseAudio();
-
+    // Pause the audio and reset currentTime
+    this.audio.pause();
     this.audio.currentTime = 0;
 
-    URL.revokeObjectURL(this.audioUrl);
+    // Revoke the old object URL and create a new one
+    if (this.audioUrl) {
+      URL.revokeObjectURL(this.audioUrl);
+    }
 
-    // Load the audio source again
-    this.audio.src = this.audioUrl;
+    // Reload the audio source (recreate the URL if necessary)
     try {
+      // Assuming you have a method to get the correct audio binary
+      // Replace with actual method to get binary data
+      this.audioUrl = URL.createObjectURL(this.audioBinary);
+      this.audio.src = this.audioUrl;
+
+      // Ensure the audio is ready before playing
       await this.audio.play();
       this.setAudioStatus(true);
       this.audioStatus = true;
