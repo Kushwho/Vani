@@ -116,6 +116,12 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
           enqueueAudio(audioBinary);
         }
       });
+
+      socketRef.current.on("speech_started", (data) => {
+        if (data.is_started === true) {
+          audioPlayerRef.current.pauseAudio()
+        }
+      });
       const handleBeforeUnload = () => {
         socketRef.current?.emit("leave", { sessionId });
         socketRef.current?.disconnect();
@@ -243,7 +249,7 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
           <p className="text-xl font-semibold ">START</p>
         )}
       </button>
-      <div className="flex flex-row items-center justify-center mt-2">
+      <div className="flex flex-row items-center justify-center mt-2 gap-8">
         <button
           className="h-12 w-12 rounded-full border border-1  flex items-center justify-center p-2"
           onClick={() => {
@@ -254,6 +260,19 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
         >
           <img
             src={`/assets/icons/${audioPlaying ? "pause.svg" : "play.svg"}`}
+          />
+        </button>
+        <button
+          className="h-12 w-12 rounded-full border border-1  flex items-center justify-center p-2"
+          onClick={() => {
+            audioPlaying
+              ? audioPlayerRef.current.pauseAudio()
+              : audioPlayerRef.current.resumeAudio();
+          }}
+        >
+          <img
+            src={`/assets/icons/replay.svg`}
+            onClick={audioPlayerRef.current.replayAudio}
           />
         </button>
       </div>

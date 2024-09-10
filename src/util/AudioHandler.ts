@@ -107,6 +107,12 @@ export class AudioHandler {
     this.audio.oncancel = () => {
       URL.revokeObjectURL(this.audioUrl);
     };
+
+    this.audio.onerror = () => {
+      this.setAudioStatus(false)
+      this.audioStatus = false;
+      URL.revokeObjectURL(this.audioUrl);
+    }
     try {
       await this.audio.play();
     } catch (error) {
@@ -116,10 +122,16 @@ export class AudioHandler {
 
   public async pauseAudio() {
     this.audio.pause();
+    
   }
 
   public async resumeAudio() {
     this.audio.play()
+  }
+
+  public async replayAudio(){
+    this.audio.currentTime = 0
+    this.resumeAudio();
   }
   // Add additional methods as needed
 }
