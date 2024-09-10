@@ -119,7 +119,7 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
 
       socketRef.current.on("speech_started", (data) => {
         if (data.is_started === true) {
-          audioPlayerRef.current.pauseAudio()
+          audioPlayerRef.current.pauseAudio();
         }
       });
       const handleBeforeUnload = () => {
@@ -265,15 +265,10 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
         <button
           className="h-12 w-12 rounded-full border border-1  flex items-center justify-center p-2"
           onClick={() => {
-            audioPlaying
-              ? audioPlayerRef.current.pauseAudio()
-              : audioPlayerRef.current.resumeAudio();
+            audioPlayerRef.current.replayAudio();
           }}
         >
-          <img
-            src={`/assets/icons/replay.svg`}
-            onClick={audioPlayerRef.current.replayAudio}
-          />
+          <img src={`/assets/icons/replay.svg`} />
         </button>
       </div>
     </>
