@@ -30,7 +30,7 @@ export class AudioFilter {
   public static async getInstance(): Promise<AudioFilter> {
     if (!AudioFilter.instance) {
       const audioContext = new AudioContext();
-      fetch("/volume-processor.js")
+      fetch("volume-processor.js")
       .then((response) => response.text())
       .then((text) => {
           const blob = new Blob([text], { type: 'application/javascript; charset=utf-8' });
