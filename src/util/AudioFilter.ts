@@ -50,8 +50,7 @@ export class AudioFilter {
     console.log("Created media stream source");
     this.microphoneStream.connect(this.workletNode);
     console.log("Connected to worklet node");
-    this.workletNode.connect(this.audioContext.destination);
-    console.log("Connected to destination");
+    
   }
 
   public stopMicrophoneProcessing(): void {

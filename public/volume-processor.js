@@ -13,6 +13,8 @@ class AudioLevelProcessor extends AudioWorkletProcessor {
 
 
     if (input.length > 0) {
+      console.log("Hi from process");
+      
       
       const samples = input[0];
       let sum = 0;
