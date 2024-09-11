@@ -23,11 +23,11 @@ class AudioLevelProcessor extends AudioWorkletProcessor {
 
       const rms = Math.sqrt(sum / samples.length);
       this.volume = Math.max(rms, this.volume * 0.95);
-      console.log(this.currentTime, this.lastUpdate);
+      console.log(currentTime, this.lastUpdate);
 
-      if (this.currentTime - this.lastUpdate > 0.1) {
+      if (currentTime - this.lastUpdate > 0.1) {
         console.log(this.volume);
-        this.lastUpdate = this.currentTime;
+        this.lastUpdate = currentTime;
         const db = 20 * Math.log10(this.volume);
         const byteArray = new Float32Array(samples).buffer;
         const blob = new Blob([byteArray], { type: "audio/wav" });
