@@ -215,17 +215,17 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
 
   // ...
 
-  const handleRecordButtonClick = () => {
+  const handleRecordButtonClick = async () => {
     if (!isRecording) {
       setIsRecording(true);
       console.log("Hello");
       
-      audioProcessorRef.current?.startMicrophoneProcessing().catch((err) => {
+      await audioProcessorRef.current?.startMicrophoneProcessing().catch((err) => {
         setIsRecording(false);
         console.log(err);
       });
     } else {
-      audioProcessorRef.current?.stopMicrophoneProcessing();
+     await audioProcessorRef.current?.stopMicrophoneProcessing();
     }
   };
 
