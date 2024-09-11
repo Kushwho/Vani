@@ -4,7 +4,7 @@ export class AudioFilter {
   private workletNode: AudioWorkletNode;
   private microphoneStream: MediaStreamAudioSourceNode | null = null;
   private onProcessedAudioCallback:
-    | ((processedAudio: Float32Array) => void)
+    | ((processedAudio: Blob) => void)
     | null = null;
 
   private constructor(
@@ -13,6 +13,7 @@ export class AudioFilter {
   ) {
     this.audioContext = audioContext;
     this.workletNode = workletNode;
+    this.workletNode.disconnect();
     this.workletNode.port.onmessage = (event) => {
       const { aboveThreshold, level, processedAudio } = event.data;
       console.log(
@@ -35,7 +36,6 @@ export class AudioFilter {
         audioContext,
         "volume-processor"
       );
-      console.log("Hello234");
       
       AudioFilter.instance = new AudioFilter(audioContext, workletNode);
     }
@@ -63,7 +63,7 @@ export class AudioFilter {
   }
 
   public setProcessedAudioCallback(
-    callback: (processedAudio: Float32Array) => void
+    callback: (processedAudio: Blob) => void
   ): void {
     this.onProcessedAudioCallback = callback;
   }
