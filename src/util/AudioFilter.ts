@@ -30,15 +30,7 @@ export class AudioFilter {
   public static async getInstance(): Promise<AudioFilter> {
     if (!AudioFilter.instance) {
       const audioContext = new AudioContext();
-      fetch("volume-processor.js")
-      .then((response) => response.text())
-      .then((text) => {
-          const blob = new Blob([text], { type: 'application/javascript; charset=utf-8' });
-          const objectUrl = URL.createObjectURL(blob);
-
-          return audioContext.audioWorklet.addModule(objectUrl)
-              .finally(() => URL.revokeObjectURL(objectUrl));
-      })
+      await audioContext.audioWorklet.addModule("/volume-processor.js");
       const workletNode = new AudioWorkletNode(
         audioContext,
         "volume-processor"

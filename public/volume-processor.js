@@ -3,11 +3,14 @@ class AudioLevelProcessor extends AudioWorkletProcessor {
     super();
     this.lastUpdate = 0;
     this.volume = 0;
+    console.log("I am loaded2")
+
   }
 
   process(inputs, outputs) {
     const input = inputs[0];
     const output = outputs[0];
+    console.log("I am loaded")
 
     if (input.length > 0) {
       const samples = input[0];
