@@ -16,6 +16,7 @@ import { toast } from "react-toastify";
 import { DEFAULT_SESSION_ID, NOT_LOGGED_IN_EMAIL } from "@/util/constant";
 import { useNavigate } from "react-router";
 import { AudioHandler } from "@/util/AudioHandler";
+import { AudioFilter } from "@/util/AudioFilter";
 
 export type AudioRecorderProps = {
   setHistory: React.Dispatch<React.SetStateAction<ChatHistoryProps>>;
@@ -36,7 +37,7 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
 
   const [isDeepgramOpened, setIsDeepGramOpened] = useState<boolean>(false);
 
-  const microphoneRef = useRef<MediaRecorder | null>(null);
+  // const microphoneRef = useRef<MediaRecorder | null>(null);
   const socketRef = useRef<Socket | null>(null);
   const auth = useAuthContext();
 
@@ -49,6 +50,18 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
       setAudioPlaying
     )
   );
+
+  const audioProcessorRef = useRef<AudioFilter | null>(null);
+
+  useEffect(() => {
+    const initializeAudioProcessor = async () => {
+      audioProcessorRef.current = await AudioFilter.getInstance();
+      audioProcessorRef.current.setProcessedAudioCallback((data) => {
+        console.log(data);
+      });
+    };
+    initializeAudioProcessor();
+  }, []);
 
   console.log("auth primary values", auth?.primaryValues);
 
@@ -144,49 +157,50 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
     onClickEndSession,
   }));
 
-  const openMicrophone = async (socket: Socket) => {
-    return new Promise<void>((resolve) => {
-      microphoneRef.current!.onstart = () => {
-        console.log("Microphone opened");
-        document.body.classList.add("recording");
-        resolve();
-      };
-      microphoneRef.current!.ondataavailable = async (event) => {
-        console.log(event);
+  // const openMicrophone = async (socket: Socket) => {
+  //   return new Promise<void>((resolve) => {
+  //     microphoneRef.current!.onstart = () => {
+  //       console.log("Microphone opened");
+  //       document.body.classList.add("recording");
+  //       resolve();
+  //     };
+  //     microphoneRef.current!.ondataavailable = async (event) => {
+  //       console.log(event);
 
-        if (event.data.size > 0) {
-          socket.emit("audio_stream", { data: event.data, sessionId });
-        }
-      };
+  //       if (event.data.size > 0) {
+  //         socket.emit("audio_stream", { data: event.data, sessionId });
+  //       }
+  //     };
 
-      microphoneRef.current!.start(500);
-    });
-  };
+  //     microphoneRef.current!.start(500);
+  //   });
+  // };
 
-  const startRecording = async () => {
-    setIsRecording(true);
+  // const startRecording = async () => {
+  //   setIsRecording(true);
 
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      microphoneRef.current = new MediaRecorder(stream, {
-        mimeType: "audio/webm",
-      });
-      await openMicrophone(socketRef.current!);
-    } catch (error) {
-      console.error("Error accessing microphone:", error);
-      throw error;
-    }
-  };
+  //   try {
+  //     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
 
-  const stopRecording = async () => {
-    setIsRecording(false);
-    document.body.classList.remove("recording");
-    audioPlayerRef.current.pauseAudio();
-    microphoneRef.current?.pause();
-    microphoneRef.current?.stop();
-    microphoneRef.current?.stream.getTracks().forEach((track) => track.stop());
-    microphoneRef.current = null;
-  };
+  //     microphoneRef.current = new MediaRecorder(stream, {
+  //       mimeType: "audio/webm",
+  //     });
+  //     await openMicrophone(socketRef.current!);
+  //   } catch (error) {
+  //     console.error("Error accessing microphone:", error);
+  //     throw error;
+  //   }
+  // };
+
+  // const stopRecording = async () => {
+  //   setIsRecording(false);
+  //   document.body.classList.remove("recording");
+  //   audioPlayerRef.current.pauseAudio();
+  //   microphoneRef.current?.pause();
+  //   microphoneRef.current?.stop();
+  //   microphoneRef.current?.stream.getTracks().forEach((track) => track.stop());
+  //   microphoneRef.current = null;
+  // };
 
   const enqueueAudio = async (audioBinary: ArrayBuffer) => {
     await playAudio(audioBinary);
@@ -203,13 +217,13 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
 
   const handleRecordButtonClick = () => {
     if (!isRecording) {
-      startRecording()
-        .then(() => {})
-        .catch((error) => console.error("Error starting recording:", error));
+      setIsRecording(true);
+      audioProcessorRef.current?.startMicrophoneProcessing().catch((err) => {
+        setIsRecording(false);
+        console.log(err);
+      });
     } else {
-      stopRecording().catch((error) =>
-        console.error("Error stopping recording:", error)
-      );
+      audioProcessorRef.current?.stopMicrophoneProcessing();
     }
   };
 
