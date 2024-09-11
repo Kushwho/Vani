@@ -33,6 +33,8 @@ export class AudioFilter {
       this.microphoneStream = this.audioContext.createMediaStreamSource(stream);
       this.microphoneStream.connect(this.workletNode);
       this.workletNode.connect(this.audioContext.destination);
+      console.log("Listening");
+      
     }
   
     public stopMicrophoneProcessing(): void {
