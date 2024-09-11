@@ -26,13 +26,13 @@ class AudioLevelProcessor extends AudioWorkletProcessor {
   
 
       if (currentTime - this.lastUpdate > 0.1) {
-        console.log(this.volume);
+  
         this.lastUpdate = currentTime;
         const db = 20 * Math.log10(this.volume);
 
         this.port.postMessage({
           level: db,
-          aboveThreshold: db > -20,
+          aboveThreshold: db > -30,
           processedAudio: samples, // Send processed audio data
         });
       }
