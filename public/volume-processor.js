@@ -13,7 +13,7 @@ class AudioLevelProcessor extends AudioWorkletProcessor {
 
 
     if (input.length > 0) {
-      console.log("I am loaded")
+      
       const samples = input[0];
       let sum = 0;
 
@@ -26,10 +26,12 @@ class AudioLevelProcessor extends AudioWorkletProcessor {
       this.volume = Math.max(rms, this.volume * 0.95);
 
       if (this.currentTime - this.lastUpdate > 0.1) {
+        console.log(this.volume);
         this.lastUpdate = this.currentTime;
         const db = 20 * Math.log10(this.volume);
         const byteArray = new Float32Array(samples).buffer;
         const blob = new Blob([byteArray], { type: "audio/wav" });
+        
         this.port.postMessage({
           level: db,
           aboveThreshold: db > -50,
