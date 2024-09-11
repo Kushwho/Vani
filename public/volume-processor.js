@@ -3,19 +3,16 @@ class AudioLevelProcessor extends AudioWorkletProcessor {
     super();
     this.lastUpdate = 0;
     this.volume = 0;
-    console.log("I am loaded2")
-
+    console.log("I am loaded2");
   }
 
   process(inputs, outputs, parameters) {
     const input = inputs[0];
     const output = outputs[0];
 
-
     if (input.length > 0) {
       console.log("Hi from process");
-      
-      
+
       const samples = input[0];
       let sum = 0;
 
@@ -26,14 +23,15 @@ class AudioLevelProcessor extends AudioWorkletProcessor {
 
       const rms = Math.sqrt(sum / samples.length);
       this.volume = Math.max(rms, this.volume * 0.95);
-      const currentTime = this.port.context.currentTime;
-      if (currentTime - this.lastUpdate > 0.1) {
+      console.log(this.currentTime, this.lastUpdate);
+
+      if (this.currentTime - this.lastUpdate > 0.1) {
         console.log(this.volume);
-        this.lastUpdate = currentTime;
+        this.lastUpdate = this.currentTime;
         const db = 20 * Math.log10(this.volume);
         const byteArray = new Float32Array(samples).buffer;
         const blob = new Blob([byteArray], { type: "audio/wav" });
-        
+
         this.port.postMessage({
           level: db,
           aboveThreshold: db > -50,
@@ -45,5 +43,5 @@ class AudioLevelProcessor extends AudioWorkletProcessor {
     return true;
   }
 }
-   
+
 registerProcessor("volume-processor", AudioLevelProcessor);
