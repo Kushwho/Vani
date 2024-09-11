@@ -225,7 +225,7 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
         console.log(err);
       });
     } else {
-     await audioProcessorRef.current?.stopMicrophoneProcessing();
+     audioProcessorRef.current?.stopMicrophoneProcessing();
     }
   };
 
