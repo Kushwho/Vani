@@ -10,8 +10,7 @@ class AudioLevelProcessor extends AudioWorkletProcessor {
   process(inputs, outputs, parameters) {
     const input = inputs[0];
     const output = outputs[0];
-  
-console.log(input, output);
+
 
     if (input.length > 0) {
       console.log("I am loaded")
