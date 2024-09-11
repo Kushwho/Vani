@@ -11,7 +11,7 @@ class AudioLevelProcessor extends AudioWorkletProcessor {
     const output = outputs[0];
 
     if (input.length > 0) {
-      console.log("Hi from process");
+
 
       const samples = input[0];
       let sum = 0;
@@ -23,7 +23,7 @@ class AudioLevelProcessor extends AudioWorkletProcessor {
 
       const rms = Math.sqrt(sum / samples.length);
       this.volume = Math.max(rms, this.volume * 0.95);
-      console.log(currentTime, this.lastUpdate);
+  
 
       if (currentTime - this.lastUpdate > 0.1) {
         console.log(this.volume);
@@ -32,7 +32,7 @@ class AudioLevelProcessor extends AudioWorkletProcessor {
 
         this.port.postMessage({
           level: db,
-          aboveThreshold: db > -50,
+          aboveThreshold: db > -20,
           processedAudio: samples, // Send processed audio data
         });
       }

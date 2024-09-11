@@ -17,11 +17,13 @@ export class AudioFilter {
       const { aboveThreshold, level, processedAudio } = event.data;
       const byteArray = new Float32Array(processedAudio).buffer;
       const blob = new Blob([byteArray], { type: "audio/wav" });
-      console.log(
-        `Audio level: ${level.toFixed(
-          2
-        )} dB, Above threshold: ${aboveThreshold}`
-      );
+      if (aboveThreshold) {
+        console.log(
+          `Audio level: ${level.toFixed(
+            2
+          )} dB, Above threshold: ${aboveThreshold}`
+        );
+      }
 
       if (this.onProcessedAudioCallback && processedAudio) {
         this.onProcessedAudioCallback(blob);
