@@ -29,13 +29,11 @@ class AudioLevelProcessor extends AudioWorkletProcessor {
         console.log(this.volume);
         this.lastUpdate = currentTime;
         const db = 20 * Math.log10(this.volume);
-        const byteArray = new Float32Array(samples).buffer;
-        const blob = new Blob([byteArray], { type: "audio/wav" });
 
         this.port.postMessage({
           level: db,
           aboveThreshold: db > -50,
-          processedAudio: blob, // Send processed audio data
+          processedAudio: samples, // Send processed audio data
         });
       }
     }
