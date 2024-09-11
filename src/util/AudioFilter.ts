@@ -32,6 +32,9 @@ export class AudioFilter {
       const audioContext = new AudioContext();
       await audioContext.audioWorklet
         .addModule("/volume-processor.js")
+        .then((data) => {
+          console.log("Audio worklet added", data);
+        })
         .catch((err) => {
           console.log(err);
         });
