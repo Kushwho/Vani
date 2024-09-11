@@ -35,6 +35,8 @@ export class AudioFilter {
         audioContext,
         "volume-processor"
       );
+      console.log("Hello234");
+      
       AudioFilter.instance = new AudioFilter(audioContext, workletNode);
     }
     return AudioFilter.instance;
