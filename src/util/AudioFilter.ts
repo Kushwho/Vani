@@ -29,11 +29,15 @@ export class AudioFilter {
     }
   
     public async startMicrophoneProcessing(): Promise<void> {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      this.microphoneStream = this.audioContext.createMediaStreamSource(stream);
-      this.microphoneStream.connect(this.workletNode);
-      this.workletNode.connect(this.audioContext.destination);
-      console.log("Listening");
+        console.log("Starting microphone processing");
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        console.log("Got media stream");
+        this.microphoneStream = this.audioContext.createMediaStreamSource(stream);
+        console.log("Created media stream source");
+        this.microphoneStream.connect(this.workletNode);
+        console.log("Connected to worklet node");
+        this.workletNode.connect(this.audioContext.destination);
+        console.log("Connected to destination");
       
     }
   
