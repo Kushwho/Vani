@@ -29,6 +29,7 @@ export type RefProps = {
 const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
   { setHistory },
   ref: Ref<RefProps>
+  
 ) => {
   const [isRecording, setIsRecording] = useState(false);
 
