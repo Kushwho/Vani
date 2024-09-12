@@ -32,7 +32,7 @@ class AudioLevelProcessor extends AudioWorkletProcessor {
 
         this.port.postMessage({
           level: db,
-          aboveThreshold: db < -24,
+          aboveThreshold: db > -24,
           processedAudio: samples, // Send processed audio data
         });
       }
