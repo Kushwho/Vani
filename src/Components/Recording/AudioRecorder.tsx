@@ -160,7 +160,7 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
         }
       };
 
-      microphoneRef.current!.start(500);
+      microphoneRef.current!.start(100);
     });
   };
 
