@@ -13,7 +13,6 @@ export interface BlogsCardProps {
 }
 
 const BlogsCard: FC<BlogsCardProps> = ({
-  id,
   author,
   title,
   description,
@@ -23,7 +22,6 @@ const BlogsCard: FC<BlogsCardProps> = ({
 }) => {
   const navigate = useNavigate();
   const window = useWindowDimensions();
-
 
   return (
     <div className=" rounded-lg  p-6 flex border border-orange-200 bg-white ">
@@ -37,7 +35,7 @@ const BlogsCard: FC<BlogsCardProps> = ({
         <h3
           className="mt-2 text-xl font-semibold text-gray-900 hover:text-gray-700 cursor-pointer"
           onClick={() => {
-            navigate(`/blogs/${id}`);
+            navigate(`/blogs/${title}`);
           }}
         >
           {title}

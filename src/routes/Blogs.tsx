@@ -96,7 +96,6 @@ const Blogs: FC = () => {
                   imageUrl={post.imageUrl}
                   publishedAt={post.publishedAt}
                   heroImage={post.heroImage}
-                  id={post.id}
                   description={post.description}
                 />
               ))}
