@@ -25,9 +25,8 @@ const BlogDetail: FC = () => {
   const { title } = useParams();
 
   const [post, setPost] = useState<BlogDetailResponse | undefined>(undefined);
-  const query = `*[_type == "blogPost" && title == ${replaceHyphensWithSpaces(
-    title
-  )}]{ title, mainImage, publishedAt, content,author->{name, image}}`;
+
+  const query = `*[_type == "blogPost" && title == ${replaceHyphensWithSpaces(title?title:"")}]{ title, mainImage, publishedAt, content,author->{name, image}}`;
 
   useEffect(() => {
     client.fetch(query).then((fetchedPost: BlogDetailResponse[]) => {
