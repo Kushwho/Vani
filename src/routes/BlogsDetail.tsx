@@ -7,7 +7,6 @@ import { SanityImage } from "@/types/SanityImage.type";
 import { PortableText } from "@portabletext/react";
 
 import { myPortableTextComponents } from "@/Components/Blogs/MyPortableComponent";
-import { replaceHyphensWithSpaces } from "@/util/StringHandler";
 
 interface BlogDetailResponse {
   _id: string;
@@ -22,11 +21,10 @@ interface BlogDetailResponse {
 }
 
 const BlogDetail: FC = () => {
-  const { title } = useParams();
+  const { id } = useParams();
 
   const [post, setPost] = useState<BlogDetailResponse | undefined>(undefined);
-
-  const query = `*[_type == "blogPost" && title == ${replaceHyphensWithSpaces(title?title:"")}]{ title, mainImage, publishedAt, content,author->{name, image}}`;
+  const query = `*[_type == "blogPost" && _id == "${id}"]{_id, title, mainImage, publishedAt, content,author->{name, image}}`;
 
   useEffect(() => {
     client.fetch(query).then((fetchedPost: BlogDetailResponse[]) => {
