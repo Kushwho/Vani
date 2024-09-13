@@ -1,7 +1,6 @@
 import { FC } from "react";
 import { useNavigate } from "react-router";
 import useWindowDimensions from "../../Hooks/useWindowDimensions";
-import { replaceSpacesWithHyphens } from "@/util/StringHandler";
 
 export interface BlogsCardProps {
   id: string;
@@ -14,7 +13,7 @@ export interface BlogsCardProps {
 }
 
 const BlogsCard: FC<BlogsCardProps> = ({
-  id:_,
+  id,
   author,
   title,
   description,
@@ -25,7 +24,6 @@ const BlogsCard: FC<BlogsCardProps> = ({
   const navigate = useNavigate();
   const window = useWindowDimensions();
 
-  
 
   return (
     <div className=" rounded-lg  p-6 flex border border-orange-200 bg-white ">
@@ -39,7 +37,7 @@ const BlogsCard: FC<BlogsCardProps> = ({
         <h3
           className="mt-2 text-xl font-semibold text-gray-900 hover:text-gray-700 cursor-pointer"
           onClick={() => {
-            navigate(`/blogs/${replaceSpacesWithHyphens(title)}`);
+            navigate(`/blogs/${id}`);
           }}
         >
           {title}
