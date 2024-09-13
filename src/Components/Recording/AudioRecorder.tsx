@@ -37,6 +37,8 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
 
   const [isDeepgramOpened, setIsDeepGramOpened] = useState<boolean>(false);
 
+  const timeInterValIdRef = useRef<NodeJS.Timeout | null>(null);
+
   // const microphoneRef = useRef<MediaRecorder | null>(null);
   const socketRef = useRef<Socket | null>(null);
   const auth = useAuthContext();
@@ -57,7 +59,10 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
     const initializeAudioProcessor = async () => {
       audioProcessorRef.current = await AudioFilter.getInstance();
       audioProcessorRef.current.setProcessedAudioCallback((data) => {
-        console.log(data);
+        socketRef.current?.emit("audio_stream", {
+          data: data,
+          sessionId,
+        });
       });
     };
     initializeAudioProcessor();
@@ -78,9 +83,9 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
       toast.success(
         "You are not logged in. Please log in to view this page. Navigating you to the home page"
       );
-      setTimeout(() => {
-        navigate("/");
-      }, 1500);
+      // setTimeout(() => {
+      //   navigate("/");
+      // }, 1500);
     }
   }, [auth?.primaryValues.email, navigate]);
 
@@ -219,19 +224,32 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
     if (!isRecording) {
       setIsRecording(true);
       console.log("Hello");
-      
-      await audioProcessorRef.current?.startMicrophoneProcessing().catch((err) => {
-        setIsRecording(false);
-        console.log(err);
-      });
+      if (timeInterValIdRef.current) {
+        clearInterval(timeInterValIdRef?.current);
+      }
+
+      await audioProcessorRef.current
+        ?.startMicrophoneProcessing()
+        .catch((err) => {
+          setIsRecording(false);
+          console.log(err);
+        });
     } else {
-     audioProcessorRef.current?.stopMicrophoneProcessing();
+      setIsRecording(false);
+      audioProcessorRef.current?.stopMicrophoneProcessing();
+      timeInterValIdRef.current = setInterval(() => {
+        socketRef.current?.emit("audio_stream", {
+          data: audioProcessorRef.current?.getLinear16Stream(),
+          sessionId,
+        });
+      }, 100);
     }
   };
 
   return (
     <>
       <button
+        id="btn-record"
         className={`${
           isRecording
             ? "relative grid place-items-center p-8"
