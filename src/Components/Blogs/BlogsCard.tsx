@@ -13,6 +13,7 @@ export interface BlogsCardProps {
 }
 
 const BlogsCard: FC<BlogsCardProps> = ({
+  id:_,
   author,
   title,
   description,
@@ -22,6 +23,8 @@ const BlogsCard: FC<BlogsCardProps> = ({
 }) => {
   const navigate = useNavigate();
   const window = useWindowDimensions();
+
+  
 
   return (
     <div className=" rounded-lg  p-6 flex border border-orange-200 bg-white ">

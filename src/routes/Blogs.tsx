@@ -83,13 +83,13 @@ const Blogs: FC = () => {
       ) : error ? (
         "an erro occured"
       ) : (
-
         <div className="flex gap-12 justify-stretch items-stretch w-screen max-w-6xl mx-auto min-h-screen h-full bg-white py-8 max-lg:px-6">
           <BlogsSidebar posts={popularPostTitle} />
           <main className="flex-1 w-full h-full mx-auto px-6 flex flex-col items-center space-y-12 p-4">
             <div className="flex flex-col space-y-6">
               {posts.map((post) => (
                 <BlogsCard
+                  id={post.id}
                   key={post.id}
                   author={post.author}
                   title={post.title}
@@ -101,10 +101,9 @@ const Blogs: FC = () => {
               ))}
             </div>
           </main>
-          </div>
-
+        </div>
       )}
-</>
+    </>
   );
 };
 
