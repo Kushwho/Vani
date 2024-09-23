@@ -17,7 +17,7 @@ export class AudioFilter {
     this.linear16Stream = this.createLinear16Stream(100);
     this.workletNode.port.onmessage = (event) => {
       const { aboveThreshold, level, processedAudio } = event.data;
-      console.log("DB Level", level);
+     
 
       let blob: Blob;
       let byteArray: ArrayBufferLike;
@@ -25,6 +25,8 @@ export class AudioFilter {
       if (aboveThreshold) {
         byteArray = new Float32Array(processedAudio).buffer;
         blob = new Blob([byteArray], { type: "audio/wav" });
+        console.log(blob, "Above threshold");
+        
       } else {
         byteArray = this.linear16Stream;
         blob = new Blob([byteArray], { type: "audio/wav" });

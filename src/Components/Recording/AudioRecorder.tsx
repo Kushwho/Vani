@@ -59,6 +59,8 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
     const initializeAudioProcessor = async () => {
       audioProcessorRef.current = await AudioFilter.getInstance();
       audioProcessorRef.current.setProcessedAudioCallback((data) => {
+        console.log("Sending data", data);
+        
         socketRef.current?.emit("audio_stream", {
           data: data,
           sessionId,
