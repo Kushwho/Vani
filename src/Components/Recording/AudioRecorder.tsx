@@ -238,6 +238,7 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
       setIsRecording(false);
       audioProcessorRef.current?.stopMicrophoneProcessing();
       timeInterValIdRef.current = setInterval(() => {
+        console.log("Sending 16 audio stream");
         socketRef.current?.emit("audio_stream", {
           data: audioProcessorRef.current?.getLinear16Stream(),
           sessionId,
