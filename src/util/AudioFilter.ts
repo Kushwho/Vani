@@ -25,7 +25,7 @@ export class AudioFilter {
       if (aboveThreshold) {
         byteArray = new Float32Array(processedAudio).buffer;
         blob = new Blob([byteArray], { type: "audio/wav" });
-        console.log(blob, "Above threshold");
+        console.log(blob,"Level", level, "Above threshold");
         
       } else {
         byteArray = this.linear16Stream;
