@@ -55,12 +55,17 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
 
   const audioProcessorRef = useRef<AudioFilter | null>(null);
 
+  console.log("auth primary values", auth?.primaryValues);
+
+  console.log(auth?.primaryValues.id);
+
+  const [sessionId, setSessionId] = useState<string>(DEFAULT_SESSION_ID);
   useEffect(() => {
     const initializeAudioProcessor = async () => {
       audioProcessorRef.current = await AudioFilter.getInstance();
       audioProcessorRef.current.setProcessedAudioCallback((data) => {
         console.log("Sending data", data);
-        
+
         socketRef.current?.emit("audio_stream", {
           data: data,
           sessionId,
@@ -68,13 +73,7 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
       });
     };
     initializeAudioProcessor();
-  }, []);
-
-  console.log("auth primary values", auth?.primaryValues);
-
-  console.log(auth?.primaryValues.id);
-
-  const [sessionId, setSessionId] = useState<string>(DEFAULT_SESSION_ID);
+  }, [sessionId]);
   useEffect(() => {
     if (auth?.primaryValues.id) {
       setSessionId(auth?.primaryValues.id);
@@ -163,7 +162,6 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
   useImperativeHandle(ref, () => ({
     onClickEndSession,
   }));
-
 
   const enqueueAudio = async (audioBinary: ArrayBuffer) => {
     await playAudio(audioBinary);
