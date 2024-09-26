@@ -14,9 +14,12 @@ export default async (
   axios: AxiosInstance
 ): Promise<GetUserResponse> => {
   console.log(data);
+  try {
+    const resp = await axios.get<GetUserResponse>(URL);
+    console.log(resp.data);
 
-  const resp = await axios.get<GetUserResponse>(URL);
-  console.log(resp.data);
-
-  return resp.data;
+    return resp.data;
+  } catch (err) {
+    throw err;
+  }
 };
