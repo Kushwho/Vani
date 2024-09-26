@@ -60,9 +60,7 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
   console.log(auth?.primaryValues.id);
 
   const [sessionId, setSessionId] = useState<string>(DEFAULT_SESSION_ID);
-  useEffect(() => {
- 
-  }, [sessionId]);
+  useEffect(() => {}, [sessionId]);
   useEffect(() => {
     if (auth?.primaryValues.id) {
       setSessionId(auth?.primaryValues.id);
@@ -141,7 +139,8 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
         audioProcessorRef.current = await AudioFilter.getInstance();
         audioProcessorRef.current.setProcessedAudioCallback((data) => {
           console.log("Sending data", data);
-  
+          console.log(socketRef.current);
+
           socketRef.current?.emit("audio_stream", {
             data: data,
             sessionId,
@@ -155,7 +154,7 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
         window.removeEventListener("beforeunload", handleBeforeUnload);
       };
     }
-  }, [sessionId,auth?.primaryValues.email,setHistory]);
+  }, [sessionId, auth?.primaryValues.email, setHistory]);
 
   const onClickEndSession = () => {
     socketRef.current?.emit("leave", { sessionId });
