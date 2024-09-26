@@ -61,18 +61,7 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
 
   const [sessionId, setSessionId] = useState<string>(DEFAULT_SESSION_ID);
   useEffect(() => {
-    const initializeAudioProcessor = async () => {
-      audioProcessorRef.current = await AudioFilter.getInstance();
-      audioProcessorRef.current.setProcessedAudioCallback((data) => {
-        console.log("Sending data", data);
-
-        socketRef.current?.emit("audio_stream", {
-          data: data,
-          sessionId,
-        });
-      });
-    };
-    initializeAudioProcessor();
+ 
   }, [sessionId]);
   useEffect(() => {
     if (auth?.primaryValues.id) {
@@ -84,9 +73,9 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
       toast.success(
         "You are not logged in. Please log in to view this page. Navigating you to the home page"
       );
-      // setTimeout(() => {
-      //   navigate("/");
-      // }, 1500);
+      setTimeout(() => {
+        navigate("/");
+      }, 1500);
     }
   }, [auth?.primaryValues.email, navigate]);
 
@@ -148,12 +137,25 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
 
       window.addEventListener("beforeunload", handleBeforeUnload);
 
+      const initializeAudioProcessor = async () => {
+        audioProcessorRef.current = await AudioFilter.getInstance();
+        audioProcessorRef.current.setProcessedAudioCallback((data) => {
+          console.log("Sending data", data);
+  
+          socketRef.current?.emit("audio_stream", {
+            data: data,
+            sessionId,
+          });
+        });
+      };
+      initializeAudioProcessor();
+
       return () => {
         handleBeforeUnload();
         window.removeEventListener("beforeunload", handleBeforeUnload);
       };
     }
-  }, [sessionId]);
+  }, [sessionId,auth?.primaryValues.email,setHistory]);
 
   const onClickEndSession = () => {
     socketRef.current?.emit("leave", { sessionId });
