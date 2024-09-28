@@ -28,14 +28,6 @@ export type RefProps = {
 };
 
 function createLinear16Stream(duration: number): Uint8Array {
-  /*************  ✨ Codeium Command ⭐  *************/
-  /**
-   * Write a string to a DataView at a given offset.
-   * @param view the DataView to write to
-   * @param offset the offset to start writing at
-   * @param string the string to write
-   */
-  /******  d66454a6-fbc0-4948-9fb7-dc52bf1d9ce8  *******/
   function writeString(view: DataView, offset: number, string: string): void {
     for (let i: number = 0; i < string.length; i++) {
       view.setUint8(offset + i, string.charCodeAt(i));
@@ -104,6 +96,9 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
   const linearAudio16Stream = useMemo(() => {
     return createLinear16Stream(duration);
   }, [duration]);
+  useEffect(() => {
+    console.log(linearAudio16Stream);
+  }, []);
 
   console.log("auth primary values", auth?.primaryValues);
 
@@ -130,7 +125,11 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
 
   useEffect(() => {
     if (sessionId !== DEFAULT_SESSION_ID) {
-      socketRef.current = io("wss://backend.vanii.ai");
+      socketRef.current = io("wss://backend.vanii.ai", {
+        transports: ["websocket"],
+        reconnectionAttempts: 5,
+        reconnectionDelay: 1000,
+      });
 
       socketRef.current.on("connect", () => {
         console.log("SendingThisSessionId", sessionId);
@@ -154,8 +153,6 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
           sessionId: responseSessionId,
           user,
         } = data;
-        console.log(responseSessionId);
-        console.log(data);
         if (responseSessionId === sessionId) {
           const captionsElement = document.getElementById("captions");
           if (captionsElement) {
@@ -245,15 +242,15 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
     if (timeInterValIdRef.current != null) {
       clearInterval(timeInterValIdRef.current);
     }
-    timeInterValIdRef.current = setInterval(() => {
-      console.log("Hello sending linear 16 stream");
-      console.log(socketRef.current);
+    // timeInterValIdRef.current = setInterval(() => {
+    //   console.log("Hello sending linear 16 stream");
+    //   console.log(socketRef.current);
 
-      socketRef.current?.emit("audio_stream", {
-        data: linearAudio16Stream,
-        sessionId,
-      });
-    }, 100);
+    //   socketRef.current?.emit("audio_stream", {
+    //     data: linearAudio16Stream,
+    //     sessionId,
+    //   });
+    // }, 100);
   };
 
   const enqueueAudio = async (audioBinary: ArrayBuffer) => {

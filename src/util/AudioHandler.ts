@@ -97,7 +97,6 @@ export class AudioHandler {
     this.audio.onpause = () => {
       this.setAudioStatus(false)
       this.audioStatus = false;
-      URL.revokeObjectURL(this.audioUrl);
     };
     this.audio.onended = () => {
       this.setAudioStatus(false)
@@ -107,7 +106,6 @@ export class AudioHandler {
     this.audio.oncancel = () => {
       this.setAudioStatus(false)
       this.audioStatus = false
-      URL.revokeObjectURL(this.audioUrl);
     };
 
     this.audio.onerror = () => {
