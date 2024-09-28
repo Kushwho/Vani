@@ -100,7 +100,7 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
     )
   );
 
-  const duration = 100;
+  const duration = 0.1;
   const linearAudio16Stream = useMemo(() => {
     return createLinear16Stream(duration);
   }, [duration]);
