@@ -104,14 +104,8 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
   const duration = 100;
   const linearAudio16Stream = useMemo(() => {
     return createLinear16Stream(duration);
-    
   }, [duration]);
 
-  useEffect(() =>{
-    console.log(linearAudio16Stream);
-    console.log(timeInterValIdRef);
-    
-  }, [])
   console.log("auth primary values", auth?.primaryValues);
 
   console.log(auth?.primaryValues.id);
@@ -226,9 +220,9 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
 
   const startRecording = async () => {
     setIsRecording(true);
-    // if (timeInterValIdRef.current) {
-    //   clearInterval(timeInterValIdRef.current);
-    // }
+    if (timeInterValIdRef.current) {
+      clearInterval(timeInterValIdRef.current);
+    }
 
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -250,17 +244,17 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
     microphoneRef.current?.stop();
     microphoneRef.current?.stream.getTracks().forEach((track) => track.stop());
     microphoneRef.current = null;
-    // if (timeInterValIdRef.current != null) {
-    //   clearInterval(timeInterValIdRef.current);
-    // }
-    // timeInterValIdRef.current = setInterval(() => {
-    //   console.log("Hello sending linear 16 stream");
+    if (timeInterValIdRef.current != null) {
+      clearInterval(timeInterValIdRef.current);
+    }
+    timeInterValIdRef.current = setInterval(() => {
+      console.log("Hello sending linear 16 stream");
       
-    //   socketRef.current?.emit("audio_stream", {
-    //     data: linearAudio16Stream,
-    //     sessionId,
-    //   });
-    // }, 100);
+      socketRef.current?.emit("audio_stream", {
+        data: linearAudio16Stream,
+        sessionId,
+      });
+    }, 100);
   };
 
   const enqueueAudio = async (audioBinary: ArrayBuffer) => {
