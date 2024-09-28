@@ -6,6 +6,7 @@ import React, {
   forwardRef,
   useImperativeHandle,
   ForwardRefRenderFunction,
+  useMemo,
 } from "react";
 import { Player } from "@lottiefiles/react-lottie-player";
 import { ChatHistoryProps } from "./Chat";
@@ -26,10 +27,44 @@ export type RefProps = {
   onClickEndSession: () => void;
 };
 
+function createLinear16Stream(duration: number): Uint8Array {
+  const sampleRate: number = 44100; // Standard sample rate (Hz)
+  const numChannels: number = 1; // Mono
+  const bytesPerSample: number = 2; // 16-bit = 2 bytes
+
+  const numSamples: number = Math.floor(sampleRate * duration);
+  const dataSize: number = numSamples * numChannels * bytesPerSample;
+  const fileSize: number = 44 + dataSize; // 44 bytes for header + data size
+
+  // Create a buffer for the entire file
+  const buffer: ArrayBuffer = new ArrayBuffer(fileSize);
+  const view: DataView = new DataView(buffer);
+
+  // Write WAV header
+  this.writeString(view, 0, "RIFF"); // ChunkID
+  view.setUint32(4, fileSize - 8, true); // ChunkSize
+  this.writeString(view, 8, "WAVE"); // Format
+  this.writeString(view, 12, "fmt "); // Subchunk1ID
+  view.setUint32(16, 16, true); // Subchunk1Size
+  view.setUint16(20, 1, true); // AudioFormat (1 for PCM)
+  view.setUint16(22, numChannels, true); // NumChannels
+  view.setUint32(24, sampleRate, true); // SampleRate
+  view.setUint32(28, sampleRate * numChannels * bytesPerSample, true); // ByteRate
+  view.setUint16(32, numChannels * bytesPerSample, true); // BlockAlign
+  view.setUint16(34, 8 * bytesPerSample, true); // BitsPerSample
+  this.writeString(view, 36, "data"); // Subchunk2ID
+  view.setUint32(40, dataSize, true); // Subchunk2Size
+
+  // Write zero-filled payload (silence)
+  for (let i: number = 44; i < fileSize; i++) {
+    view.setUint8(i, 0);
+  }
+
+  return new Uint8Array(buffer);
+}
 const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
   { setHistory },
   ref: Ref<RefProps>
-  
 ) => {
   const [isRecording, setIsRecording] = useState(false);
 
@@ -40,6 +75,7 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
   const microphoneRef = useRef<MediaRecorder | null>(null);
   const socketRef = useRef<Socket | null>(null);
   const auth = useAuthContext();
+  const timeInterValIdRef = useRef<NodeJS.Timeout | null>(null);
 
   const [audioPlaying, setAudioPlaying] = useState<boolean>(false);
 
@@ -50,6 +86,11 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
       setAudioPlaying
     )
   );
+
+  const duration = 100;
+  const linearAudio16Stream = useMemo(() => {
+    return createLinear16Stream(duration);
+  }, [duration]);
 
   console.log("auth primary values", auth?.primaryValues);
 
@@ -166,6 +207,9 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
 
   const startRecording = async () => {
     setIsRecording(true);
+    if (timeInterValIdRef.current) {
+      clearInterval(timeInterValIdRef.current);
+    }
 
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -187,6 +231,15 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
     microphoneRef.current?.stop();
     microphoneRef.current?.stream.getTracks().forEach((track) => track.stop());
     microphoneRef.current = null;
+    if (timeInterValIdRef.current != null) {
+      clearInterval(timeInterValIdRef.current);
+    }
+    timeInterValIdRef.current = setInterval(() => {
+      socketRef.current?.emit("audio_stream", {
+        data: linearAudio16Stream,
+        sessionId,
+      });
+    }, 100);
   };
 
   const enqueueAudio = async (audioBinary: ArrayBuffer) => {
