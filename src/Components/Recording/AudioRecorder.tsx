@@ -194,7 +194,6 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
         resolve();
       };
       microphoneRef.current!.ondataavailable = async (event) => {
-        console.log(event);
 
         if (event.data.size > 0) {
           socket.emit("audio_stream", { data: event.data, sessionId });
