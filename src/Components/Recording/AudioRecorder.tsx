@@ -29,6 +29,14 @@ export type RefProps = {
 
 function createLinear16Stream(duration: number): Uint8Array {
 
+/*************  ✨ Codeium Command ⭐  *************/
+  /**
+   * Write a string to a DataView at a given offset.
+   * @param view the DataView to write to
+   * @param offset the offset to start writing at
+   * @param string the string to write
+   */
+/******  d66454a6-fbc0-4948-9fb7-dc52bf1d9ce8  *******/
   function writeString(view: DataView, offset: number, string: string): void {
     for (let i: number = 0; i < string.length; i++) {
       view.setUint8(offset + i, string.charCodeAt(i));
@@ -212,9 +220,9 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
 
   const startRecording = async () => {
     setIsRecording(true);
-    if (timeInterValIdRef.current) {
-      clearInterval(timeInterValIdRef.current);
-    }
+    // if (timeInterValIdRef.current) {
+    //   clearInterval(timeInterValIdRef.current);
+    // }
 
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -236,17 +244,17 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
     microphoneRef.current?.stop();
     microphoneRef.current?.stream.getTracks().forEach((track) => track.stop());
     microphoneRef.current = null;
-    if (timeInterValIdRef.current != null) {
-      clearInterval(timeInterValIdRef.current);
-    }
-    timeInterValIdRef.current = setInterval(() => {
-      console.log("Hello sending linear 16 stream");
+    // if (timeInterValIdRef.current != null) {
+    //   clearInterval(timeInterValIdRef.current);
+    // }
+    // timeInterValIdRef.current = setInterval(() => {
+    //   console.log("Hello sending linear 16 stream");
       
-      socketRef.current?.emit("audio_stream", {
-        data: linearAudio16Stream,
-        sessionId,
-      });
-    }, 100);
+    //   socketRef.current?.emit("audio_stream", {
+    //     data: linearAudio16Stream,
+    //     sessionId,
+    //   });
+    // }, 100);
   };
 
   const enqueueAudio = async (audioBinary: ArrayBuffer) => {
