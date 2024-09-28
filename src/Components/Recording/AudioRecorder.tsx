@@ -104,8 +104,14 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
   const duration = 100;
   const linearAudio16Stream = useMemo(() => {
     return createLinear16Stream(duration);
+    
   }, [duration]);
 
+  useEffect(() =>{
+    console.log(linearAudio16Stream);
+    console.log(timeInterValIdRef);
+    
+  }, [])
   console.log("auth primary values", auth?.primaryValues);
 
   console.log(auth?.primaryValues.id);
