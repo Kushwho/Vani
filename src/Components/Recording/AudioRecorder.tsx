@@ -28,15 +28,14 @@ export type RefProps = {
 };
 
 function createLinear16Stream(duration: number): Uint8Array {
-
-/*************  ✨ Codeium Command ⭐  *************/
+  /*************  ✨ Codeium Command ⭐  *************/
   /**
    * Write a string to a DataView at a given offset.
    * @param view the DataView to write to
    * @param offset the offset to start writing at
    * @param string the string to write
    */
-/******  d66454a6-fbc0-4948-9fb7-dc52bf1d9ce8  *******/
+  /******  d66454a6-fbc0-4948-9fb7-dc52bf1d9ce8  *******/
   function writeString(view: DataView, offset: number, string: string): void {
     for (let i: number = 0; i < string.length; i++) {
       view.setUint8(offset + i, string.charCodeAt(i));
@@ -208,7 +207,6 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
         resolve();
       };
       microphoneRef.current!.ondataavailable = async (event) => {
-
         if (event.data.size > 0) {
           socket.emit("audio_stream", { data: event.data, sessionId });
         }
@@ -249,7 +247,8 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
     }
     timeInterValIdRef.current = setInterval(() => {
       console.log("Hello sending linear 16 stream");
-      
+      console.log(socketRef.current);
+
       socketRef.current?.emit("audio_stream", {
         data: linearAudio16Stream,
         sessionId,
