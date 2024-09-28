@@ -28,15 +28,6 @@ export type RefProps = {
 };
 
 function createLinear16Stream(duration: number): Uint8Array {
-
-/*************  ✨ Codeium Command ⭐  *************/
-  /**
-   * Write a string to a DataView at a given offset.
-   * @param view the DataView to write to
-   * @param offset the offset to start writing at
-   * @param string the string to write
-   */
-/******  d66454a6-fbc0-4948-9fb7-dc52bf1d9ce8  *******/
   function writeString(view: DataView, offset: number, string: string): void {
     for (let i: number = 0; i < string.length; i++) {
       view.setUint8(offset + i, string.charCodeAt(i));
@@ -76,21 +67,18 @@ function createLinear16Stream(duration: number): Uint8Array {
 
   return new Uint8Array(buffer);
 }
+
 const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
   { setHistory },
   ref: Ref<RefProps>
 ) => {
   const [isRecording, setIsRecording] = useState(false);
-
   const navigate = useNavigate();
-
   const [isDeepgramOpened, setIsDeepGramOpened] = useState<boolean>(false);
-
   const microphoneRef = useRef<MediaRecorder | null>(null);
   const socketRef = useRef<Socket | null>(null);
   const auth = useAuthContext();
   const timeInterValIdRef = useRef<NodeJS.Timeout | null>(null);
-
   const [audioPlaying, setAudioPlaying] = useState<boolean>(false);
 
   const audioPlayerRef = useRef<AudioHandler>(
@@ -107,15 +95,16 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
   }, [duration]);
 
   console.log("auth primary values", auth?.primaryValues);
-
   console.log(auth?.primaryValues.id);
 
   const [sessionId, setSessionId] = useState<string>(DEFAULT_SESSION_ID);
+
   useEffect(() => {
     if (auth?.primaryValues.id) {
       setSessionId(auth?.primaryValues.id);
     }
   }, [auth?.primaryValues.id]);
+
   useEffect(() => {
     if (auth?.primaryValues.email === NOT_LOGGED_IN_EMAIL) {
       toast.success(
@@ -126,8 +115,6 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
       }, 1500);
     }
   }, [auth?.primaryValues.email, navigate]);
-
-  // Usage
 
   useEffect(() => {
     if (sessionId !== DEFAULT_SESSION_ID) {
@@ -144,6 +131,7 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
           voice: audioPlayerRef.current.voice,
         });
       });
+
       socketRef.current.on("deepgram_connection_opened", () => {
         setIsDeepGramOpened(true);
       });
@@ -175,9 +163,9 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
 
       socketRef.current.on("speech_started", (data) => {
         console.log(data);
-
         audioPlayerRef.current.pauseAudio();
       });
+
       const handleBeforeUnload = () => {
         socketRef.current?.emit("leave", { sessionId });
         socketRef.current?.disconnect();
@@ -196,6 +184,7 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
     socketRef.current?.emit("leave", { sessionId });
     socketRef.current?.disconnect();
   };
+
   useImperativeHandle(ref, () => ({
     onClickEndSession,
   }));
@@ -208,12 +197,10 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
         resolve();
       };
       microphoneRef.current!.ondataavailable = async (event) => {
-
         if (event.data.size > 0) {
           socket.emit("audio_stream", { data: event.data, sessionId });
         }
       };
-
       microphoneRef.current!.start(100);
     });
   };
@@ -224,15 +211,22 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
       clearInterval(timeInterValIdRef.current);
     }
 
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      microphoneRef.current = new MediaRecorder(stream, {
-        mimeType: "audio/webm",
-      });
-      await openMicrophone(socketRef.current!);
-    } catch (error) {
-      console.error("Error accessing microphone:", error);
-      throw error;
+    if (microphoneRef.current && microphoneRef.current.state === "paused") {
+      // Resume the existing MediaRecorder
+      microphoneRef.current.resume();
+      document.body.classList.add("recording");
+    } else if (!microphoneRef.current) {
+      // Create a new MediaRecorder if it doesn't exist
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        microphoneRef.current = new MediaRecorder(stream, {
+          mimeType: "audio/webm",
+        });
+        await openMicrophone(socketRef.current!);
+      } catch (error) {
+        console.error("Error accessing microphone:", error);
+        throw error;
+      }
     }
   };
 
@@ -240,16 +234,16 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
     setIsRecording(false);
     document.body.classList.remove("recording");
     audioPlayerRef.current.pauseAudio();
-    microphoneRef.current?.pause();
-    microphoneRef.current?.stop();
-    microphoneRef.current?.stream.getTracks().forEach((track) => track.stop());
-    microphoneRef.current = null;
+
+    if (microphoneRef.current && microphoneRef.current.state === "recording") {
+      microphoneRef.current.pause(); // Pause instead of stop
+    }
+
     if (timeInterValIdRef.current != null) {
       clearInterval(timeInterValIdRef.current);
     }
     timeInterValIdRef.current = setInterval(() => {
-      console.log("Hello sending linear 16 stream");
-      
+      console.log("Sending linear 16 stream (silence)");
       socketRef.current?.emit("audio_stream", {
         data: linearAudio16Stream,
         sessionId,
@@ -261,14 +255,10 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
     await playAudio(audioBinary);
   };
 
-  // ...
-
   const playAudio = async (audioBinary: ArrayBuffer) => {
     setAudioPlaying(true);
     await audioPlayerRef.current.playSound(audioBinary);
   };
-
-  // ...
 
   const handleRecordButtonClick = () => {
     if (!isRecording) {
@@ -281,6 +271,18 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
       );
     }
   };
+
+  useEffect(() => {
+    return () => {
+      if (microphoneRef.current) {
+        microphoneRef.current.stop();
+        microphoneRef.current.stream.getTracks().forEach((track) => track.stop());
+      }
+      if (timeInterValIdRef.current) {
+        clearInterval(timeInterValIdRef.current);
+      }
+    };
+  }, []);
 
   return (
     <>
@@ -320,7 +322,7 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
       </button>
       <div className="flex flex-row items-center justify-center mt-2 gap-8">
         <button
-          className="h-12 w-12 rounded-full border border-1  flex items-center justify-center p-2"
+          className="h-12 w-12 rounded-full border border-1 flex items-center justify-center p-2"
           onClick={() => {
             audioPlaying
               ? audioPlayerRef.current.pauseAudio()
@@ -332,7 +334,7 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
           />
         </button>
         <button
-          className="h-12 w-12 rounded-full border border-1  flex items-center justify-center p-2"
+          className="h-12 w-12 rounded-full border border-1 flex items-center justify-center p-2"
           onClick={() => {
             audioPlayerRef.current.replayAudio();
           }}
