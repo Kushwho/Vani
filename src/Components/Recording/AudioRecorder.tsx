@@ -234,6 +234,8 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
       clearInterval(timeInterValIdRef.current);
     }
     timeInterValIdRef.current = setInterval(() => {
+      console.log("Hello sending linear 16 stream");
+      
       socketRef.current?.emit("audio_stream", {
         data: linearAudio16Stream,
         sessionId,
