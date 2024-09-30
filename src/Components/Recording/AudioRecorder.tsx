@@ -100,9 +100,6 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
     console.log(linearAudio16Stream);
   }, []);
 
-  console.log("auth primary values", auth?.primaryValues);
-
-  console.log(auth?.primaryValues.id);
 
   const [sessionId, setSessionId] = useState<string>(DEFAULT_SESSION_ID);
   useEffect(() => {
@@ -132,9 +129,7 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
       });
 
       socketRef.current.on("connect", () => {
-        console.log("SendingThisSessionId", sessionId);
         socketRef.current?.emit("session_start", { sessionId });
-        console.log(audioPlayerRef.current.voice);
 
         socketRef.current?.emit("join", {
           sessionId,
@@ -242,15 +237,15 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
     if (timeInterValIdRef.current != null) {
       clearInterval(timeInterValIdRef.current);
     }
-    // timeInterValIdRef.current = setInterval(() => {
-    //   console.log("Hello sending linear 16 stream");
-    //   console.log(socketRef.current);
+    timeInterValIdRef.current = setInterval(() => {
+      console.log("Hello sending linear 16 stream");
+      console.log(socketRef.current);
 
-    //   socketRef.current?.emit("audio_stream", {
-    //     data: linearAudio16Stream,
-    //     sessionId,
-    //   });
-    // }, 100);
+      socketRef.current?.emit("audio_stream", {
+        data: linearAudio16Stream,
+        sessionId,
+      });
+    }, 100);
   };
 
   const enqueueAudio = async (audioBinary: ArrayBuffer) => {
