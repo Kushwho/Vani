@@ -172,6 +172,7 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
       const handleBeforeUnload = () => {
         socketRef.current?.emit("leave", { sessionId });
         socketRef.current?.disconnect();
+        if(timeInterValIdRef.current) clearInterval(timeInterValIdRef.current);
       };
 
       window.addEventListener("beforeunload", handleBeforeUnload);
@@ -238,9 +239,7 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
       clearInterval(timeInterValIdRef.current);
     }
     timeInterValIdRef.current = setInterval(() => {
-      console.log("Hello sending linear 16 stream");
-      console.log(socketRef.current);
-
+    
       socketRef.current?.emit("audio_stream", {
         data: linearAudio16Stream,
         sessionId,
