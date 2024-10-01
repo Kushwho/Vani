@@ -100,7 +100,6 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
     console.log(linearAudio16Stream);
   }, []);
 
-
   const [sessionId, setSessionId] = useState<string>(DEFAULT_SESSION_ID);
   useEffect(() => {
     if (auth?.primaryValues.id) {
@@ -172,7 +171,10 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
       const handleBeforeUnload = () => {
         socketRef.current?.emit("leave", { sessionId });
         socketRef.current?.disconnect();
-        if(timeInterValIdRef.current) clearInterval(timeInterValIdRef.current);
+        if (timeInterValIdRef.current) {
+          clearInterval(timeInterValIdRef.current);
+          timeInterValIdRef.current = null;
+        }
       };
 
       window.addEventListener("beforeunload", handleBeforeUnload);
@@ -239,7 +241,6 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
       clearInterval(timeInterValIdRef.current);
     }
     timeInterValIdRef.current = setInterval(() => {
-    
       socketRef.current?.emit("audio_stream", {
         data: linearAudio16Stream,
         sessionId,
