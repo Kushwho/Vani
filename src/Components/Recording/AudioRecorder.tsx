@@ -95,13 +95,6 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
     )
   );
 
-<<<<<<< HEAD
-  const audioProcessorRef = useRef<AudioFilter | null>(null);
-
-  console.log("auth primary values", auth?.primaryValues);
-
-  console.log(auth?.primaryValues.id);
-=======
   const duration = 0.1;
   const linearAudio16Stream = useMemo(() => {
     return createLinear16Stream(duration);
@@ -109,7 +102,6 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
   useEffect(() => {
     console.log(linearAudio16Stream);
   }, []);
->>>>>>> main
 
   const [sessionId, setSessionId] = useState<string>(DEFAULT_SESSION_ID);
   useEffect(() => {}, [sessionId]);
@@ -221,8 +213,6 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
     onClickEndSession,
   }));
 
-<<<<<<< HEAD
-=======
   const openMicrophone = async (socket: Socket) => {
     return new Promise<void>((resolve) => {
       microphoneRef.current!.onstart = () => {
@@ -277,7 +267,6 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
     }, 100);
   };
 
->>>>>>> main
   const enqueueAudio = async (audioBinary: ArrayBuffer) => {
     await playAudio(audioBinary);
   };
