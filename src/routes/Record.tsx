@@ -53,7 +53,7 @@ const Record: FC = () => {
           }
         }}
       />
-      <div className="min-h-[480px] relative flex flex-col gap-6 justify-center items-center pb-16 max-w-6xl w-full">
+      <div className="min-h-[480px] relative flex flex-col gap-6 justify-center items-center max-w-6xl w-full">
         <button
           className={`${
             !isMobile ? "absolute top-6 right-0" : "mt-6"
@@ -72,9 +72,6 @@ const Record: FC = () => {
             ref={ref}
           />
         </div>
-
-        <h1 className="heading font-semibold text-xl">Vanii</h1>
-        <h2 className="captions" id="captions"></h2>
       </div>
       <ChatHistory messages={messages.messages} />
     </main>

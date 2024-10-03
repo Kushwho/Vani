@@ -27,6 +27,11 @@ export type RefProps = {
   onClickEndSession: () => void;
 };
 
+export type AudioStatus = {
+  audioPlayingStatus: boolean;
+  jointStatus: string;
+};
+
 function createLinear16Stream(duration: number): Uint8Array {
   function writeString(view: DataView, offset: number, string: string): void {
     for (let i: number = 0; i < string.length; i++) {
@@ -82,7 +87,10 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
   const auth = useAuthContext();
   const timeInterValIdRef = useRef<NodeJS.Timeout | null>(null);
 
-  const [audioPlaying, setAudioPlaying] = useState<boolean>(false);
+  const [audioPlaying, setAudioPlaying] = useState<AudioStatus>({
+    audioPlayingStatus: false,
+    jointStatus: "Connecting ... ",
+  });
 
   const audioPlayerRef = useRef<AudioHandler>(
     AudioHandler.getInstance(
@@ -111,9 +119,9 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
       toast.success(
         "You are not logged in. Please log in to view this page. Navigating you to the home page"
       );
-      setTimeout(() => {
-        navigate("/");
-      }, 1500);
+      // setTimeout(() => {
+      //   navigate("/");
+      // }, 1500);
     }
   }, [auth?.primaryValues.email, navigate]);
 
@@ -137,6 +145,10 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
         });
       });
       socketRef.current.on("deepgram_connection_opened", () => {
+        setAudioPlaying({
+          ...audioPlaying,
+          jointStatus: "Connected",
+        });
         setIsDeepGramOpened(true);
       });
 
@@ -213,6 +225,10 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
 
   const startRecording = async () => {
     setIsRecording(true);
+    setAudioPlaying({
+      audioPlayingStatus: false,
+      jointStatus: "Listening ... ",
+    });
     if (timeInterValIdRef.current) {
       clearInterval(timeInterValIdRef.current);
     }
@@ -225,12 +241,20 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
       await openMicrophone(socketRef.current!);
     } catch (error) {
       console.error("Error accessing microphone:", error);
+      setAudioPlaying({
+        ...audioPlaying,
+        jointStatus: "Error connecting to microphone",
+      });
       throw error;
     }
   };
 
   const stopRecording = async () => {
     setIsRecording(false);
+    setAudioPlaying({
+      audioPlayingStatus: false,
+      jointStatus: "Connected ",
+    });
     document.body.classList.remove("recording");
     audioPlayerRef.current.pauseAudio();
     microphoneRef.current?.pause();
@@ -255,7 +279,6 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
   // ...
 
   const playAudio = async (audioBinary: ArrayBuffer) => {
-    setAudioPlaying(true);
     await audioPlayerRef.current.playSound(audioBinary);
   };
 
@@ -330,6 +353,13 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
         >
           <img src={`/assets/icons/replay.svg`} />
         </button>
+      </div>
+      <div className="flex items-center justify-center mt-6">
+        <h1 className="heading font-semibold text-xl">Vanii</h1>
+        <h2 className="captions" id="captions"></h2>
+      </div>
+      <div className="flex items-center justify-center mt-6">
+        <h1 className="heading text-sm">{audioPlaying.jointStatus}</h1>
       </div>
     </>
   );
