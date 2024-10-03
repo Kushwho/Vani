@@ -17,7 +17,6 @@ import { toast } from "react-toastify";
 import { DEFAULT_SESSION_ID, NOT_LOGGED_IN_EMAIL } from "@/util/constant";
 import { useNavigate } from "react-router";
 import { AudioHandler } from "@/util/AudioHandler";
-import { AudioFilter } from "@/util/AudioFilter";
 
 export type AudioRecorderProps = {
   setHistory: React.Dispatch<React.SetStateAction<ChatHistoryProps>>;
@@ -78,9 +77,7 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
 
   const [isDeepgramOpened, setIsDeepGramOpened] = useState<boolean>(false);
 
-  const timeInterValIdRef = useRef<NodeJS.Timeout | null>(null);
-
-  // const microphoneRef = useRef<MediaRecorder | null>(null);
+  const microphoneRef = useRef<MediaRecorder | null>(null);
   const socketRef = useRef<Socket | null>(null);
   const auth = useAuthContext();
   const timeInterValIdRef = useRef<NodeJS.Timeout | null>(null);
@@ -104,7 +101,6 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
   }, []);
 
   const [sessionId, setSessionId] = useState<string>(DEFAULT_SESSION_ID);
-  useEffect(() => {}, [sessionId]);
   useEffect(() => {
     if (auth?.primaryValues.id) {
       setSessionId(auth?.primaryValues.id);
@@ -183,23 +179,8 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
 
       window.addEventListener("beforeunload", handleBeforeUnload);
 
-      const initializeAudioProcessor = async () => {
-        audioProcessorRef.current = await AudioFilter.getInstance();
-        audioProcessorRef.current.setProcessedAudioCallback((data) => {
-          console.log("Sending data", data);
-          console.log(socketRef.current);
-          
-          socketRef.current?.emit("audio_stream", {
-            data: data,
-            sessionId,
-          });
-        });
-      };
-      initializeAudioProcessor();
-
       return () => {
         handleBeforeUnload();
-        timeInterValIdRef.current? clearInterval(timeInterValIdRef.current):"";
         window.removeEventListener("beforeunload", handleBeforeUnload);
       };
     }
@@ -280,37 +261,21 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
 
   // ...
 
-  const handleRecordButtonClick = async () => {
+  const handleRecordButtonClick = () => {
     if (!isRecording) {
-      setIsRecording(true);
-      console.log("Hello");
-      if (timeInterValIdRef.current) {
-        clearInterval(timeInterValIdRef?.current);
-      }
-
-      await audioProcessorRef.current
-        ?.startMicrophoneProcessing()
-        .catch((err) => {
-          setIsRecording(false);
-          console.log(err);
-        });
+      startRecording()
+        .then(() => {})
+        .catch((error) => console.error("Error starting recording:", error));
     } else {
-      setIsRecording(false);
-      audioProcessorRef.current?.stopMicrophoneProcessing();
-      // timeInterValIdRef.current = setInterval(() => {
-      //   console.log("Sending 16 audio stream");
-      //   socketRef.current?.emit("audio_stream", {
-      //     data: audioProcessorRef.current?.getLinear16Stream(),
-      //     sessionId,
-      //   });
-      // }, 100);
+      stopRecording().catch((error) =>
+        console.error("Error stopping recording:", error)
+      );
     }
   };
 
   return (
     <>
       <button
-        id="btn-record"
         className={`${
           isRecording
             ? "relative grid place-items-center p-8"
