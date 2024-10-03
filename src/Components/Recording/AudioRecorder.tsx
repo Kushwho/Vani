@@ -6,6 +6,7 @@ import React, {
   forwardRef,
   useImperativeHandle,
   ForwardRefRenderFunction,
+  useMemo,
 } from "react";
 import { Player } from "@lottiefiles/react-lottie-player";
 import { ChatHistoryProps } from "./Chat";
@@ -27,6 +28,46 @@ export type RefProps = {
   onClickEndSession: () => void;
 };
 
+function createLinear16Stream(duration: number): Uint8Array {
+  function writeString(view: DataView, offset: number, string: string): void {
+    for (let i: number = 0; i < string.length; i++) {
+      view.setUint8(offset + i, string.charCodeAt(i));
+    }
+  }
+  const sampleRate: number = 44100; // Standard sample rate (Hz)
+  const numChannels: number = 1; // Mono
+  const bytesPerSample: number = 2; // 16-bit = 2 bytes
+
+  const numSamples: number = Math.floor(sampleRate * duration);
+  const dataSize: number = numSamples * numChannels * bytesPerSample;
+  const fileSize: number = 44 + dataSize; // 44 bytes for header + data size
+
+  // Create a buffer for the entire file
+  const buffer: ArrayBuffer = new ArrayBuffer(fileSize);
+  const view: DataView = new DataView(buffer);
+
+  // Write WAV header
+  writeString(view, 0, "RIFF"); // ChunkID
+  view.setUint32(4, fileSize - 8, true); // ChunkSize
+  writeString(view, 8, "WAVE"); // Format
+  writeString(view, 12, "fmt "); // Subchunk1ID
+  view.setUint32(16, 16, true); // Subchunk1Size
+  view.setUint16(20, 1, true); // AudioFormat (1 for PCM)
+  view.setUint16(22, numChannels, true); // NumChannels
+  view.setUint32(24, sampleRate, true); // SampleRate
+  view.setUint32(28, sampleRate * numChannels * bytesPerSample, true); // ByteRate
+  view.setUint16(32, numChannels * bytesPerSample, true); // BlockAlign
+  view.setUint16(34, 8 * bytesPerSample, true); // BitsPerSample
+  writeString(view, 36, "data"); // Subchunk2ID
+  view.setUint32(40, dataSize, true); // Subchunk2Size
+
+  // Write zero-filled payload (silence)
+  for (let i: number = 44; i < fileSize; i++) {
+    view.setUint8(i, 0);
+  }
+
+  return new Uint8Array(buffer);
+}
 const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
   { setHistory },
   ref: Ref<RefProps>
@@ -42,6 +83,7 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
   // const microphoneRef = useRef<MediaRecorder | null>(null);
   const socketRef = useRef<Socket | null>(null);
   const auth = useAuthContext();
+  const timeInterValIdRef = useRef<NodeJS.Timeout | null>(null);
 
   const [audioPlaying, setAudioPlaying] = useState<boolean>(false);
 
@@ -53,11 +95,21 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
     )
   );
 
+<<<<<<< HEAD
   const audioProcessorRef = useRef<AudioFilter | null>(null);
 
   console.log("auth primary values", auth?.primaryValues);
 
   console.log(auth?.primaryValues.id);
+=======
+  const duration = 0.1;
+  const linearAudio16Stream = useMemo(() => {
+    return createLinear16Stream(duration);
+  }, [duration]);
+  useEffect(() => {
+    console.log(linearAudio16Stream);
+  }, []);
+>>>>>>> main
 
   const [sessionId, setSessionId] = useState<string>(DEFAULT_SESSION_ID);
   useEffect(() => {}, [sessionId]);
@@ -81,12 +133,14 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
 
   useEffect(() => {
     if (sessionId !== DEFAULT_SESSION_ID) {
-      socketRef.current = io("wss://backend.vanii.ai");
+      socketRef.current = io("wss://backend.vanii.ai", {
+        transports: ["websocket"],
+        reconnectionAttempts: 5,
+        reconnectionDelay: 1000,
+      });
 
       socketRef.current.on("connect", () => {
-        console.log("SendingThisSessionId", sessionId);
         socketRef.current?.emit("session_start", { sessionId });
-        console.log(audioPlayerRef.current.voice);
 
         socketRef.current?.emit("join", {
           sessionId,
@@ -105,8 +159,6 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
           sessionId: responseSessionId,
           user,
         } = data;
-        console.log(responseSessionId);
-        console.log(data);
         if (responseSessionId === sessionId) {
           const captionsElement = document.getElementById("captions");
           if (captionsElement) {
@@ -131,6 +183,10 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
       const handleBeforeUnload = () => {
         socketRef.current?.emit("leave", { sessionId });
         socketRef.current?.disconnect();
+        if (timeInterValIdRef.current) {
+          clearInterval(timeInterValIdRef.current);
+          timeInterValIdRef.current = null;
+        }
       };
 
       window.addEventListener("beforeunload", handleBeforeUnload);
@@ -165,6 +221,63 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
     onClickEndSession,
   }));
 
+<<<<<<< HEAD
+=======
+  const openMicrophone = async (socket: Socket) => {
+    return new Promise<void>((resolve) => {
+      microphoneRef.current!.onstart = () => {
+        console.log("Microphone opened");
+        document.body.classList.add("recording");
+        resolve();
+      };
+      microphoneRef.current!.ondataavailable = async (event) => {
+        if (event.data.size > 0) {
+          socket.emit("audio_stream", { data: event.data, sessionId });
+        }
+      };
+
+      microphoneRef.current!.start(100);
+    });
+  };
+
+  const startRecording = async () => {
+    setIsRecording(true);
+    if (timeInterValIdRef.current) {
+      clearInterval(timeInterValIdRef.current);
+    }
+
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      microphoneRef.current = new MediaRecorder(stream, {
+        mimeType: "audio/webm",
+      });
+      await openMicrophone(socketRef.current!);
+    } catch (error) {
+      console.error("Error accessing microphone:", error);
+      throw error;
+    }
+  };
+
+  const stopRecording = async () => {
+    setIsRecording(false);
+    document.body.classList.remove("recording");
+    audioPlayerRef.current.pauseAudio();
+    microphoneRef.current?.pause();
+    microphoneRef.current?.stop();
+    microphoneRef.current?.stream.getTracks().forEach((track) => track.stop());
+    microphoneRef.current = null;
+    if (timeInterValIdRef.current != null) {
+      clearInterval(timeInterValIdRef.current);
+    }
+    timeInterValIdRef.current = setInterval(() => {
+      socketRef.current?.emit("audio_stream", {
+        data: linearAudio16Stream,
+        sessionId,
+      });
+    }, 100);
+  };
+
+>>>>>>> main
   const enqueueAudio = async (audioBinary: ArrayBuffer) => {
     await playAudio(audioBinary);
   };
