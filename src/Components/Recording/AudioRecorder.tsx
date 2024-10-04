@@ -95,7 +95,6 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
   const audioPlayerRef = useRef<AudioHandler>(
     AudioHandler.getInstance(
       auth?.primaryValues.voice || "Deepgram",
-      audioPlaying,
       setAudioPlaying
     )
   );

@@ -9,10 +9,7 @@ export class AudioHandler {
   private audio: HTMLAudioElement;
   private audioUrl: string = "";
 
-  public audioStatus: AudioStatus = {
-    audioPlayingStatus: false,
-    jointStatus: "Connecting ... ",
-  };
+
   public setAudioStatus!: Dispatch<SetStateAction<AudioStatus>>;
 
   private constructor(voice: VOICE_OPTIONS) {
@@ -22,12 +19,11 @@ export class AudioHandler {
 
   public static getInstance(
     voice: VOICE_OPTIONS,
-    audioStatus: AudioStatus,
+
     setAudioStatus: Dispatch<SetStateAction<AudioStatus>>
   ): AudioHandler {
     if (!AudioHandler.instance) {
       AudioHandler.instance = new AudioHandler(voice);
-      AudioHandler.instance.audioStatus = audioStatus;
       AudioHandler.instance.setAudioStatus = setAudioStatus;
     }
     return AudioHandler.instance;
@@ -95,46 +91,38 @@ export class AudioHandler {
     this.audio.src = this.audioUrl;
 
     this.audio.onplay = () => {
+
       this.setAudioStatus({
         audioPlayingStatus: true,
         jointStatus: "Responding ... ",
       });
-      this.audioStatus.audioPlayingStatus = true;
-      this.audioStatus.jointStatus = "Responding ... ";
     };
     this.audio.onpause = () => {
-      this.setAudioStatus({
-        audioPlayingStatus: false,
-        jointStatus: "Listening ... ",
+      this.setAudioStatus((prevStatus) => {
+        return { ...prevStatus, audioPlayingStatus: false };
       });
-      this.audioStatus.audioPlayingStatus = false;
-      this.audioStatus.jointStatus = "Listening ... ";
+
     };
     this.audio.onended = () => {
-      this.setAudioStatus({
-        audioPlayingStatus: false,
-        jointStatus: "Listening ... ",
+      this.setAudioStatus((prevStatus) => {
+        return { ...prevStatus, audioPlayingStatus: false };
       });
-      this.audioStatus.audioPlayingStatus = false;
-      this.audioStatus.jointStatus = "Listening ... ";
+
       URL.revokeObjectURL(this.audioUrl);
     };
     this.audio.oncancel = () => {
-      this.setAudioStatus({
-        audioPlayingStatus: false,
-        jointStatus: "Listening ... ",
+      this.setAudioStatus((prevStatus) => {
+        return { ...prevStatus, audioPlayingStatus: false };
       });
-      this.audioStatus.audioPlayingStatus = false;
-      this.audioStatus.jointStatus = "Listening ... ";
+
     };
 
     this.audio.onerror = () => {
-      this.setAudioStatus({
-        audioPlayingStatus: false,
-        jointStatus: "Listening ... ",
+      this.setAudioStatus((prevStatus) => {
+        return { ...prevStatus, audioPlayingStatus: false };
       });
-      this.audioStatus.audioPlayingStatus = false;
-      this.audioStatus.jointStatus = "Listening ... ";
+   
+
       URL.revokeObjectURL(this.audioUrl);
     };
     try {
