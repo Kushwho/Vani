@@ -5,8 +5,7 @@ import Login from "./Login";
 import Signup from "./Signup";
 import Blogs from "./Blogs";
 import BlogDetail from "./BlogsDetail";
-import Record from "./Record";
-import Home from "./Home";
+
 import HealthCheck from "./HealthCheck";
 import useAuthContext from "@/Hooks/useAuthContext";
 import { useAxiosContext } from "@/Hooks/useAxiosContext";
@@ -14,6 +13,7 @@ import GetUser from "@/services/Login/GetUser";
 import { DEFAULT_SESSION_ID, NOT_LOGGED_IN_EMAIL } from "@/util/constant";
 import ForgotPassword from "./ForgotPassword";
 import Onboarding from "./Onboarding";
+import AudioRecorder from "@/Components/Recording/AudioRecorder";
 
 const AppRoutes: FC = () => {
   const auth = useAuthContext();
@@ -47,7 +47,7 @@ const AppRoutes: FC = () => {
             path="/"
             element={
               <Layout>
-                <Home />
+                <AudioRecorder />
               </Layout>
             }
           />
@@ -70,14 +70,6 @@ const AppRoutes: FC = () => {
             }
           />
 
-          <Route
-            path="/record"
-            element={
-              <Layout>
-                <Record />
-              </Layout>
-            }
-          />
           <Route path="/health-check" element={<HealthCheck />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/onboarding" element={<Onboarding />} />

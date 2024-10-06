@@ -1,111 +1,48 @@
-import React, {
-  useState,
-  useEffect,
-  useRef,
-  Ref,
-  forwardRef,
-  useImperativeHandle,
-  ForwardRefRenderFunction,
-  useMemo,
-} from "react";
-import { Player } from "@lottiefiles/react-lottie-player";
-import { ChatHistoryProps } from "./Chat";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import ChatHistory, { ChatHistoryProps } from "./Chat";
 import { io, Socket } from "socket.io-client";
 import useAuthContext from "@/Hooks/useAuthContext";
 
 import { toast } from "react-toastify";
-import { DEFAULT_SESSION_ID, NOT_LOGGED_IN_EMAIL } from "@/util/constant";
+import { DEFAULT_SESSION_ID } from "@/util/constant";
 import { useNavigate } from "react-router";
-import { AudioHandler } from "@/util/AudioHandler";
-
-export type AudioRecorderProps = {
-  setHistory: React.Dispatch<React.SetStateAction<ChatHistoryProps>>;
-  history: ChatHistoryProps;
-};
-
-export type RefProps = {
-  onClickEndSession: () => void;
-};
+import Test from "@/routes/Recorder";
+import { useAudioPlayer } from "@/Hooks/useAudioPlayer";
+import FeedbackModal from "./FeebackModal";
+import { useAxiosContext } from "@/Hooks/useAxiosContext";
+import useWindowDimensions from "@/Hooks/useWindowDimensions";
+import ApiResponse from "@/types/ApiResponse";
+import HeroSection from "../Home/HeroSection";
+import AboutUs from "../Home/AboutUs";
+import Features from "../Home/Features";
 
 export type AudioStatus = {
   audioPlayingStatus: boolean;
   jointStatus: string;
 };
 
-function createLinear16Stream(duration: number): Uint8Array {
-  function writeString(view: DataView, offset: number, string: string): void {
-    for (let i: number = 0; i < string.length; i++) {
-      view.setUint8(offset + i, string.charCodeAt(i));
-    }
-  }
-  const sampleRate: number = 44100; // Standard sample rate (Hz)
-  const numChannels: number = 1; // Mono
-  const bytesPerSample: number = 2; // 16-bit = 2 bytes
-
-  const numSamples: number = Math.floor(sampleRate * duration);
-  const dataSize: number = numSamples * numChannels * bytesPerSample;
-  const fileSize: number = 44 + dataSize; // 44 bytes for header + data size
-
-  // Create a buffer for the entire file
-  const buffer: ArrayBuffer = new ArrayBuffer(fileSize);
-  const view: DataView = new DataView(buffer);
-
-  // Write WAV header
-  writeString(view, 0, "RIFF"); // ChunkID
-  view.setUint32(4, fileSize - 8, true); // ChunkSize
-  writeString(view, 8, "WAVE"); // Format
-  writeString(view, 12, "fmt "); // Subchunk1ID
-  view.setUint32(16, 16, true); // Subchunk1Size
-  view.setUint16(20, 1, true); // AudioFormat (1 for PCM)
-  view.setUint16(22, numChannels, true); // NumChannels
-  view.setUint32(24, sampleRate, true); // SampleRate
-  view.setUint32(28, sampleRate * numChannels * bytesPerSample, true); // ByteRate
-  view.setUint16(32, numChannels * bytesPerSample, true); // BlockAlign
-  view.setUint16(34, 8 * bytesPerSample, true); // BitsPerSample
-  writeString(view, 36, "data"); // Subchunk2ID
-  view.setUint32(40, dataSize, true); // Subchunk2Size
-
-  // Write zero-filled payload (silence)
-  for (let i: number = 44; i < fileSize; i++) {
-    view.setUint8(i, 0);
-  }
-
-  return new Uint8Array(buffer);
-}
-const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
-  { setHistory },
-  ref: Ref<RefProps>
-) => {
+const AudioRecorder = () => {
   const [isRecording, setIsRecording] = useState(false);
 
+  const {
+    setAudioStatus,
+    audioStatus,
+    playSound,
+    pauseAudio,
+    resumeAudio,
+    replayAudio,
+  } = useAudioPlayer("Deepgram");
+  const axios = useAxiosContext();
   const navigate = useNavigate();
+  const [feedbackModalOpen, setFeedbackModalOpen] = useState<boolean>(false);
+  const { dimensions } = useWindowDimensions();
+  const isMobile = useMemo(() => dimensions.width < 768, [dimensions.width]);
 
   const [isDeepgramOpened, setIsDeepGramOpened] = useState<boolean>(false);
+  const [messages, setMessages] = useState<ChatHistoryProps>({ messages: [] });
 
-  const microphoneRef = useRef<MediaRecorder | null>(null);
   const socketRef = useRef<Socket | null>(null);
   const auth = useAuthContext();
-  const timeInterValIdRef = useRef<NodeJS.Timeout | null>(null);
-
-  const [audioPlaying, setAudioPlaying] = useState<AudioStatus>({
-    audioPlayingStatus: false,
-    jointStatus: "Connecting ... ",
-  });
-
-  const audioPlayerRef = useRef<AudioHandler>(
-    AudioHandler.getInstance(
-      auth?.primaryValues.voice || "Deepgram",
-      setAudioPlaying
-    )
-  );
-
-  const duration = 0.1;
-  const linearAudio16Stream = useMemo(() => {
-    return createLinear16Stream(duration);
-  }, [duration]);
-  useEffect(() => {
-    console.log(linearAudio16Stream);
-  }, []);
 
   const [sessionId, setSessionId] = useState<string>(DEFAULT_SESSION_ID);
   useEffect(() => {
@@ -113,18 +50,17 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
       setSessionId(auth?.primaryValues.id);
     }
   }, [auth?.primaryValues.id]);
-  useEffect(() => {
-    if (auth?.primaryValues.email === NOT_LOGGED_IN_EMAIL) {
-      toast.success(
-        "You are not logged in. Please log in to view this page. Navigating you to the home page"
-      );
-      // setTimeout(() => {
-      //   navigate("/");
-      // }, 1500);
-    }
-  }, [auth?.primaryValues.email, navigate]);
 
   // Usage
+  const audioSubmitterButton = useCallback(
+    (data: Blob) => {
+      socketRef.current?.emit("audio_stream", {
+        data,
+        sessionId,
+      });
+    },
+    [sessionId]
+  );
 
   useEffect(() => {
     if (sessionId !== DEFAULT_SESSION_ID) {
@@ -140,15 +76,15 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
         socketRef.current?.emit("join", {
           sessionId,
           email: auth?.primaryValues.email || "",
-          voice: audioPlayerRef.current.voice,
+          voice: "Deepgram",
         });
       });
       socketRef.current.on("deepgram_connection_opened", () => {
-        setAudioPlaying({
-          ...audioPlaying,
+        setIsDeepGramOpened(true);
+        setAudioStatus({
+          ...audioStatus,
           jointStatus: "Connected",
         });
-        setIsDeepGramOpened(true);
       });
 
       socketRef.current.on("transcription_update", (data) => {
@@ -158,34 +94,31 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
           sessionId: responseSessionId,
           user,
         } = data;
+
         if (responseSessionId === sessionId) {
           const captionsElement = document.getElementById("captions");
           if (captionsElement) {
             captionsElement.innerHTML = transcription;
           }
-          setHistory((prevHistory) => ({
+          playSound(audioBinary);
+          setMessages((prevHistory) => ({
             messages: [
               ...prevHistory.messages,
               { id: sessionId, sender: "other", content: transcription },
               { id: sessionId, sender: "me", content: user },
             ],
           }));
-          enqueueAudio(audioBinary);
         }
       });
 
       socketRef.current.on("speech_started", (data) => {
         console.log(data);
 
-        audioPlayerRef.current.pauseAudio();
+        pauseAudio();
       });
       const handleBeforeUnload = () => {
         socketRef.current?.emit("leave", { sessionId });
         socketRef.current?.disconnect();
-        if (timeInterValIdRef.current) {
-          clearInterval(timeInterValIdRef.current);
-          timeInterValIdRef.current = null;
-        }
       };
 
       window.addEventListener("beforeunload", handleBeforeUnload);
@@ -201,167 +134,96 @@ const AudioRecorder: ForwardRefRenderFunction<RefProps, AudioRecorderProps> = (
     socketRef.current?.emit("leave", { sessionId });
     socketRef.current?.disconnect();
   };
-  useImperativeHandle(ref, () => ({
-    onClickEndSession,
-  }));
-
-  const openMicrophone = async (socket: Socket) => {
-    return new Promise<void>((resolve) => {
-      microphoneRef.current!.onstart = () => {
-        console.log("Microphone opened");
-        document.body.classList.add("recording");
-        resolve();
-      };
-      microphoneRef.current!.ondataavailable = async (event) => {
-        if (event.data.size > 0) {
-          socket.emit("audio_stream", { data: event.data, sessionId });
-        }
-      };
-
-      microphoneRef.current!.start(100);
-    });
-  };
-
-  const startRecording = async () => {
-    setIsRecording(true);
-    setAudioPlaying({
-      audioPlayingStatus: false,
-      jointStatus: "Listening ... ",
-    });
-    if (timeInterValIdRef.current) {
-      clearInterval(timeInterValIdRef.current);
-    }
-
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      microphoneRef.current = new MediaRecorder(stream, {
-        mimeType: "audio/webm",
-      });
-      await openMicrophone(socketRef.current!);
-    } catch (error) {
-      console.error("Error accessing microphone:", error);
-      setAudioPlaying({
-        ...audioPlaying,
-        jointStatus: "Error connecting to microphone",
-      });
-      throw error;
-    }
-  };
-
-  const stopRecording = async () => {
-    setIsRecording(false);
-    setAudioPlaying({
-      audioPlayingStatus: false,
-      jointStatus: "Connected ",
-    });
-    document.body.classList.remove("recording");
-    audioPlayerRef.current.pauseAudio();
-    microphoneRef.current?.pause();
-    microphoneRef.current?.stop();
-    microphoneRef.current?.stream.getTracks().forEach((track) => track.stop());
-    microphoneRef.current = null;
-    if (timeInterValIdRef.current != null) {
-      clearInterval(timeInterValIdRef.current);
-    }
-    timeInterValIdRef.current = setInterval(() => {
-      socketRef.current?.emit("audio_stream", {
-        data: linearAudio16Stream,
-        sessionId,
-      });
-    }, 100);
-  };
-
-  const enqueueAudio = async (audioBinary: ArrayBuffer) => {
-    await playAudio(audioBinary);
-  };
-
-  // ...
-
-  const playAudio = async (audioBinary: ArrayBuffer) => {
-    await audioPlayerRef.current.playSound(audioBinary);
-  };
-
-  // ...
-
-  const handleRecordButtonClick = () => {
-    if (!isRecording) {
-      startRecording()
-        .then(() => {})
-        .catch((error) => console.error("Error starting recording:", error));
-    } else {
-      stopRecording().catch((error) =>
-        console.error("Error stopping recording:", error)
-      );
-    }
-  };
 
   return (
     <>
-      <button
-        className={`${
-          isRecording
-            ? "relative grid place-items-center p-8"
-            : `m-auto mt-16 h-48 aspect-square border rounded-full font-satoshiMedium text-md ${
-                isDeepgramOpened
-                  ? "bg-primary-100 border-primary-400"
-                  : "bg-gray-200 border-gray-400 opacity-50 cursor-not-allowed"
-              }`
-        }`}
-        onClick={() => {
-          console.log("Deepgram Connection", isDeepgramOpened);
+      <main className="flex flex-col items-center w-full">
+        <FeedbackModal
+          isOpen={feedbackModalOpen}
+          onSubmit={async (data) => {
+            const toFed = { ...data, aiUnderstanding: data.personalisation };
+            delete toFed.personalisation;
+            const resp = await axios.post<ApiResponse<any>>(
+              "https://backend.vanii.ai/auth/api/v1/user/post-review",
+              toFed
+            );
+            console.log(resp);
 
-          if (isDeepgramOpened) handleRecordButtonClick();
-        }}
-      >
-        {isRecording ? (
-          <>
-            <Player
-              autoplay
-              loop
-              src="/assets/icons/circle-wave.json"
-              className="h-[450px] aspect-square"
+            if (resp.data.success) {
+              onClickEndSession();
+              toast("Thanks for using.Navigating to home page.");
+              setTimeout(() => {
+                navigate("/");
+              }, 1500);
+            } else {
+              toast("Error Sending response");
+            }
+          }}
+        />
+        <div className="min-h-[480px] relative flex flex-col gap-6 justify-center items-center max-w-6xl w-full">
+          <button
+            className={`${
+              !isMobile ? "absolute top-6 right-0" : "mt-6"
+            } max-xl:right-20 bg-red-600 text-gray-100 p-2 px-4 rounded-md `}
+            onClick={() => {
+              onClickEndSession();
+              setFeedbackModalOpen(true);
+            }}
+          >
+            End Session
+          </button>
+          <div className="relative max-md:p-8">
+            <Test
+              isDisabled={isDeepgramOpened}
+              resultFxn={audioSubmitterButton}
+              isRecording={isRecording}
+              setIsRecording={setIsRecording}
             />
-            <img
-              src="/assets/icons/mic-outline.svg"
-              alt="Microphone icon"
-              className="absolute h-20 w-20"
-            />
-          </>
+            <div className="flex flex-row items-center justify-center mt-2 gap-8">
+              <button
+                className="h-12 w-12 rounded-full border border-1  flex items-center justify-center p-2"
+                onClick={() => {
+                  audioStatus.audioPlayingStatus ? pauseAudio : resumeAudio();
+                }}
+              >
+                <img
+                  src={`/assets/icons/${
+                    audioStatus.audioPlayingStatus ? "pause.svg" : "play.svg"
+                  }`}
+                />
+              </button>
+              <button
+                className="h-12 w-12 rounded-full border border-1  flex items-center justify-center p-2"
+                onClick={() => {
+                  replayAudio();
+                }}
+              >
+                <img src={`/assets/icons/replay.svg`} />
+              </button>
+            </div>
+            <div className="flex items-center justify-center mt-6">
+              <h1 className="heading font-semibold text-xl">Vanii</h1>
+              <h2 className="captions" id="captions"></h2>
+            </div>
+            <div className="flex items-center justify-center mt-6">
+              <h1 className="heading text-sm">{audioStatus.jointStatus}</h1>
+            </div>
+          </div>
+        </div>
+      </main>
+      <>
+        {auth?.primaryValues.loggedIn ? (
+          <ChatHistory messages={messages.messages} />
         ) : (
-          <p className="text-xl font-semibold ">START</p>
+          <>
+            <HeroSection />
+          </>
         )}
-      </button>
-      <div className="flex flex-row items-center justify-center mt-2 gap-8">
-        <button
-          className="h-12 w-12 rounded-full border border-1  flex items-center justify-center p-2"
-          onClick={() => {
-            audioPlaying
-              ? audioPlayerRef.current.pauseAudio()
-              : audioPlayerRef.current.resumeAudio();
-          }}
-        >
-          <img
-            src={`/assets/icons/${audioPlaying ? "pause.svg" : "play.svg"}`}
-          />
-        </button>
-        <button
-          className="h-12 w-12 rounded-full border border-1  flex items-center justify-center p-2"
-          onClick={() => {
-            audioPlayerRef.current.replayAudio();
-          }}
-        >
-          <img src={`/assets/icons/replay.svg`} />
-        </button>
-      </div>
-      <div className="flex items-center justify-center mt-6">
-        <h1 className="heading font-semibold text-xl">Vanii</h1>
-        <h2 className="captions" id="captions"></h2>
-      </div>
-      <div className="flex items-center justify-center mt-6">
-        <h1 className="heading text-sm">{audioPlaying.jointStatus}</h1>
-      </div>
+        <AboutUs />
+        <Features />
+      </>
     </>
   );
 };
 
-export default forwardRef(AudioRecorder);
+export default AudioRecorder;
