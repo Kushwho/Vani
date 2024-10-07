@@ -101,7 +101,7 @@ const AudioRecorder = () => {
           </button>
           <div className="relative max-md:p-8">
             <Test
-              isDisabled={isDeepgramOpened}
+              isDisabled={!isDeepgramOpened}
               resultFxn={emitAudioStream}
               isRecording={isRecording}
               setIsRecording={setIsRecording}
