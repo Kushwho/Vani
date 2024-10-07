@@ -112,14 +112,9 @@ const useSocket = ({
 
   useEffect(() => {
     if (sessionId !== DEFAULT_SESSION_ID) {
-      const cleanup = initializeSocket();
-
-      // Cleanup on unmount or when sessionId changes
-      return () => {
-        cleanup ? cleanup() : null;
-      };
+      return  initializeSocket();
     }
-  }, [sessionId, initializeSocket]);
+  }, [sessionId]);
 
   // Function to emit audio stream data
   const emitAudioStream = useCallback(
