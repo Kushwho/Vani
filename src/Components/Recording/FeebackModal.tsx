@@ -1,9 +1,13 @@
+import { useAxiosContext } from "@/Hooks/useAxiosContext";
+import ApiResponse from "@/types/ApiResponse";
 import React, { useState } from "react";
+import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
 
 interface FeedbackModalProps {
   isOpen: boolean;
 
-  onSubmit: (feedback: FeedbackData) => void;
+  cleanupFunction: () => void;
 }
 
 interface FeedbackData {
@@ -14,7 +18,10 @@ interface FeedbackData {
   textFeedback: string;
 }
 
-const FeedbackModal: React.FC<FeedbackModalProps> = ({ isOpen, onSubmit }) => {
+const FeedbackModal: React.FC<FeedbackModalProps> = ({
+  isOpen,
+  cleanupFunction
+}) => {
   const [feedback, setFeedback] = useState<FeedbackData>({
     overallExperience: 5,
     personalisation: 5,
@@ -23,6 +30,9 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({ isOpen, onSubmit }) => {
     textFeedback: "",
   });
 
+  const axios = useAxiosContext();
+  const navigate = useNavigate();
+
   const handleChange = (field: keyof FeedbackData, value: number | string) => {
     setFeedback((prev) => ({
       ...prev,
@@ -30,8 +40,27 @@ const FeedbackModal: React.FC<FeedbackModalProps> = ({ isOpen, onSubmit }) => {
     }));
   };
 
-  const handleSubmit = () => {
-    onSubmit(feedback);
+  const handleSubmit = async () => {
+    const toFed = { ...feedback, aiUnderstanding: feedback.textFeedback };
+
+    delete toFed.personalisation;
+    const resp = await axios.post<ApiResponse<any>>(
+      "https://backend.vanii.ai/auth/api/v1/user/post-review",
+      toFed
+    );
+
+    if (resp.data.success) {
+      cleanupFunction();
+      toast("Thanks for using.Navigating to home page.");
+      setTimeout(() => {
+        navigate("/");
+      }, 1500);
+    } else {
+      toast("An unknown error occured. Navigating to home page.");
+      setTimeout(() => {
+        navigate("/");
+      }, 1500);
+    }
   };
 
   if (!isOpen) return null;
