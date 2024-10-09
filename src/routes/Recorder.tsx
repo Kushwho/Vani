@@ -1,5 +1,6 @@
+import { createLinear16Stream } from "@/util/Linear16StreamCreator";
 import { Player } from "@lottiefiles/react-lottie-player";
-import React, { Dispatch, useRef } from "react";
+import React, { Dispatch, useMemo, useRef } from "react";
 
 interface RecorderProps {
   isDisabled: boolean;
@@ -16,7 +17,14 @@ const Recorder: React.FC<RecorderProps> = ({
 }) => {
   const microphoneRef = useRef<MediaRecorder | null>(null);
 
+  const duration = 100;
+  const linear16Stream = useMemo<Uint8Array>(() => {
+    return createLinear16Stream(duration);
+  }, [duration]);
+  const intervalId = useRef<NodeJS.Timeout | null>(null);
+
   const startRecording = async () => {
+    if (intervalId.current) clearInterval(intervalId.current);
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       microphoneRef.current = new MediaRecorder(stream, {
@@ -41,6 +49,13 @@ const Recorder: React.FC<RecorderProps> = ({
       microphoneRef.current.stream.getTracks().forEach((track) => track.stop());
       microphoneRef.current = null;
       setIsRecording(false);
+    }
+
+    if (intervalId.current) {
+      clearInterval(intervalId.current);
+      intervalId.current = setInterval(() => {
+        resultFxn(new Blob([linear16Stream], { type: "audio/webm" }));
+      }, 100);
     }
   };
 

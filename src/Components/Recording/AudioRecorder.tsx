@@ -19,6 +19,7 @@ export type AudioStatus = {
 
 const AudioRecorder = () => {
   const [isRecording, setIsRecording] = useState(false);
+  const [isSessionActive, setIsSessionActive] = useState(false); // New state variable
 
   const {
     setAudioStatus,
@@ -84,7 +85,7 @@ const AudioRecorder = () => {
   // Effect to handle the timer
   useEffect(() => {
     let interval = null;
-    if (isRecording) {
+    if (isSessionActive) {
       interval = setInterval(() => {
         setTimeElapsed((prevTime) => prevTime + 1);
       }, 1000);
@@ -96,7 +97,14 @@ const AudioRecorder = () => {
         clearInterval(interval);
       }
     };
-  }, [isRecording]);
+  }, [isSessionActive]);
+
+  // Detect when recording starts for the first time
+  useEffect(() => {
+    if (isRecording && !isSessionActive) {
+      setIsSessionActive(true);
+    }
+  }, [isRecording, isSessionActive]);
 
   return (
     <>
@@ -143,13 +151,14 @@ const AudioRecorder = () => {
           <div className="flex items-center justify-center mt-6">
             <h1 className="heading text-sm">{audioStatus.jointStatus}</h1>
           </div>
-          <div>{isRecording ? `Recording Time: ${timeElapsed}s` : null}</div>
+          <div>{isSessionActive ? `${timeElapsed}s` : null}</div>
           <button
             className={`${
               !isMobile ? "absolute top-6 right-0" : "mt-6"
             } max-xl:right-20 bg-red-600 text-gray-100 p-2 px-4 rounded-md `}
             onClick={() => {
               leaveSession();
+              setIsSessionActive(false); // Added this line
               setFeedbackModalOpen(true);
             }}
           >
