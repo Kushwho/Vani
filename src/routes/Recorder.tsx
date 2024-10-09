@@ -17,7 +17,7 @@ const Recorder: React.FC<RecorderProps> = ({
 }) => {
   const microphoneRef = useRef<MediaRecorder | null>(null);
 
-  const duration = 100;
+  const duration = 0.1;
   const linear16Stream = useMemo<Uint8Array>(() => {
     return createLinear16Stream(duration);
   }, [duration]);
@@ -54,7 +54,7 @@ const Recorder: React.FC<RecorderProps> = ({
     if (intervalId.current) {
       clearInterval(intervalId.current);
       intervalId.current = setInterval(() => {
-        resultFxn(new Blob([linear16Stream], { type: "audio/webm" }));
+        resultFxn(new Blob([linear16Stream], { type: "audio/wav" }));
       }, 100);
     }
   };
