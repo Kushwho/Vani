@@ -128,13 +128,13 @@ const AudioRecorder = () => {
                 <img src={`/assets/icons/replay.svg`} />
               </button>
             </div>
-            <div className="flex items-center flex-col justify-center mt-6">
-              <h1 className="heading font-semibold text-xl">Vanii</h1>
-              <h2 className="captions" id="captions"></h2>
-            </div>
-            <div className="flex items-center justify-center mt-6">
-              <h1 className="heading text-sm">{audioStatus.jointStatus}</h1>
-            </div>
+          </div>
+          <div className="flex items-center flex-col justify-center mt-6">
+            <h1 className="heading font-semibold text-xl">Vanii</h1>
+            <h2 className="captions" id="captions"></h2>
+          </div>
+          <div className="flex items-center justify-center mt-6">
+            <h1 className="heading text-sm">{audioStatus.jointStatus}</h1>
           </div>
         </div>
       </main>
