@@ -26,7 +26,7 @@ interface UseSocketProps {
 
 // Define the return type of the hook
 interface UseSocketReturn {
-  emitAudioStream: (data: Blob) => void;
+  emitAudioStream: (data: Blob | Uint8Array) => void;
   leaveSession: () => void;
   initializeSocket: () => void;
 }
@@ -112,13 +112,13 @@ const useSocket = ({
 
   useEffect(() => {
     if (sessionId !== DEFAULT_SESSION_ID) {
-      return  initializeSocket();
+      return initializeSocket();
     }
   }, [sessionId]);
 
   // Function to emit audio stream data
   const emitAudioStream = useCallback(
-    (data: Blob) => {
+    (data: Blob | Uint8Array) => {
       if (socketRef.current) {
         socketRef.current.emit("audio_stream", {
           data,

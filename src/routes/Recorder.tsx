@@ -4,7 +4,7 @@ import React, { Dispatch, useMemo, useRef } from "react";
 
 interface RecorderProps {
   isDisabled: boolean;
-  resultFxn: (data: Blob) => void;
+  resultFxn: (data: Blob | Uint8Array) => void;
   isRecording: boolean;
   setIsRecording: Dispatch<React.SetStateAction<boolean>>;
 }
@@ -54,7 +54,7 @@ const Recorder: React.FC<RecorderProps> = ({
     if (intervalId.current) {
       clearInterval(intervalId.current);
       intervalId.current = setInterval(() => {
-        resultFxn(new Blob([linear16Stream], { type: "audio/wav" }));
+        resultFxn(linear16Stream);
       }, 100);
     }
   };
