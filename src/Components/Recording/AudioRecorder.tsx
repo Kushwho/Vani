@@ -29,6 +29,7 @@ const AudioRecorder = () => {
     replayAudio,
   } = useAudioPlayer("Deepgram");
   const [feedbackModalOpen, setFeedbackModalOpen] = useState<boolean>(false);
+  const [timeElapsed, setTimeElapsed] = useState(0); // State for timer**
   const { dimensions } = useWindowDimensions();
   const isMobile = useMemo(() => dimensions.width < 768, [dimensions.width]);
 
@@ -80,6 +81,23 @@ const AudioRecorder = () => {
     },
   });
 
+  // Effect to handle the timer
+  useEffect(() => {
+    let interval = null;
+    if (isRecording) {
+      interval = setInterval(() => {
+        setTimeElapsed((prevTime) => prevTime + 1);
+      }, 1000);
+    } else {
+      setTimeElapsed(0);
+    }
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
+  }, [isRecording]);
+
   return (
     <>
       <main className="flex flex-col items-center w-full">
@@ -88,17 +106,6 @@ const AudioRecorder = () => {
           cleanupFunction={leaveSession}
         />
         <div className="min-h-[480px] relative flex flex-col gap-6 justify-center items-center max-w-6xl w-full">
-          <button
-            className={`${
-              !isMobile ? "absolute top-6 right-0" : "mt-6"
-            } max-xl:right-20 bg-red-600 text-gray-100 p-2 px-4 rounded-md `}
-            onClick={() => {
-              leaveSession();
-              setFeedbackModalOpen(true);
-            }}
-          >
-            End Session
-          </button>
           <div className="relative max-md:p-8">
             <Recorder
               isDisabled={!isDeepgramOpened}
@@ -136,6 +143,18 @@ const AudioRecorder = () => {
           <div className="flex items-center justify-center mt-6">
             <h1 className="heading text-sm">{audioStatus.jointStatus}</h1>
           </div>
+          <div>{isRecording ? `Recording Time: ${timeElapsed}s` : null}</div>
+          <button
+            className={`${
+              !isMobile ? "absolute top-6 right-0" : "mt-6"
+            } max-xl:right-20 bg-red-600 text-gray-100 p-2 px-4 rounded-md `}
+            onClick={() => {
+              leaveSession();
+              setFeedbackModalOpen(true);
+            }}
+          >
+            End Session
+          </button>
         </div>
       </main>
       <>
