@@ -53,10 +53,10 @@ const Recorder: React.FC<RecorderProps> = ({
 
     if (intervalId.current) {
       clearInterval(intervalId.current);
-      intervalId.current = setInterval(() => {
-        resultFxn(linear16Stream);
-      }, 100);
     }
+    intervalId.current = setInterval(() => {
+      resultFxn(linear16Stream);
+    }, 100);
   };
 
   return (
