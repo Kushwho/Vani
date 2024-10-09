@@ -3,7 +3,7 @@ import ChatHistory, { ChatHistoryProps } from "./Chat";
 import useAuthContext from "@/Hooks/useAuthContext";
 
 import { DEFAULT_SESSION_ID } from "@/util/constant";
-import Test from "@/routes/Recorder";
+import Recorder from "@/routes/Recorder";
 import { useAudioPlayer } from "@/Hooks/useAudioPlayer";
 import FeedbackModal from "./FeebackModal";
 import useWindowDimensions from "@/Hooks/useWindowDimensions";
@@ -100,7 +100,7 @@ const AudioRecorder = () => {
             End Session
           </button>
           <div className="relative max-md:p-8">
-            <Test
+            <Recorder
               isDisabled={!isDeepgramOpened}
               resultFxn={emitAudioStream}
               isRecording={isRecording}
@@ -128,7 +128,7 @@ const AudioRecorder = () => {
                 <img src={`/assets/icons/replay.svg`} />
               </button>
             </div>
-            <div className="flex items-center justify-center mt-6">
+            <div className="flex items-center flex-col justify-center mt-6">
               <h1 className="heading font-semibold text-xl">Vanii</h1>
               <h2 className="captions" id="captions"></h2>
             </div>
