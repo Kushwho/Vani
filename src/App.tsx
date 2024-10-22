@@ -3,7 +3,6 @@ import axios, { AxiosError } from "axios";
 import AxiosContext from "./Hooks/useAxiosContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import AppRoutes from "./routes/AppRoutes";
-import { WindowDimensionsProvider } from "./Hooks/useWindowDimensions";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ApiError } from "./types/ApiError";
@@ -38,9 +37,9 @@ const App: FC = () => {
     <AuthContextProvider values={{ primaryValues, setPrimaryValues }}>
       <QueryClientProvider client={queryClient}>
         <AxiosContext.Provider value={axiosInstance}>
-          <WindowDimensionsProvider>
+   
             <AppRoutes />
-          </WindowDimensionsProvider>
+
         </AxiosContext.Provider>
         <ToastContainer autoClose={1500} />
       </QueryClientProvider>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import useAuthContext from "../Hooks/useAuthContext";
-import useWindowDimensions from "../Hooks/useWindowDimensions";
+import { useWindowResize } from "../Hooks/useWindowSize";
 import { useAxiosContext } from "@/Hooks/useAxiosContext";
 import Logout from "@/services/Login/Logout";
 import { toast } from "react-toastify";
@@ -9,12 +9,12 @@ import { toast } from "react-toastify";
 const Navbar: React.FC = () => {
   const [isActive, setIsActive] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
-  const { dimensions } = useWindowDimensions();
+  const { width } = useWindowResize();
   const navigate = useNavigate();
   const authContext = useAuthContext();
   const axios = useAxiosContext();
 
-  const isMobile = useMemo(() => dimensions.width < 768, [dimensions.width]);
+  const isMobile = useMemo(() => width < 768, [width]);
 
   const handleScroll = useCallback(() => {
     if (isActive) {
@@ -67,7 +67,13 @@ const Navbar: React.FC = () => {
   const menuContainerClasses = useMemo(
     () => `
       fixed inset-0 bg-primary-50 transform transition-transform duration-300 ease-in-out
-      ${isMobile ? (isActive ? "translate-x-0 z-40" : "translate-x-full z-40") : "relative z-auto"}
+      ${
+        isMobile
+          ? isActive
+            ? "translate-x-0 z-40"
+            : "translate-x-full z-40"
+          : "relative z-auto"
+      }
       flex ${isMobile ? "flex-col items-center justify-center" : "flex-row"}
     `,
     [isActive, isMobile]
@@ -84,7 +90,13 @@ const Navbar: React.FC = () => {
   // Classes for the hamburger lines
   const hamburgerLineClasses = (isActive: boolean, rotate: boolean) => `
     block w-8 h-1 bg-primary-700 rounded transition-transform duration-300 ease-in-out
-    ${isActive ? (rotate ? "rotate-45 translate-y-2" : "-rotate-45 -translate-y-2") : ""}
+    ${
+      isActive
+        ? rotate
+          ? "rotate-45 translate-y-2"
+          : "-rotate-45 -translate-y-2"
+        : ""
+    }
   `;
 
   return (

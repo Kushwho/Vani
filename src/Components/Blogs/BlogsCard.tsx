@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { useNavigate } from "react-router";
-import useWindowDimensions from "../../Hooks/useWindowDimensions";
+import {useWindowResize} from "../../Hooks/useWindowSize";
 
 export interface BlogsCardProps {
   id: string;
@@ -22,8 +22,7 @@ const BlogsCard: FC<BlogsCardProps> = ({
   heroImage: mainImage,
 }) => {
   const navigate = useNavigate();
-  const window = useWindowDimensions();
-
+  const {width} = useWindowResize();
 
   return (
     <div className=" rounded-lg  p-6 flex border border-orange-200 bg-white ">
@@ -49,7 +48,7 @@ const BlogsCard: FC<BlogsCardProps> = ({
           </div>
         </div>
       </div>
-      {window.dimensions.width > 768 ? (
+      {width > 768 ? (
         <div className="flex items-center justify-center mx-6">
           <img src={mainImage} className="w-[700px] h-32" alt="Img not found" />
         </div>
