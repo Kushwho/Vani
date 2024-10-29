@@ -14,7 +14,7 @@ const Hero: FC = () => {
   return (
     <section id="hero" className="observe bg-primary-50 py-14">
       <div className="max-w-screen-xl mx-auto max-md:px-8 md:px-24 flex flex-col justify-center items-center gap-16">
-        <h1 className="font-satoshi-medium text-4xl leading-tight text-center bg-gradient-to-r from-black to-primary-600 bg-clip-text text-transparent">
+        <h1 className="font-satoshi-medium text-4xl leading-tight text-center bg-gradient-to-r from-black to-primary bg-clip-text text-transparent">
           India&#39;s AI for Spoken English Learning
         </h1>
 
@@ -49,7 +49,7 @@ const Hero: FC = () => {
                 <div className="flex flex-wrap gap-5">
                   <Button
                     variant="outline"
-                    className="animate-pulse border-2 border-dashed border-primary-700 text-primary-700 hover:bg-primary-100"
+                    className="animate-pulse border-2 border-dashed border-primary text-primary/90 font-bold hover:bg-primary-100"
                     onClick={() =>
                       auth.config.loggedIn
                         ? router.push("/learn")

@@ -132,8 +132,8 @@ const Login: FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex md:flex-row max-md:flex-col max-md:space-y-24">
-      <div className="relative md:w-3/5 md:h-screen max-md:w-full max-md:h-2/5">
+    <div className="h-full min-h-screen flex md:flex-row max-md:flex-col max-md:space-y-12 bg-card">
+      <div className="relative md:w-3/5 md:h-screen max-md:w-full max-md:min-h-[300px] max-md:h-2/5">
         <Image
           src="/images/login/bg.png"
           alt="Background"
@@ -143,8 +143,8 @@ const Login: FC = () => {
         />
       </div>
 
-      <div className="flex items-center justify-center md:w-3/5 max-md:w-full p-8">
-        <Card className="w-full max-w-md">
+      <div className="flex items-center justify-center md:w-3/5 max-md:w-full p-8 ">
+        <Card className="w-full max-w-md border-none shadow-none">
           <CardHeader className="space-y-1">
             <CardTitle className="text-2xl text-center">
               Log in to your account

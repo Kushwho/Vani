@@ -178,7 +178,7 @@ export function Navbar() {
   );
 
   const AuthButtons = () => (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-2 ">
       {auth.config.loggedIn ? (
         <>
           <Button variant="outline" onClick={() => router.push("/learn")}>
@@ -204,7 +204,7 @@ export function Navbar() {
         isSticky && "sticky top-0 z-50 border-b"
       )}
     >
-      <div className="container flex items-center justify-between">
+      <div className="container flex items-center justify-between  max-w-screen-xl mx-auto">
         <Link href="/" className="flex-shrink-0">
           <Image
             src="/images/icons/logo.png"

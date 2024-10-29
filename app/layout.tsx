@@ -42,10 +42,8 @@ export default function RootLayout({
         <AxiosContextProvider>
           <AuthProvider>
             <Wrapper>
-              <div className="max-w-screen-xl mx-auto">
-                <Navbar />
+              <div className="mx-auto">
                 {children}
-                <Footer />
                 <Toaster />
               </div>
             </Wrapper>

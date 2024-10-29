@@ -173,7 +173,7 @@ const Signup: FC = () => {
 
   return (
     <div className="min-h-screen flex md:flex-row flex-col">
-      <div className="relative md:w-2/5 w-full md:h-screen h-1/3">
+      <div className="relative md:w-2/5 w-full md:h-screen h-1/3 min-h-[300px]">
         <Image
           src="/images/login/bg.png"
           alt="Background"
@@ -183,8 +183,8 @@ const Signup: FC = () => {
         />
       </div>
 
-      <div className="flex-1 flex items-center justify-center p-6">
-        <Card className="w-full max-w-md">
+      <div className="flex-1 flex items-center justify-center p-6 bg-card" >
+        <Card className="w-full max-w-md shadow-none border-none">
           <CardHeader className="space-y-1">
             <CardTitle className="text-2xl text-center">
               Welcome to Vanii!

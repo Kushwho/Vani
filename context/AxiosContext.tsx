@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
-import { BACKEND_URL } from "@/lib/constants";
 import axios, { AxiosInstance } from "axios";
 import { createContext, ReactNode } from "react";
+import 'dotenv/config'
 
 const instance = axios.create({
-  baseURL: BACKEND_URL,
+  baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
   withCredentials: true,
 });
 

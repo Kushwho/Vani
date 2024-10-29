@@ -5,14 +5,14 @@ import Image from "next/image";
 const AboutSection = () => {
   
   return (
-    <section id="about-us" className="py-24">
+    <section id="about-us" className="py-24 bg-card">
       <div className="max-w-screen-xl mx-auto max-md:px-8 md:px-24 grid max-md:grid-cols-1 md:grid-cols-2 gap-16 items-center">
         <Card className="border-none shadow-none">
           <CardContent className="p-0">
-            <h2 className="font-satoshi-medium text-3xl text-primary-700 font-bold">
+            <h2 className="font-satoshi-medium text-4xl text-primary- font-bold">
               What We Are?
             </h2>
-            <p className="mt-12 text-md">
+            <p className="mt-12 text-xl tracking-wider">
               An AI-based language learning platform designed to be your
               personal assistant in mastering a new language. Preparing for
               competitive exams like TOEFL, IELTS etc.? Want to improve your

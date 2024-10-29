@@ -27,7 +27,7 @@ const contactLinks = [
 
 export default function Footer() {
   return (
-    <footer className="bg-primary-50 w-full ">
+    <footer className="bg-primary-50 w-full max-w-screen-2xl mx-auto">
       <div className=" mx-auto py-16 px-4 md:px-6 flex justify-around gap-6">
         {/* Logo and Tagline */}
         <div className="flex items-center max-md:flex-col gap-6">

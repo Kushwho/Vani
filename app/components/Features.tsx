@@ -51,11 +51,11 @@ export default function FeaturesSection() {
           {features.map((feature, index) => (
             <Card
               key={index}
-              className="group border bg-primary-100 transition-colors duration-200 hover:bg-primary-600 hover:text-neutral-50"
+              className="group border bg-primary/10 transition-colors duration-200 hover:bg-primary hover:text-neutral-50"
             >
               <CardContent className="p-8">
                 <div className="grid grid-cols-[auto_1fr] gap-4 items-center">
-                  <div className="grid place-items-center max-w-20 aspect-square p-4 rounded-full bg-primary-600 transition duration-200 group-hover:border-primary-50 max-md:hidden">
+                  <div className="grid place-items-center max-w-20 aspect-square p-4 rounded-full bg-primary transition duration-200 group-hover:border-primary/5 max-md:hidden">
                     <Image
                       src={feature.icon}
                       alt={`${feature.title} icon`}

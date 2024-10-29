@@ -89,7 +89,7 @@ const OnboardingForm: FC = () => {
         formData.nativeLanguage = values.otherLanguage || "";
       }
 
-      await axios.post("api/v1/user/post-onboarding", formData);
+
       PostOnboarding({
         axios,
         data: formData,
