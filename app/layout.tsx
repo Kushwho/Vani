@@ -20,9 +20,6 @@ const geistMono = localFont({
 export const metadata: Metadata = {
   title: "Vanii",
   description: "An AI-based language learning platform designed to be your personal assistant in mastering a new language. Preparing for competitive exams like TOEFL, IELTS etc.? Want to improve your professional soft skills? Or maybe you just want to communicate better? Look no further. Our innovative AI-powered tool ensures that you receive the best learning experience tailored to your individual needs.",
-  icons:{
-    icon:"images/icons/logo.png"
-  }
 };
 
 export default function RootLayout({
