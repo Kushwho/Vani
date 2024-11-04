@@ -21,7 +21,7 @@ const BlogsSidebar: FC<BlogsSidebarProps> = ({ posts }) => {
   const router = useRouter();
 
   return (
-    <Card className="w-full sticky top-4 max-lg:hidden border-none shadow-none" >
+    <Card className="w-full sticky top-4 max-lg:hidden border-none shadow-none bg-transparent" >
       <CardHeader>
         <CardTitle className="text-left text-2xl text-primary">Popular Posts</CardTitle>
       </CardHeader>

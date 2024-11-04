@@ -70,7 +70,7 @@ export default function Blogs() {
   if (error) return <ErrorState retry={fetchData} />;
 
   return (
-    <div className=" py-8 px-4  h-full bg-card">
+    <div className=" py-8 px-4  h-full bg-transparent">
       <div className="flex gap-12 max-w-7xl mx-auto justify-center">
         {/* Sidebar with smaller width */}
         <aside className="w-72 flex-shrink-0">

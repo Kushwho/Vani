@@ -10,6 +10,7 @@ const navigationLinks = [
   { href: "/#about-us", label: "About Us" },
   { href: "/#features", label: "Features" },
   { href: "/blogs", label: "Blog" },
+  { href: "/terms", label: "Terms and Conditions" },
 ];
 
 const contactLinks = [

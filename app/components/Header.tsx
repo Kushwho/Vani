@@ -32,6 +32,7 @@ const NAVIGATION_ITEMS = [
   { label: "About Us", href: "/#about-us" },
   { label: "Features", href: "/#features" },
   { label: "Blogs", href: "/blogs" },
+  { label: "Pricing", href: "/pricing" },
 ] as const;
 
 const MOBILE_BREAKPOINT = 768;
