@@ -136,6 +136,17 @@ export function Navbar() {
               {label}
             </Link>
           ))}
+          <Link
+            key={"Terms & Conditions"}
+            href={"/terms"}
+            onClick={() => setIsMobileMenuOpen(false)}
+            className={cn(
+              "text-lg font-medium transition-colors hover:text-primary bg-transparent",
+              pathname === "/terms" && "text-primary"
+            )}
+          >
+            {"Terms & Conditions"}
+          </Link>
           <div className="flex flex-col gap-2 mt-4">
             {auth.config.loggedIn ? (
               <>
