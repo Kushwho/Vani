@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Mail, Linkedin } from "lucide-react";
+import { Mail, Linkedin, Phone, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const navigationLinks = [
@@ -16,8 +16,18 @@ const navigationLinks = [
 const contactLinks = [
   {
     href: "mailto:aryan@vanii.ai",
-    label: "Email",
+    label: "aryan@vanii.ai",
     icon: <Mail className="h-5 w-5" />,
+  },
+  {
+    href: "tel:+91 6377 529 438",
+    label: "+91 6377 529 438",
+    icon: <Phone className="h-5 w-5" />,
+  },
+  {
+    href: "https://maps.app.goo.gl/nxyLDJjY5BXymPvA6",
+    label: "IIT Jodhpur",
+    icon: <MapPin className="h-5 w-5" />,
   },
   {
     href: "https://www.linkedin.com/company/vanii-ai",
@@ -36,9 +46,9 @@ export default function Footer() {
             <Image
               src="/images/icons/logo.png"
               alt="Logo"
-              width={32} // Since h-8 is 32px
-              height={32} // Maintaining aspect ratio
-              priority // Since it's a logo above the fold
+              width={32}
+              height={32}
+              priority
               className="w-auto h-8 object-contain"
             />
           </div>
@@ -53,7 +63,7 @@ export default function Footer() {
           <h3 className="text-lg md:text-xl font-medium text-primary-700">
             We&apos;d Like &<br className=" md:inline" /> Love to Help
           </h3>
-          <div className="flex flex-col max-md:flex-row flex-wrap ">
+          <div className="flex flex-col max-md:flex-row flex-wrap  items-start">
             {contactLinks.map((link) => (
               <Button
                 key={link.label}
@@ -64,7 +74,7 @@ export default function Footer() {
               >
                 <Link href={link.href}>
                   {link.icon}
-                  <span>{link.label}</span>
+                  <span className="max-md:hidden">{link.label}</span>
                 </Link>
               </Button>
             ))}
