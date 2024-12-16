@@ -95,7 +95,7 @@ const Room = () => {
         <Card className="w-full bg-white shadow-none border-none rounded-t-xl rounded-b-none overflow-hidden md:h-1/6 min-h-[16rem]">
           {/* Main Content Section */}
           <div className="relative p-4">
-            {/* Connection Status */}
+
 
 
             {/* End Session Button */}
@@ -117,7 +117,7 @@ const Room = () => {
             <div className="flex flex-col items-center gap-8 mt-8">
               <div className="flex items-center gap-8 w-full max-w-3xl">
                 <div className="flex items-center justify-center w-16 mx-auto">
-                <AudioVisualizerComponent />
+                {/* <AudioVisualizerComponent /> */}
                   <TrackToggle
                     source={Track.Source.Microphone}
                     showIcon={false}
