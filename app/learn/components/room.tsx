@@ -20,7 +20,7 @@ import { useLivekitContext } from "@/hooks/custom/useLivekitContext";
 import { useMediaQuery } from "@/hooks/custom/useMediaQuery";
 import { Dialog } from "@radix-ui/react-dialog";
 import MicrophoneButton from "./audio/MicrophoneButton";
-import AudioVisualizerComponent from "./audio/AudioInputTile";
+
 import { cn } from "@/lib/utils";
 
 const Room = () => {
