@@ -82,7 +82,7 @@ const Room = () => {
 
   return (
     <>
-      <main className="flex flex-col items-center w-full max-w-7xl mx-auto px-4 py-8 h-screen">
+      <main className="flex flex-col items-center w-full max-w-7xl mx-auto px-4 py-2 h-screen">
         <Dialog>
           {" "}
           <FeedbackModal
@@ -91,25 +91,11 @@ const Room = () => {
           />
         </Dialog>
 
-        <Card className="w-full bg-white shadow-lg rounded-xl overflow-hidden md:h-3/6">
+        <Card className="w-full bg-white shadow-lg rounded-xl overflow-hidden md:h-2/6">
           {/* Main Content Section */}
-          <div className="relative p-8">
+          <div className="relative p-4">
             {/* Connection Status */}
-            <div className="absolute top-4 left-4 flex items-center gap-2">
-              {config.isConnected ? (
-                <>
-                  <span className="text-sm text-green-500 font-medium">
-                    Connected
-                  </span>
-                </>
-              ) : (
-                <>
-                  <span className="text-sm text-red-500 font-medium">
-                    Not Connected
-                  </span>
-                </>
-              )}
-            </div>
+
 
             {/* End Session Button */}
             <Button
@@ -118,26 +104,26 @@ const Room = () => {
                 setFeedbackModalOpen(true);
               }}
               className={`${
-                !isMobile ? "absolute top-4 right-4" : "mt-6"
-              } bg-red-500 hover:bg-red-600 text-white transition-colors duration-200`}
+                !isMobile ? "absolute top-4 right-4" : "mt-2 mx-auto "
+              }  "bg-red-500 hover:bg-red-600 disabled:text-gray-500 disabled:bg-gray-200 disabled:cursor-not-allowed" transition-colors duration-200`}
+
+            disabled ={(config.isConnected && voiceAssistant.audioTrack) ? false : true}
             >
-              End Session
+             {(config.isConnected && voiceAssistant.audioTrack) ? "End Session" : "Not Connected"}
             </Button>
 
             {/* Voice Controls */}
             <div className="flex flex-col items-center gap-8 mt-8">
               <div className="flex items-center gap-8 w-full max-w-3xl">
                 <div className="flex items-center justify-center w-16 mx-auto">
-
                 <AudioVisualizerComponent />
-
                   <TrackToggle
                     source={Track.Source.Microphone}
                     showIcon={false}
                   >
                     <MicrophoneButton
                       isRecording={!enabled}
-                      className="w-24 h-24"
+                      className="w-24 h-24 rounded-full bg-primary/85 hover:bg-primary/70"
                     />
                   </TrackToggle>
                 </div>

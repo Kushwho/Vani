@@ -17,7 +17,7 @@ export const AudioVisualizerComponent = () => {
   });
 
   if (!localMicTrack) {
-    return <div className="p-4 text-gray-600">No audio track available</div>;
+    return <></>;
   }
 
   return (

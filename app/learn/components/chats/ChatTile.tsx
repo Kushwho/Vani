@@ -39,7 +39,7 @@ export const ChatTile = ({ messages, onSend }: ChatTileProps) => {
         )}
    
       >
-        <div className="flex flex-col  justify-end space-y-2 ">
+        <div className="flex flex-col  justify-end">
           {messages.map((message, index, allMsg) => {
             const hideName =
               index >= 1 && allMsg[index - 1].name === message.name;

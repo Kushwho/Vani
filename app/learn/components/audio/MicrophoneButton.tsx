@@ -41,7 +41,7 @@ export const MicrophoneButton = ({
             disabled={disabled || isLoading}
             onClick={onClick}
             className={cn(
-              "relative w-10 h-10",
+              "relative",
               isLoading && "animate-pulse",
               className
             )}
@@ -50,11 +50,11 @@ export const MicrophoneButton = ({
               <Loader2 className="h-4 w-4 animate-spin" />
             ) : isRecording ? (
               <>
-                <MicOff className="h-4 w-4" />
+                <MicOff className="h-20 w-20" />
                 <span className="absolute top-0 right-0 w-2 h-2 bg-destructive rounded-full animate-pulse" />
               </>
             ) : (
-              <Mic className="h-4 w-4" />
+              <Mic className="h-20 w-20" />
             )}
           </Button>
         </TooltipTrigger>
