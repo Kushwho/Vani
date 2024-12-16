@@ -91,7 +91,7 @@ const Room = () => {
           />
         </Dialog>
 
-        <Card className="w-full bg-white shadow-lg rounded-xl overflow-hidden md:h-2/6">
+        <Card className="w-full bg-white shadow-lg rounded-xl overflow-hidden md:h-1/6 min-h-[16rem]">
           {/* Main Content Section */}
           <div className="relative p-4">
             {/* Connection Status */}
