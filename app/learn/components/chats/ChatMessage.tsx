@@ -23,7 +23,7 @@ const ChatMessage = ({
       {!hideName && (
         <div
           className={cn(
-            "text-xs  font-medium tracking-wide",
+            "text-lg font-medium tracking-wide",
             isSelf
               ? "text-primary/90 dark:text-primary/80"
               : "text-muted-foreground/90 dark:text-muted-foreground/80"

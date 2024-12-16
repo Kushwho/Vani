@@ -15,9 +15,10 @@ const Page: React.FC = () => {
     GetLiveKitRoom({
       axios,
       onSuccess: (response) => {
-        console.log(response.data.token);
 
         setLivekitConfig((prevValues) => {
+          console.log(response.data.token);
+          
           return {
             ...prevValues,
             token: response.data.token,

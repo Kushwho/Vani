@@ -3,6 +3,7 @@ import { ChatMessageType } from "@/types/chats";
 import {
   TrackToggle,
   useConnectionState,
+
   useDataChannel,
   useLocalParticipant,
   useTrackToggle,
@@ -19,6 +20,7 @@ import { useLivekitContext } from "@/hooks/custom/useLivekitContext";
 import { useMediaQuery } from "@/hooks/custom/useMediaQuery";
 import { Dialog } from "@radix-ui/react-dialog";
 import MicrophoneButton from "./audio/MicrophoneButton";
+import AudioVisualizerComponent from "./audio/AudioInputTile";
 
 const Room = () => {
   const voiceAssistant = useVoiceAssistant();
@@ -30,6 +32,9 @@ const Room = () => {
   const [feedbackModalOpen, setFeedbackModalOpen] = useState(false);
   const { config, setConfig } = useLivekitContext();
   const isMobile = useMediaQuery("screen and (max-width: 768px)");
+
+
+  
 
   const { enabled } = useTrackToggle({ source: Track.Source.Microphone });
 
@@ -86,7 +91,7 @@ const Room = () => {
           />
         </Dialog>
 
-        <Card className="w-full bg-white shadow-lg rounded-xl overflow-hidden md:h-2/6">
+        <Card className="w-full bg-white shadow-lg rounded-xl overflow-hidden md:h-3/6">
           {/* Main Content Section */}
           <div className="relative p-8">
             {/* Connection Status */}
@@ -123,6 +128,9 @@ const Room = () => {
             <div className="flex flex-col items-center gap-8 mt-8">
               <div className="flex items-center gap-8 w-full max-w-3xl">
                 <div className="flex items-center justify-center w-16 mx-auto">
+
+                <AudioVisualizerComponent />
+
                   <TrackToggle
                     source={Track.Source.Microphone}
                     showIcon={false}
@@ -156,7 +164,7 @@ const Room = () => {
             ) : (
               <div className="flex items-center justify-center h-full text-white">
                 <p className="text-lg font-medium">
-                  Unable to connect to the agent
+                  Unable to connect to the Vanii :(
                 </p>
               </div>
             )}

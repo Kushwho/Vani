@@ -206,7 +206,7 @@ const Login: FC = () => {
                     <Button
                       variant="link"
                       className="h-auto p-0 text-primary block"
-                      onClick={() => router.push("/forgot-password")}
+                      onClick={() => router.push("/forgotpassword")}
                     >
                       Forgot password
                     </Button>

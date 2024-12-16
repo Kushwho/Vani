@@ -1,23 +1,42 @@
+import React from "react";
 import {
   BarVisualizer,
-  TrackReferenceOrPlaceholder,
+  AudioTrack,
+  useTracks,
 } from "@livekit/components-react";
+import { LocalParticipant, Track } from "livekit-client";
 
-export const AudioInputTile = ({
-  trackRef,
-}: {
-  trackRef: TrackReferenceOrPlaceholder;
-}) => {
+export const AudioVisualizerComponent = () => {
+  const tracks = useTracks();
+  const localParticipant = tracks.filter((track) => {
+    return track.participant instanceof LocalParticipant;
+  });
+
+  const localMicTrack = localParticipant.find((track) => {
+    return track.source === Track.Source.Microphone;
+  });
+
+  if (!localMicTrack) {
+    return <div className="p-4 text-gray-600">No audio track available</div>;
+  }
+
   return (
-    <div
-      className={`flex flex-row gap-2 h-[100px] items-center w-full justify-center border rounded-sm border-gray-800 bg-gray-900`}
-    >
-      <BarVisualizer
-        trackRef={trackRef}
-        className="h-full w-full"
-        barCount={20}
-        options={{ minHeight: 0 }}
-      />
+    <div className="w-full max-w-xl mx-auto p-4">
+      <div className="h-32 bg-gray-900 rounded-lg overflow-hidden">
+        <AudioTrack trackRef={localMicTrack}>
+          <BarVisualizer
+            height={128}
+            className="w-full"
+            options={{
+              minHeight: 2,
+              maxHeight: 90,
+            }}
+            barCount={24}
+          />
+        </AudioTrack>
+      </div>
     </div>
   );
 };
+
+export default AudioVisualizerComponent;
