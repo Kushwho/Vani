@@ -21,6 +21,7 @@ import { useMediaQuery } from "@/hooks/custom/useMediaQuery";
 import { Dialog } from "@radix-ui/react-dialog";
 import MicrophoneButton from "./audio/MicrophoneButton";
 import AudioVisualizerComponent from "./audio/AudioInputTile";
+import { cn } from "@/lib/utils";
 
 const Room = () => {
   const voiceAssistant = useVoiceAssistant();
@@ -91,7 +92,7 @@ const Room = () => {
           />
         </Dialog>
 
-        <Card className="w-full bg-white shadow-lg rounded-xl overflow-hidden md:h-1/6 min-h-[16rem]">
+        <Card className="w-full bg-white shadow-none border-none rounded-t-xl rounded-b-none overflow-hidden md:h-1/6 min-h-[16rem]">
           {/* Main Content Section */}
           <div className="relative p-4">
             {/* Connection Status */}
@@ -139,8 +140,10 @@ const Room = () => {
         </Card>
 
         {/* Transcription Section */}
-        <div className="w-full mt-8 rounded-xl overflow-hidden bg-gradient-to-br from-blue-400 to-blue-300 shadow-lg h-3/5">
-          <div className="h-full bg-black">
+        <div className={cn("w-full rounded-b-xl overflow-hidden border-none bg-white  border-t-0 ",
+        voiceAssistant.audioTrack? "h-3/5" : "h-fit py-8"
+        )}>
+          <div className="h-full bg-white">
             {voiceAssistant.audioTrack ? (
               <>
                 <TranscriptionTile
@@ -148,7 +151,7 @@ const Room = () => {
                 />
               </>
             ) : (
-              <div className="flex items-center justify-center h-full text-white">
+              <div className="flex items-center justify-center h-full text-black">
                 <p className="text-lg font-medium">
                   Unable to connect to the Vanii :(
                 </p>
