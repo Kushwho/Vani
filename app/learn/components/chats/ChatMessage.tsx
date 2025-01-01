@@ -40,8 +40,8 @@ const ChatMessage = ({
         className={cn(
           "pr-4 text-sm whitespace-pre-line leading-relaxed px-3 py-2   w-fit",
           isSelf
-            ? "bg-muted text-muted-foreground"
-            : "bg-primary text-primary-foreground",
+            ? "bg-muted text-muted-foreground rounded-none rounded-t-lg rounded-br-lg"
+            : "bg-primary text-primary-foreground rounded-none rounded-t-lg rounded-bl-lg",
           hideName ? "rounded-t-none" : "rounded-t-lg",
         )}
       >
