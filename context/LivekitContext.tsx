@@ -10,7 +10,7 @@ import { createContext } from "react";
 export const defaultConfig: LivekitContextType = {
   roomName: "",
   token: "",
-  serverUrl: "wss://vanii-wat801kw.livekit.clodud",
+  serverUrl: "wss://vanii-wat801kw.livekit.cloud",
   audioOn: false,
   isConnected: false,
 };
