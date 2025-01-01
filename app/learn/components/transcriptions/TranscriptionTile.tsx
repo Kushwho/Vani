@@ -82,7 +82,7 @@ export function TranscriptionTile({
     let currentGroup = 0;
     allMessages.forEach((message,index) => {
       if(allMessages[index].isSelf == allMessages[index-1]?.isSelf){
-        grouped[currentGroup].message.concat(allMessages[index].message)
+        grouped[currentGroup].message =  grouped[currentGroup].message.concat(allMessages[index].message)
       }else{
         currentGroup++;
         grouped[currentGroup] = allMessages[index];
