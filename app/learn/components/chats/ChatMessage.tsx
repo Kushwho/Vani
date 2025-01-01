@@ -27,7 +27,7 @@ const ChatMessage = ({
           className={cn(
             "text-lg font-medium tracking-wide",
             isSelf
-              ? "text-muted-foreground/90 dark:text-muted-foreground/80"
+              ? "text-muted-foreground/90 dark:text-muted-foreground/80 self-end"
               : "text-primary/90 dark:text-primary/80"
           )}
         >
