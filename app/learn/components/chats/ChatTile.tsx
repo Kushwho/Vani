@@ -42,13 +42,13 @@ export const ChatTile = ({ messages, onSend }: ChatTileProps) => {
         <div className="flex flex-col  justify-end">
           {messages.map((message, index, allMsg) => {
             const hideName =
-              index >= 1 && allMsg[index - 1].name === message.name;
+              index >= 1 && allMsg[index - 1]?.name === message?.name;
 
             return (
               <ChatMessage
                 key={index}
                 hideName={hideName}
-                name={message.name}
+                name={message?.name}
                 message={message.message}
                 isSelf={message.isSelf}
               />
