@@ -78,9 +78,20 @@ export function TranscriptionTile({
       });
     }
     allMessages.sort((a, b) => a.timestamp - b.timestamp);
-    console.log(allMessages);
+    const grouped :ChatMessageType[] = [];
+    let currentGroup = 0;
+    allMessages.forEach((message,index) => {
+      if(allMessages[index].isSelf == allMessages[index-1]?.isSelf){
+        grouped[currentGroup].message.concat(allMessages[index].message)
+      }else{
+        currentGroup++;
+        grouped[currentGroup] = allMessages[index];
+      }
+    })
+
     
-    setMessages(allMessages);
+    
+    setMessages(grouped);
   }, [
     transcripts,
     chatMessages,

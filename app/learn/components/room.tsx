@@ -143,12 +143,17 @@ const Room = () => {
         <div className={cn("w-full rounded-b-xl overflow-hidden border-none bg-white  border-t-0 ",
         voiceAssistant.audioTrack? "h-3/5" : "h-fit py-8"
         )}>
+
+      
+               
           <div className="h-full bg-white">
             {voiceAssistant.audioTrack ? (
               <>
                 <TranscriptionTile
                   agentAudioTrack={voiceAssistant.audioTrack}
-                />
+                /> 
+
+       
               </>
             ) : (
               <div className="flex items-center justify-center h-full text-black">

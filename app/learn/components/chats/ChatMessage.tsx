@@ -15,38 +15,39 @@ const ChatMessage = ({
 }: ChatMessageProps) => {
   return (
     <div
-    className={cn(
-      "flex flex-col gap-1 transition-spacing duration-200",
-      hideName ? "pt-0" : "pt-6",
-      isSelf ? "self-end" : ""
-    )}
-  >
-    {/* Display sender name unless hideName is true */}
-    {!hideName && name && (
-      <div
-        className={cn(
-          "text-lg font-medium tracking-wide",
-          isSelf
-            ? "text-muted-foreground/90 dark:text-muted-foreground/80"
-            : "text-primary/90 dark:text-primary/80"
-        )}
-      >
-        {name}
-      </div>
-    )}
-
-    {/* Message bubble */}
-    <div
       className={cn(
-        "pr-4 text-sm whitespace-pre-line leading-relaxed px-3 py-2 rounded-lg shadow-md w-fit",
-        isSelf
-          ? "bg-muted text-muted-foreground"
-          : "bg-primary text-primary-foreground"
+        "flex flex-col gap-1 transition-spacing duration-200",
+        hideName ? "pt-0" : "pt-6",
+        isSelf ? "self-end" : ""
       )}
     >
-      {message}
+      {/* Display sender name unless hideName is true */}
+      {!hideName && name && (
+        <div
+          className={cn(
+            "text-lg font-medium tracking-wide",
+            isSelf
+              ? "text-muted-foreground/90 dark:text-muted-foreground/80"
+              : "text-primary/90 dark:text-primary/80"
+          )}
+        >
+          {name}
+        </div>
+      )}
+
+      {/* Message bubble */}
+      <div
+        className={cn(
+          "pr-4 text-sm whitespace-pre-line leading-relaxed px-3 py-2   w-fit",
+          isSelf
+            ? "bg-muted text-muted-foreground"
+            : "bg-primary text-primary-foreground",
+          hideName ? "rounded-t-none" : "rounded-t-lg",
+        )}
+      >
+        {message}
+      </div>
     </div>
-  </div>
   );
 };
 
