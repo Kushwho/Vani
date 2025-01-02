@@ -114,11 +114,12 @@ const Room = () => {
             {/* Voice Controls */}
             <div className="flex flex-col items-center gap-8 mt-8">
               <div className="flex items-center gap-8 w-full max-w-3xl">
-                <div className="flex items-center justify-center w-12 mx-auto">
+                <div className="flex items-center justify-center  mx-auto ">
                   {/* <AudioVisualizerComponent /> */}
                   <TrackToggle
                     source={Track.Source.Microphone}
                     showIcon={false}
+                    className="max-w-52 w-full bg-red-300"
       
                   >
                                 <AudioVisualizerComponent/>

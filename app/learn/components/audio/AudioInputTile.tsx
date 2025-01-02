@@ -17,19 +17,19 @@ export const AudioVisualizerComponent = () => {
     return track.source === Track.Source.Microphone;
   });
 
-  if (!localMicTrack) {
-    return <>no track available</>;
-  }
+  // if (!localMicTrack) {
+  //   return <>no track available</>;
+  // }
 
   return (
     <div
-      className={`flex flex-row w-full gap-2 h-[100px]  overflow-visible items-center  justify-center border rounded-sm border-gray-100 bg-green-600`}
+      className={`flex flex-row  w-full h-[100px]  items-center  justify-center border rounded-sm border-gray-100 bg-primary`}
     >
       <BarVisualizer
         trackRef={localMicTrack}
-        className="h-full w-full [&>*]:inline-block"
+        className="h-full w-full flex flex-row !gap-1"
         barCount={10}
-        options={{ minHeight: 20 }}
+        options={{ minHeight: 10, maxHeight: 100 }}
       />
     </div>
   );
