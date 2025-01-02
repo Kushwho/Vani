@@ -119,7 +119,7 @@ const Room = () => {
                   <TrackToggle
                     source={Track.Source.Microphone}
                     showIcon={false}
-                    className="max-w-52 w-full bg-red-300"
+                    className="max-w-32 w-full bg-red-300"
       
                   >
                                 <AudioVisualizerComponent/>
