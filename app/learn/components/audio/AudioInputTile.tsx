@@ -1,7 +1,7 @@
 import React from "react";
 import {
   BarVisualizer,
-  AudioTrack,
+
   useTracks,
 } from "@livekit/components-react";
 import { LocalParticipant, Track } from "livekit-client";
