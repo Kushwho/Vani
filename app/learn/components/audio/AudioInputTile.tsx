@@ -18,25 +18,19 @@ export const AudioVisualizerComponent = () => {
   });
 
   if (!localMicTrack) {
-    return <></>;
+    return <>no track available</>;
   }
 
   return (
-    <div className="w-full max-w-xl mx-auto p-4">
-      <div className="h-32 w-32  rounded-lg overflow-hidden">
-        <AudioTrack trackRef={localMicTrack}>
-          <BarVisualizer
-            height={128}
-            className="w-full"
-            options={{
-              minHeight: 2,
-              maxHeight: 90,
-            }}
-            barCount={24}
-            trackRef={localMicTrack}
-          />
-        </AudioTrack>
-      </div>
+    <div
+      className={`flex flex-row gap-2 h-[100px] items-center w-full justify-center border rounded-sm border-gray-800 bg-gray-900`}
+    >
+      <BarVisualizer
+        trackRef={localMicTrack}
+        className="h-full w-full"
+        barCount={20}
+        options={{ minHeight: 0 }}
+      />
     </div>
   );
 };
