@@ -2,7 +2,7 @@ import React from "react";
 import { BarVisualizer, useTracks } from "@livekit/components-react";
 import { LocalParticipant, Track } from "livekit-client";
 import "@livekit/components-styles";
-import MicrophoneButton from "./MicrophoneButton";
+// import MicrophoneButton from "./MicrophoneButton";
 import { MicOff } from "lucide-react";
 
 export const AudioVisualizerComponent = () => {
