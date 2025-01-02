@@ -23,13 +23,13 @@ export const AudioVisualizerComponent = () => {
 
   return (
     <div
-      className={`flex flex-row gap-2 h-[100px] items-center w-full justify-center border rounded-sm border-gray-800 bg-gray-900`}
+      className={`flex flex-row w-full gap-2 h-[100px]  overflow-visible items-center  justify-center border rounded-sm border-gray-100 bg-green-600`}
     >
       <BarVisualizer
         trackRef={localMicTrack}
-        className="h-full w-full"
-        barCount={20}
-        options={{ minHeight: 0 }}
+        className="h-full w-full [&>*]:inline-block"
+        barCount={10}
+        options={{ minHeight: 20 }}
       />
     </div>
   );

@@ -6,6 +6,7 @@ import useAxiosContext from "@/hooks/custom/useAxiosContext";
 import { toast } from "@/hooks/use-toast";
 import Room from "./components/room";
 import { defaultConfig, LivekitProvider } from "@/context/LivekitContext";
+import "@livekit/components-styles"
 
 const Page: React.FC = () => {
   const axios = useAxiosContext();

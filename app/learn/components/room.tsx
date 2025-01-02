@@ -114,21 +114,21 @@ const Room = () => {
             {/* Voice Controls */}
             <div className="flex flex-col items-center gap-8 mt-8">
               <div className="flex items-center gap-8 w-full max-w-3xl">
-                <div className="flex items-center justify-center w-16 mx-auto">
+                <div className="flex items-center justify-center w-12 mx-auto">
                   {/* <AudioVisualizerComponent /> */}
                   <TrackToggle
                     source={Track.Source.Microphone}
                     showIcon={false}
+      
                   >
-                    <MicrophoneButton
-                      isRecording={!enabled}
-                      className="w-24 h-24 rounded-full bg-primary/85 hover:bg-primary/70"
-                    />
+                                <AudioVisualizerComponent/>
                   </TrackToggle>
 
-                  <AudioVisualizerComponent/>
                 </div>
+
               </div>
+
+
 
               {/* Assistant Info */}
               <div className="text-center space-y-2">
