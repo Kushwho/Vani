@@ -5,14 +5,15 @@ import {
   useTracks,
 } from "@livekit/components-react";
 import { LocalParticipant, Track } from "livekit-client";
+import "@livekit/components-styles";
+
 
 export const AudioVisualizerComponent = () => {
   const tracks = useTracks();
-  const localParticipant = tracks.filter((track) => {
-    return track.participant instanceof LocalParticipant;
-  });
 
-  const localMicTrack = localParticipant.find((track) => {
+  const localTracks = tracks.filter(({participant})=> participant instanceof LocalParticipant);
+
+  const localMicTrack = localTracks.find((track) => {
     return track.source === Track.Source.Microphone;
   });
 
@@ -22,7 +23,7 @@ export const AudioVisualizerComponent = () => {
 
   return (
     <div className="w-full max-w-xl mx-auto p-4">
-      <div className="h-32 bg-gray-900 rounded-lg overflow-hidden">
+      <div className="h-32 w-32  rounded-lg overflow-hidden">
         <AudioTrack trackRef={localMicTrack}>
           <BarVisualizer
             height={128}
@@ -32,6 +33,7 @@ export const AudioVisualizerComponent = () => {
               maxHeight: 90,
             }}
             barCount={24}
+            trackRef={localMicTrack}
           />
         </AudioTrack>
       </div>

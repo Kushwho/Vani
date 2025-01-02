@@ -1,9 +1,9 @@
 "use client";
 import { ChatMessageType } from "@/types/chats";
 import {
+  BarVisualizer,
   TrackToggle,
   useConnectionState,
-
   useDataChannel,
   useLocalParticipant,
   useTrackToggle,
@@ -22,6 +22,7 @@ import { Dialog } from "@radix-ui/react-dialog";
 import MicrophoneButton from "./audio/MicrophoneButton";
 
 import { cn } from "@/lib/utils";
+import AudioVisualizerComponent from "./audio/AudioInputTile";
 
 const Room = () => {
   const voiceAssistant = useVoiceAssistant();
@@ -33,9 +34,6 @@ const Room = () => {
   const [feedbackModalOpen, setFeedbackModalOpen] = useState(false);
   const { config, setConfig } = useLivekitContext();
   const isMobile = useMediaQuery("screen and (max-width: 768px)");
-
-
-  
 
   const { enabled } = useTrackToggle({ source: Track.Source.Microphone });
 
@@ -95,9 +93,6 @@ const Room = () => {
         <Card className="w-full bg-white shadow-none border-none rounded-t-xl rounded-b-none overflow-hidden md:h-1/6 min-h-[16rem]">
           {/* Main Content Section */}
           <div className="relative p-4">
-
-
-
             {/* End Session Button */}
             <Button
               onClick={() => {
@@ -107,17 +102,20 @@ const Room = () => {
               className={`${
                 !isMobile ? "absolute top-4 right-4" : "mt-2 mx-auto "
               }  "bg-red-500 hover:bg-red-600 disabled:text-gray-500 disabled:bg-gray-200 disabled:cursor-not-allowed" transition-colors duration-200`}
-
-            disabled ={(config.isConnected && voiceAssistant.audioTrack) ? false : true}
+              disabled={
+                config.isConnected && voiceAssistant.audioTrack ? false : true
+              }
             >
-             {(config.isConnected && voiceAssistant.audioTrack) ? "End Session" : "Not Connected"}
+              {config.isConnected && voiceAssistant.audioTrack
+                ? "End Session"
+                : "Not Connected"}
             </Button>
 
             {/* Voice Controls */}
             <div className="flex flex-col items-center gap-8 mt-8">
               <div className="flex items-center gap-8 w-full max-w-3xl">
                 <div className="flex items-center justify-center w-16 mx-auto">
-                {/* <AudioVisualizerComponent /> */}
+                  {/* <AudioVisualizerComponent /> */}
                   <TrackToggle
                     source={Track.Source.Microphone}
                     showIcon={false}
@@ -127,6 +125,8 @@ const Room = () => {
                       className="w-24 h-24 rounded-full bg-primary/85 hover:bg-primary/70"
                     />
                   </TrackToggle>
+
+                  <AudioVisualizerComponent/>
                 </div>
               </div>
 
@@ -140,20 +140,18 @@ const Room = () => {
         </Card>
 
         {/* Transcription Section */}
-        <div className={cn("w-full rounded-b-xl overflow-hidden border-none bg-white  border-t-0 ",
-        voiceAssistant.audioTrack? "h-3/5" : "h-fit py-8"
-        )}>
-
-      
-               
+        <div
+          className={cn(
+            "w-full rounded-b-xl overflow-hidden border-none bg-white  border-t-0 ",
+            voiceAssistant.audioTrack ? "h-3/5" : "h-fit py-8"
+          )}
+        >
           <div className="h-full bg-white">
             {voiceAssistant.audioTrack ? (
               <>
                 <TranscriptionTile
                   agentAudioTrack={voiceAssistant.audioTrack}
-                /> 
-
-       
+                />
               </>
             ) : (
               <div className="flex items-center justify-center h-full text-black">
