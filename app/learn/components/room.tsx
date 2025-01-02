@@ -1,7 +1,7 @@
 "use client";
 import { ChatMessageType } from "@/types/chats";
 import {
-  BarVisualizer,
+
   TrackToggle,
   useConnectionState,
   useDataChannel,
