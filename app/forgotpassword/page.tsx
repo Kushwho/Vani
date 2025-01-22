@@ -57,7 +57,7 @@ const ForgotPassword: FC = () => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [otpSent, setOtpSent] = useState(false);
-  const [countryCode, setCountryCode] = useState("+1");
+  const [countryCode, setCountryCode] = useState("+91");
   const [orderId, setOrderId] = useState<string | null>(null);
 
   const phoneForm = useForm<PhoneFormValues>({
@@ -220,7 +220,7 @@ const ForgotPassword: FC = () => {
                       <FormItem>
                         <FormLabel>Enter OTP</FormLabel>
                         <FormControl>
-                          <Input placeholder="Enter OTP" {...field} />
+                          <Input type="text" placeholder="Enter OTP" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>

@@ -59,7 +59,7 @@ const Signup: FC = () => {
   const [displayOtp, setDisplayOtp] = useState(false);
   const [orderId, setOrderId] = useState("");
   const [otp, setOtp] = useState("");
-  const [countryCode, setCountryCode] = useState("+1");
+  const [countryCode, setCountryCode] = useState("+91");
 
   const form = useForm<SignupFormData>({
     resolver: zodResolver(signupSchema),
