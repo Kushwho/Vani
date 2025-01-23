@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { AuthProvider } from "@/context/AuthContext";
 import { AxiosContextProvider } from "@/context/AxiosContext";
 import Wrapper from "./wrapper";
+import Script from "next/script";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -31,6 +32,18 @@ export default function RootLayout({
 
   return (
     <html lang="en">
+      <Script
+          async
+          src={`https://www.googletagmanager.com/gtag/js?id=G-MDFZR51WP5`}
+        />
+        <Script id="google-analytics">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-MDFZR51WP5');
+          `}
+        </Script>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
