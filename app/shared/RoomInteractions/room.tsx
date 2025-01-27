@@ -1,7 +1,6 @@
 "use client";
 import { ChatMessageType } from "@/types/chats";
 import {
-
   TrackToggle,
   useConnectionState,
   useDataChannel,
@@ -11,9 +10,9 @@ import {
 } from "@livekit/components-react";
 import { Track } from "livekit-client";
 import { ConnectionState } from "livekit-client";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { FC, useCallback, useEffect, useState } from "react";
 import { TranscriptionTile } from "./transcriptions/TranscriptionTile";
-import FeedbackModal from "./FeedbackModal";
+import FeedbackModal from "../../learn/components/FeedbackModal";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useLivekitContext } from "@/hooks/custom/useLivekitContext";
@@ -23,8 +22,13 @@ import { Dialog } from "@radix-ui/react-dialog";
 
 import { cn } from "@/lib/utils";
 import AudioVisualizerComponent from "./audio/AudioInputTile";
+import { useTimer } from "@/context/TimerContext";
 
-const Room = () => {
+interface RoomProps{
+  showChat:boolean
+}
+
+const Room:FC<RoomProps> = ({showChat}) => {
   const voiceAssistant = useVoiceAssistant();
   const roomState = useConnectionState();
   /* eslint-disable  @typescript-eslint/no-unused-vars */
@@ -36,6 +40,7 @@ const Room = () => {
   const isMobile = useMediaQuery("screen and (max-width: 768px)");
 
   const { enabled } = useTrackToggle({ source: Track.Source.Microphone });
+  const {starTimer, currentTime} = useTimer();
 
   useEffect(() => {
     if (roomState === ConnectionState.Connected) {
@@ -81,7 +86,7 @@ const Room = () => {
 
   return (
     <>
-      <main className="flex flex-col items-center w-full max-w-7xl mx-auto px-4 py-2 h-screen">
+      <main className={cn("flex flex-col items-center w-full max-w-7xl mx-auto px-4 py-2", showChat && "h-screen")}>
         <Dialog>
           {" "}
           <FeedbackModal
@@ -90,7 +95,8 @@ const Room = () => {
           />
         </Dialog>
 
-        <Card className="w-full bg-white shadow-none border-none rounded-t-xl rounded-b-none overflow-hidden md:h-1/6 min-h-[16rem]">
+        <Card className="w-full bg-background1682
+         shadow-none border-none rounded-t-xl rounded-b-none overflow-hidden md:h-1/6 min-h-[16rem]">
           {/* Main Content Section */}
           <div className="relative p-4">
             {/* End Session Button */}
@@ -117,31 +123,31 @@ const Room = () => {
                 <div className="flex items-center justify-center  mx-auto ">
                   {/* <AudioVisualizerComponent /> */}
                   <TrackToggle
+                    onClick={() => {
+                      if (starTimer){
+                        starTimer (300);
+                      }
+                    }}
                     source={Track.Source.Microphone}
                     showIcon={false}
                     className="max-w-32 w-full bg-red-300"
-      
                   >
-                                <AudioVisualizerComponent/>
+                    <AudioVisualizerComponent />
                   </TrackToggle>
-
                 </div>
-
               </div>
-
-
 
               {/* Assistant Info */}
               <div className="text-center space-y-2">
                 <h1 className="text-2xl font-bold text-gray-800">Vanii</h1>
-                <h2 className="text-gray-600" id="captions"></h2>
+                <h2 className="text-gray-600" >{currentTime}</h2>
               </div>
             </div>
           </div>
         </Card>
 
         {/* Transcription Section */}
-        <div
+     {showChat ?    <div
           className={cn(
             "w-full rounded-b-xl overflow-hidden border-none bg-white  border-t-0 ",
             voiceAssistant.audioTrack ? "h-3/5" : "h-fit py-8"
@@ -162,7 +168,7 @@ const Room = () => {
               </div>
             )}
           </div>
-        </div>
+        </div> : <></>}
       </main>
     </>
   );

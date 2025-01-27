@@ -1,5 +1,5 @@
-import ChatMessage from "@/app/learn/components/chats/ChatMessage";
-import { ChatMessageInput } from "@/app/learn/components/chats/ChatMessageInput";
+import ChatMessage from "@/app/shared/RoomInteractions/chats/ChatMessage";
+import { ChatMessageInput } from "@/app/shared/RoomInteractions/chats/ChatMessageInput";
 import { cn } from "@/lib/utils";
 import { ChatMessage as ComponentsChatMessage } from "@livekit/components-react";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
@@ -22,7 +22,7 @@ type ChatTileProps = {
 
 export const ChatTile = ({ messages, onSend }: ChatTileProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  
+
   useEffect(() => {
     if (containerRef.current) {
       containerRef.current.scrollTop = containerRef.current.scrollHeight;
@@ -37,7 +37,6 @@ export const ChatTile = ({ messages, onSend }: ChatTileProps) => {
           "flex-1 px-4 pb-4",
           "transition-all duration-200 ease-in-out overflow-scroll h-full"
         )}
-   
       >
         <div className="flex flex-col  justify-end">
           {messages.map((message, index, allMsg) => {
