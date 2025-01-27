@@ -38,6 +38,7 @@ const phoneFormSchema = z.object({
 
 const resetPasswordFormSchema = z
   .object({
+    phone: z.string().min(10, "Phone number must be 10 digits"),
     otp: z.string().min(6, "OTP must be 6 digits"),
     password: z.string().min(8, "Password must be at least 8 characters"),
     verifyPassword: z.string(),
@@ -57,7 +58,7 @@ const ForgotPassword: FC = () => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [otpSent, setOtpSent] = useState(false);
-  const [countryCode, setCountryCode] = useState("+1");
+  const [countryCode, setCountryCode] = useState("+91");
   const [orderId, setOrderId] = useState<string | null>(null);
 
   const phoneForm = useForm<PhoneFormValues>({
@@ -215,12 +216,25 @@ const ForgotPassword: FC = () => {
                 >
                   <FormField
                     control={resetForm.control}
+                    name="phone"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Phone Number</FormLabel>
+                        <FormControl>
+                          <Input type="text" readOnly {...field} value={phoneForm.getValues().phone} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={resetForm.control}
                     name="otp"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Enter OTP</FormLabel>
                         <FormControl>
-                          <Input placeholder="Enter OTP" {...field} />
+                          <Input type="text" placeholder="Enter OTP" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>

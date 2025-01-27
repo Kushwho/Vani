@@ -50,7 +50,7 @@ const Login: FC = () => {
     },
   });
 
-  const [countryCode, setCountryCode] = useState("+1");
+  const [countryCode, setCountryCode] = useState("+91");
 
   // Check if user is already logged in
   useEffect(() => {

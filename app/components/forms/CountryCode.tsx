@@ -220,6 +220,7 @@ export const countryCodesObject: countryCode = {
   TR: { flag: "🇹🇷", code: "+90" },
   IN: { flag: "🇮🇳", code: "+91" },
   PK: { flag: "🇵🇰", code: "+92" },
+  AF: { flag: "🇦🇫", code: "+93" },
   LK: { flag: "🇱🇰", code: "+94" },
   MM: { flag: "🇲🇲", code: "+95" },
   MV: { flag: "🇲🇻", code: "+960" },
