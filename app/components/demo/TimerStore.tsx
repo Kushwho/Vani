@@ -26,7 +26,7 @@ interface TimerState {
 
 export const useTimerStore = create<TimerState>((set, get) => ({
   currentTime: 0,
-  isVisible: true,
+  isVisible: false,
   timerStarted: false,
   intervalId: null,
 
