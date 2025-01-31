@@ -16,16 +16,11 @@ const RoomWrapper: React.FC<roomWrapperProps> = ({ showChat }) => {
   const axios = useAxiosContext();
   const [livekitConfig, setLivekitConfig] = useState(defaultConfig);
 
-
-
-
   useEffect(() => {
     GetLiveKitRoom({
       axios,
       onSuccess: (response) => {
         setLivekitConfig((prevValues) => {
-          console.log(response.data.token);
-
           return {
             ...prevValues,
             token: response.data.token,
@@ -35,11 +30,12 @@ const RoomWrapper: React.FC<roomWrapperProps> = ({ showChat }) => {
       },
       onError: (error) => {
         console.log(error);
-
         toast({ title: "Error", description: error.message });
       },
     });
+
   }, [axios]);
+  
   return (
     <>
       <LivekitProvider

@@ -5,12 +5,11 @@ import {
   useConnectionState,
   useDataChannel,
   useLocalParticipant,
-  useTrackToggle,
   useVoiceAssistant,
 } from "@livekit/components-react";
 import { Track } from "livekit-client";
 import { ConnectionState } from "livekit-client";
-import React, { FC, useCallback, useEffect, useState } from "react";
+import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { TranscriptionTile } from "./transcriptions/TranscriptionTile";
 import FeedbackModal from "../../learn/components/FeedbackModal";
 import { Card } from "@/components/ui/card";
@@ -22,7 +21,9 @@ import { Dialog } from "@radix-ui/react-dialog";
 
 import { cn } from "@/lib/utils";
 import AudioVisualizerComponent from "./audio/AudioInputTile";
-import { useTimer } from "@/context/TimerContext";
+import { useTimerStore } from "@/app/components/demo/TimerStore";
+import { useToast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
 
 interface RoomProps{
   showChat:boolean
@@ -39,14 +40,18 @@ const Room:FC<RoomProps> = ({showChat}) => {
   const { config, setConfig } = useLivekitContext();
   const isMobile = useMediaQuery("screen and (max-width: 768px)");
 
-  const { enabled } = useTrackToggle({ source: Track.Source.Microphone });
-  const {starTimer, currentTime} = useTimer();
+
+  const {currentTime} = useTimerStore();
+
+  const toggleTimerRef = useRef(useTimerStore.getState().toggleTimer);
+  const {toast} = useToast();
+  const router = useRouter();
 
   useEffect(() => {
     if (roomState === ConnectionState.Connected) {
       localParticipant.setMicrophoneEnabled(false);
     }
-  }, [localParticipant, roomState]);
+  }, [roomState]);
 
   const onDataReceived = useCallback(
     /* eslint-disable  @typescript-eslint/no-explicit-any */
@@ -75,12 +80,17 @@ const Room:FC<RoomProps> = ({showChat}) => {
     [setTranscripts]
   );
 
+  const isSessionActive = useMemo(
+    () => config.isConnected && !!voiceAssistant.audioTrack,
+    [config.isConnected, voiceAssistant.audioTrack]
+  );
+
   useDataChannel(onDataReceived);
   const leaveSession = useCallback(() => {
-    setConfig({
-      ...config,
+    setConfig((prevConfig) => ({
+      ...prevConfig,
       isConnected: false,
-    });
+    }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setConfig]);
 
@@ -109,10 +119,10 @@ const Room:FC<RoomProps> = ({showChat}) => {
                 !isMobile ? "absolute top-4 right-4" : "mt-2 mx-auto "
               }  "bg-red-500 hover:bg-red-600 disabled:text-gray-500 disabled:bg-gray-200 disabled:cursor-not-allowed" transition-colors duration-200`}
               disabled={
-                config.isConnected && voiceAssistant.audioTrack ? false : true
+                !isSessionActive 
               }
             >
-              {config.isConnected && voiceAssistant.audioTrack
+              {!isSessionActive
                 ? "End Session"
                 : "Not Connected"}
             </Button>
@@ -123,14 +133,14 @@ const Room:FC<RoomProps> = ({showChat}) => {
                 <div className="flex items-center justify-center  mx-auto ">
                   {/* <AudioVisualizerComponent /> */}
                   <TrackToggle
-                    onClick={() => {
-                      if (starTimer){
-                        starTimer (300);
-                      }
-                    }}
                     source={Track.Source.Microphone}
                     showIcon={false}
                     className="max-w-32 w-full bg-red-300"
+                    onChange={(enabled, isUserInitiated) => {
+                      if( isUserInitiated){
+                        toggleTimerRef.current(300, toast, router, leaveSession);
+                      }
+                    }}
                   >
                     <AudioVisualizerComponent />
                   </TrackToggle>

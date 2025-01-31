@@ -6,6 +6,7 @@ import React, {
 
 // Timer context interface
 interface TimerContextType {
+  
   starTimer: ((seconds:number) => void) | undefined;
   currentTime: number | undefined;
 }

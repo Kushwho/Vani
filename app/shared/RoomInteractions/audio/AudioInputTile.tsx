@@ -1,5 +1,5 @@
 import React from "react";
-import { BarVisualizer, useTracks } from "@livekit/components-react";
+import { BarVisualizer, useTracks, useTrackToggle } from "@livekit/components-react";
 import { LocalParticipant, Track } from "livekit-client";
 import "@livekit/components-styles";
 // import MicrophoneButton from "./MicrophoneButton";
@@ -7,25 +7,23 @@ import { MicOff } from "lucide-react";
 
 export const AudioVisualizerComponent = () => {
   const tracks = useTracks();
-
+  const {enabled} = useTrackToggle({source: Track.Source.Microphone});
   const localTracks = tracks.filter(
     ({ participant }) => participant instanceof LocalParticipant
   );
+
+
 
   const localMicTrack = localTracks.find((track) => {
     return track.source === Track.Source.Microphone;
   });
 
-  // if (!localMicTrack) {
-  //   return <>no track available</>;
-  // }
 
   return (
     <div
       className={`flex flex-row  w-full h-[100px]  items-center  justify-center  rounded-full  bg-transparent`}
     >
-      {!localMicTrack ||
-      !localMicTrack?.publication.isEnabled? (
+      {enabled === false ? (
         <>
           <MicOff className="h-20 w-20"/>
         </>

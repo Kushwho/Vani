@@ -171,7 +171,18 @@ function toast({ ...props }: Toast) {
   }
 }
 
-function useToast() {
+/*************  ✨ Codeium Command ⭐  *************/
+/**
+ * Custom hook for managing toast notifications.
+ * 
+ * This hook returns the current state of toasts, along with functions to create and dismiss toasts.
+ * 
+ * @returns {Object} - The current state of toasts, and functions to manage toasts:
+ *   - `toast`: Function to create a new toast notification.
+ *   - `dismiss`: Function to dismiss a toast, identified by its ID.
+ */
+
+/******  370ad458-4064-4cb6-87e1-89e94f4d0cca  *******/function useToast() {
   const [state, setState] = React.useState<State>(memoryState)
 
   React.useEffect(() => {
@@ -192,3 +203,4 @@ function useToast() {
 }
 
 export { useToast, toast }
+export type {Toast}
