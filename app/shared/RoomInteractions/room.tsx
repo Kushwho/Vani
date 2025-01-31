@@ -177,7 +177,7 @@ const Room: FC<RoomProps> = ({ showChat }) => {
               {/* Assistant Info */}
               <div className="text-center space-y-2">
                 <h1 className="text-2xl font-bold text-gray-800">Vanii</h1>
-                {showChat &&  <h2 className="text-gray-600">
+                {!showChat &&  <h2 className="text-gray-600">
                   {currentTime &&
                     (currentTime > 60
                       ? `${Math.round(currentTime / 60)}:${
