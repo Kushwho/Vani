@@ -20,41 +20,40 @@ const RoomWrapper: React.FC<roomWrapperProps> = ({ showChat }) => {
   const [livekitConfig, setLivekitConfig] = useState(defaultConfig);
 
   useEffect(() => {
-
-    if(auth.config.loggedIn){
-    GetLiveKitRoom({
-      axios,
-      onSuccess: (response) => {
-        setLivekitConfig((prevValues) => {
-          return {
-            ...prevValues,
-            token: response.data.token,
-            isConnected: true,
-          };
-        });
-      },
-      onError: (error) => {
-        console.log(error);
-        toast({ title: "Error", description: error.message });
-      },
-    });}
-    
-    else CreateDemoLiveKitRoom({
-      axios,
-      onSuccess: (response) => {
-        setLivekitConfig((prevValues) => {
-          return {
-            ...prevValues,
-            token: response.data.token,
-            isConnected: true,
-          };
-        });
-      },
-      onError: (error) => {
-        console.log(error);
-        toast({ title: "Error", description: error.message });
-      }
-    })
+    if (auth.config.loggedIn) {
+      GetLiveKitRoom({
+        axios,
+        onSuccess: (response) => {
+          setLivekitConfig((prevValues) => {
+            return {
+              ...prevValues,
+              token: response.data.token,
+              isConnected: true,
+            };
+          });
+        },
+        onError: (error) => {
+          console.log(error);
+          toast({ title: "Error", description: error.message });
+        },
+      });
+    } else {
+      CreateDemoLiveKitRoom({
+        axios,
+        onSuccess: (response) => {
+          setLivekitConfig((prevValues) => {
+            return {
+              ...prevValues,
+              token: response.data.token,
+              isConnected: true,
+            };
+          });
+        },
+        onError: (error) => {
+          console.log(error);
+        },
+      });
+    }
 
     return () => {
       DeleteLiveKitRoom({
@@ -62,7 +61,7 @@ const RoomWrapper: React.FC<roomWrapperProps> = ({ showChat }) => {
         onSuccess: () => {
           setLivekitConfig((prevValues) => {
             return {
-              ...prevValues,
+              ...prevValues,  
               token: "",
               isConnected: false,
             };
@@ -73,7 +72,7 @@ const RoomWrapper: React.FC<roomWrapperProps> = ({ showChat }) => {
         },
       });
     };
-  }, [axios]);
+  }, [axios, auth.config]);
 
   return (
     <>

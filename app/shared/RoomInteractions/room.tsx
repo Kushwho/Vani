@@ -96,6 +96,9 @@ const Room: FC<RoomProps> = ({ showChat }) => {
 
   useDataChannel(onDataReceived);
   const leaveSession = useCallback(() => {
+
+    setFeedbackModalOpen(false)
+
     DeleteLiveKitRoom({
       axios,
       onSuccess: () => {
