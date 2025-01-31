@@ -6,7 +6,7 @@ import { GetApi } from "@/lib/apis/GetApi";
 
 const URL = "/api/v1/livekit/delete-room";
 
-export async function GetLiveKitRoom({
+export async function DeleteLiveKitRoom({
   axios,
   onSuccess,
   onError,

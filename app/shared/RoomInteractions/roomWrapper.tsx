@@ -6,7 +6,9 @@ import { LiveKitRoom, RoomAudioRenderer } from "@livekit/components-react";
 import React, { useEffect, useState } from "react";
 import Room from "./room";
 import { toast } from "@/hooks/use-toast";
-
+import useAuthContext from "@/hooks/custom/useAuthContext";
+import { DeleteLiveKitRoom } from "@/lib/apis/learn/delete-room";
+import { CreateDemoLiveKitRoom } from "@/lib/apis/learn/create-demo-room";
 
 type roomWrapperProps = {
   showChat: boolean;
@@ -14,9 +16,12 @@ type roomWrapperProps = {
 
 const RoomWrapper: React.FC<roomWrapperProps> = ({ showChat }) => {
   const axios = useAxiosContext();
+  const auth = useAuthContext();
   const [livekitConfig, setLivekitConfig] = useState(defaultConfig);
 
   useEffect(() => {
+
+    if(auth.config.loggedIn){
     GetLiveKitRoom({
       axios,
       onSuccess: (response) => {
@@ -32,10 +37,44 @@ const RoomWrapper: React.FC<roomWrapperProps> = ({ showChat }) => {
         console.log(error);
         toast({ title: "Error", description: error.message });
       },
-    });
+    });}
+    
+    else CreateDemoLiveKitRoom({
+      axios,
+      onSuccess: (response) => {
+        setLivekitConfig((prevValues) => {
+          return {
+            ...prevValues,
+            token: response.data.token,
+            isConnected: true,
+          };
+        });
+      },
+      onError: (error) => {
+        console.log(error);
+        toast({ title: "Error", description: error.message });
+      }
+    })
 
+    return () => {
+      DeleteLiveKitRoom({
+        axios,
+        onSuccess: () => {
+          setLivekitConfig((prevValues) => {
+            return {
+              ...prevValues,
+              token: "",
+              isConnected: false,
+            };
+          });
+        },
+        onError: (error) => {
+          console.log(error);
+        },
+      });
+    };
   }, [axios]);
-  
+
   return (
     <>
       <LivekitProvider

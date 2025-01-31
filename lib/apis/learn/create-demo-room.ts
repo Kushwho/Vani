@@ -12,7 +12,7 @@ export interface LiveKitRoomResponse {
 
 const URL = "/api/v1/livekit/create-demo-room"
 
-export async function GetLiveKitRoom({
+export async function CreateDemoLiveKitRoom({
   axios,
   onSuccess,
   onError,
