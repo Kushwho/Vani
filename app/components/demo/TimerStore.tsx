@@ -1,6 +1,6 @@
 import { Toast } from "@/hooks/use-toast";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
-import { NextRouter } from "next/router";
+
 import { create } from "zustand";
 
 interface TimerState {
