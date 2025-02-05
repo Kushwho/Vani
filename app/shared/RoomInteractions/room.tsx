@@ -158,7 +158,7 @@ const Room: FC<RoomProps> = ({ showChat }) => {
               }  "bg-red-500 hover:bg-red-600 disabled:text-gray-500 disabled:bg-gray-200 disabled:cursor-not-allowed" transition-colors duration-200`}
               disabled={!isSessionActive}
             >
-              {!isSessionActive ? "End Session" : "Not Connected"}
+              {isSessionActive ? "End Session" : "Not Connected"}
             </Button>
 
             {/* Voice Controls */}
