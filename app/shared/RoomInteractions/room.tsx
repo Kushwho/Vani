@@ -92,7 +92,7 @@ const Room: FC<RoomProps> = ({ showChat }) => {
   );
 
   const isSessionActive = useMemo(
-    () => config.isConnected && !!voiceAssistant.audioTrack,
+    () => config.isConnected && voiceAssistant.audioTrack,
     [config.isConnected, voiceAssistant.audioTrack]
   );
 
