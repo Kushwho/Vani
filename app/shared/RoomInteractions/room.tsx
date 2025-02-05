@@ -33,6 +33,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { DeleteLiveKitRoom } from "@/lib/apis/learn/delete-room";
 import useAxiosContext from "@/hooks/custom/useAxiosContext";
+import useAuthContext from "@/hooks/custom/useAuthContext";
 
 interface RoomProps {
   showChat: boolean;
@@ -55,6 +56,7 @@ const Room: FC<RoomProps> = ({ showChat }) => {
   const { toast } = useToast();
   const router = useRouter();
   const axios = useAxiosContext();
+  const auth = useAuthContext();
 
   useEffect(() => {
     if (roomState === ConnectionState.Connected) {
@@ -139,7 +141,17 @@ const Room: FC<RoomProps> = ({ showChat }) => {
             <Button
               onClick={() => {
                 leaveSession();
-                setFeedbackModalOpen(true);
+                if(auth.config.loggedIn){
+                  setFeedbackModalOpen(true)
+                }else{
+                  toast({
+                    title: "Session Ended",
+                    description: "Please login to continue.Navigating to Login Page",
+                  })
+                  setTimeout(()=>{
+                    router.push("/login")
+                  },1500)
+                }
               }}
               className={`${
                 !isMobile ? "absolute top-4 right-4" : "mt-2 mx-auto "
