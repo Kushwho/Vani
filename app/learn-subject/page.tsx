@@ -7,15 +7,7 @@ import RoomWrapper from "../shared/RoomInteractions/roomWrapper";
 import { LiveKitMetadata } from "@/types/livekit";
 
 
-const isLiveKitMetadata = (data: any): data is LiveKitMetadata => {
-  return (
-    data &&
-    typeof data === "object" &&
-    typeof data.standard === "number" &&
-    typeof data.subject === "string" &&
-    typeof data.chapter === "string"
-  );
-};
+
 
 const Page: React.FC = () => {
   const router = useRouter();
@@ -30,12 +22,7 @@ const Page: React.FC = () => {
 
     try {
       const parsedData = JSON.parse(rawData);
-      if (isLiveKitMetadata(parsedData)) {
-        setStoredData(parsedData);
-      } else {
-        console.error("Invalid LiveKitMetadata format:", parsedData);
-        router.replace("/");
-      }
+      setStoredData(parsedData);
     } catch (error) {
       console.error("Error parsing sessionStorage data:", error);
       router.replace("/");

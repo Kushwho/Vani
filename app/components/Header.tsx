@@ -50,13 +50,7 @@ export function Navbar() {
   const router = useRouter();
   const axios = useAxiosContext();
   const auth = useAuthContext();
-
-  const handleNavigation = () => {
-    const data = { subject: "Math", level: "Beginner" };
-    sessionStorage.setItem("learnSubjectData", JSON.stringify(data));
-    router.push("/learn-subject");
-  };
-
+  
   const handleScroll = useCallback(() => {
     setIsSticky(window.scrollY > 0);
   }, []);
