@@ -1,1 +1,1 @@
-export const BACKEND_URL = "https://backend.vanii.ai"
+export const BACKEND_URL = "http://localhost:4000"

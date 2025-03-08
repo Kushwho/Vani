@@ -25,6 +25,8 @@ import { Logout } from "@/lib/apis/auth/Logout";
 import useAxiosContext from "@/hooks/custom/useAxiosContext";
 import useAuthContext from "@/hooks/custom/useAuthContext";
 import Image from "next/image";
+import LearnSubjectButton from "./LearnSubjectButton";
+
 
 // Types
 
@@ -37,6 +39,8 @@ const NAVIGATION_ITEMS = [
 
 const MOBILE_BREAKPOINT = 768;
 
+
+
 export function Navbar() {
   const [isSticky, setIsSticky] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -46,6 +50,12 @@ export function Navbar() {
   const router = useRouter();
   const axios = useAxiosContext();
   const auth = useAuthContext();
+
+  const handleNavigation = () => {
+    const data = { subject: "Math", level: "Beginner" };
+    sessionStorage.setItem("learnSubjectData", JSON.stringify(data));
+    router.push("/learn-subject");
+  };
 
   const handleScroll = useCallback(() => {
     setIsSticky(window.scrollY > 0);
@@ -153,6 +163,9 @@ export function Navbar() {
                 <Button variant="outline" onClick={() => router.push("/learn")}>
                   Start Learning
                 </Button>
+                
+                <LearnSubjectButton></LearnSubjectButton>
+
                 <Button
                   onClick={() => {
                     handleLogout();
@@ -194,8 +207,10 @@ export function Navbar() {
       {auth.config.loggedIn ? (
         <>
           <Button variant="outline" onClick={() => router.push("/learn")}>
-            Start Learning
+            Learn English
           </Button>
+          <LearnSubjectButton>
+          </LearnSubjectButton>
           <Button onClick={handleLogout}>Logout</Button>
         </>
       ) : (

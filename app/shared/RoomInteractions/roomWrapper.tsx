@@ -1,7 +1,7 @@
 "use client";
 import { defaultConfig, LivekitProvider } from "@/context/LivekitContext";
 import useAxiosContext from "@/hooks/custom/useAxiosContext";
-import { GetLiveKitRoom } from "@/lib/apis/learn/create-room";
+import { GetLiveKitRoom, GetLiveKitStudyRoom } from "@/lib/apis/learn/create-room";
 import { LiveKitRoom, RoomAudioRenderer } from "@livekit/components-react";
 import React, { useEffect, useState } from "react";
 import Room from "./room";
@@ -9,18 +9,21 @@ import { toast } from "@/hooks/use-toast";
 import useAuthContext from "@/hooks/custom/useAuthContext";
 import { DeleteLiveKitRoom } from "@/lib/apis/learn/delete-room";
 import { CreateDemoLiveKitRoom } from "@/lib/apis/learn/create-demo-room";
+import { LiveKitMetadata } from "@/types/livekit";
 
 type roomWrapperProps = {
   showChat: boolean;
+  studyRoom?: boolean;
+  data?: LiveKitMetadata
 };
 
-const RoomWrapper: React.FC<roomWrapperProps> = ({ showChat }) => {
+const RoomWrapper: React.FC<roomWrapperProps> = ({ showChat,data, studyRoom=false }) => {
   const axios = useAxiosContext();
   const auth = useAuthContext();
   const [livekitConfig, setLivekitConfig] = useState(defaultConfig);
 
   useEffect(() => {
-    if (auth.config.loggedIn) {
+    if (auth.config.loggedIn && !studyRoom) {
       GetLiveKitRoom({
         axios,
         onSuccess: (response) => {
@@ -37,7 +40,27 @@ const RoomWrapper: React.FC<roomWrapperProps> = ({ showChat }) => {
           toast({ title: "Error", description: error.message });
         },
       });
-    } else {
+    } 
+    if (auth.config.loggedIn && studyRoom && data) {
+      GetLiveKitStudyRoom({
+        axios,
+        data,
+        onSuccess: (response) => {
+          setLivekitConfig((prevValues) => {
+            return {
+              ...prevValues,
+              token: response.data.token,
+              isConnected: true,
+            };
+          });
+        },
+        onError: (error) => {
+          console.log(error);
+          toast({ title: "Error", description: error.message });
+        },
+      });
+    } 
+    else {
       CreateDemoLiveKitRoom({
         axios,
         onSuccess: (response) => {
