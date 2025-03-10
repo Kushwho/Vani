@@ -8,7 +8,6 @@ import Room from "./room";
 import { toast } from "@/hooks/use-toast";
 import useAuthContext from "@/hooks/custom/useAuthContext";
 import { DeleteLiveKitRoom } from "@/lib/apis/learn/delete-room";
-import { CreateDemoLiveKitRoom } from "@/lib/apis/learn/create-demo-room";
 import { LiveKitMetadata } from "@/types/livekit";
 
 type roomWrapperProps = {
@@ -60,23 +59,7 @@ const RoomWrapper: React.FC<roomWrapperProps> = ({ showChat,data, studyRoom=fals
         },
       });
     } 
-    else {
-      CreateDemoLiveKitRoom({
-        axios,
-        onSuccess: (response) => {
-          setLivekitConfig((prevValues) => {
-            return {
-              ...prevValues,
-              token: response.data.token,
-              isConnected: true,
-            };
-          });
-        },
-        onError: (error) => {
-          console.log(error);
-        },
-      });
-    }
+    
 
     return () => {
       DeleteLiveKitRoom({
