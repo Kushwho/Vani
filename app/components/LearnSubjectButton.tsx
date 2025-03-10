@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription, DialogClose } from "@/components/ui/dialog";
 import { useRouter } from "next/navigation";
+import { LiveKitMetadata } from "@/types/livekit";
+import useAuthContext from "@/hooks/custom/useAuthContext";
+
 
 const chaptersBySubject: Record<string, string[]> = {
   Civics: [
@@ -43,10 +46,13 @@ const LearnSubjectButton = () => {
   const [selectedSubject, setSelectedSubject] = useState("");
   const [selectedChapter, setSelectedChapter] = useState("");
   const router = useRouter();
+  const authContext = useAuthContext()
 
   const handleStartLearning = () => {
+
+
     if (selectedClass && selectedSubject && selectedChapter) {
-      const data = { class: selectedClass, subject: selectedSubject, chapter: selectedChapter };
+      const data:LiveKitMetadata = {userId: authContext.config.loggedIn? authContext.config.id : "" , standard: Number.parseInt(selectedClass), subject: selectedSubject, chapter: selectedChapter };
       sessionStorage.setItem("learnSubjectData", JSON.stringify(data));
       router.push("/learn-subject");
     } else {
