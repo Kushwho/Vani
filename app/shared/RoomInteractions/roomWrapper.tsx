@@ -23,6 +23,7 @@ const RoomWrapper: React.FC<roomWrapperProps> = ({ showChat,data, studyRoom=fals
 
   useEffect(() => {
     if (auth.config.loggedIn && !studyRoom) {
+      setLivekitConfig({ ...livekitConfig, serverUrl: "wss://vanii-wat801kw.livekit.cloud" })
       GetLiveKitRoom({
         axios,
         onSuccess: (response) => {
