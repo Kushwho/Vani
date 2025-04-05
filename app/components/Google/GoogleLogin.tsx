@@ -6,8 +6,16 @@ import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import useAuthContext from "@/hooks/custom/useAuthContext";
 
+// Define a proper interface for user data
+interface UserData {
+  _id: string;
+  email: string;
+  voice?: string;
+  [key: string]: unknown; // For any additional properties
+}
+
 interface GoogleLoginProps {
-  onSuccess?: (userData: any) => void;
+  onSuccess?: (userData: UserData) => void;
 }
 
 const GoogleLogin = ({ onSuccess }: GoogleLoginProps) => {
@@ -41,7 +49,7 @@ const GoogleLogin = ({ onSuccess }: GoogleLoginProps) => {
         
         // Store user data if needed
         if (data.user) {
-        //   localStorage.setItem("user", JSON.stringify(data.user));
+          localStorage.setItem("user", JSON.stringify(data.user));
           
           // Update auth context if available
           if (auth) {
@@ -55,7 +63,7 @@ const GoogleLogin = ({ onSuccess }: GoogleLoginProps) => {
           
           // Call onSuccess callback if provided
           if (onSuccess) {
-            onSuccess(data.user);
+            onSuccess(data.user as UserData);
           }
           
           // Show success toast

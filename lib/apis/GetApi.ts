@@ -18,7 +18,7 @@ export async function GetApi<T>({
         error !== null &&
         "response" in error
       ) {
-        onError((error as any).response);
+        onError(error.response as ApiError);
       } else {
         onError(error as ApiError);
       }

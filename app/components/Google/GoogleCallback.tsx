@@ -1,6 +1,14 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
+// Define a proper interface for user data
+interface UserData {
+  _id: string;
+  email: string;
+  voice?: string;
+  [key: string]: unknown; // For any additional properties
+}
+
 const GoogleCallback = () => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -38,7 +46,7 @@ const GoogleCallback = () => {
         
         // Store the token or user data as needed
         if (data.user) {
-          localStorage.setItem("user", JSON.stringify(data.user));
+          localStorage.setItem("user", JSON.stringify(data.user as UserData));
         }
         
         // Redirect to the dashboard or home page

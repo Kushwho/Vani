@@ -35,7 +35,6 @@ import { PostVerifyOtp } from "@/lib/apis/otp/VerifyOtp";
 import PhoneNumberInput from "../components/forms/PhoneNumberInput";
 import PasswordVerify from "@/lib/form/PasswordVerify";
 import { GetCountry } from "@/lib/apis/util/GetCountry";
-import { GoogleOAuthProvider } from "@react-oauth/google";
 import GoogleWrapper from "../components/Google/GoogleWrapper";
 import GoogleLogin from "../components/Google/GoogleLogin";
 
