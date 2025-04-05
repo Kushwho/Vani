@@ -12,18 +12,7 @@ const GoogleLogin = () => {
       setIsLoading(true);
       
       // Make a GET request to the backend API
-      const response = await fetch("https://backend.vanii.ai/auth/api/v1/user/google", {
-        method: "GET",
-        credentials: "include", 
-      });
-
-      if (!response.ok) {
-        throw new Error("Authentication failed");
-      }
-
-      // Handle the response as needed
-      const data = await response.json();
-      console.log("Google auth response:", data);
+      window.location.href = "https://backend.vanii.ai/auth/api/v1/user/google";
       
       // Show success toast
       toast({
