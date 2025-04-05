@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Forward the request to your backend server
-    const response = await fetch('http://localhost:4000/auth/api/v1/user/google', {
+    const response = await fetch('https://backend.vanii.ai/auth/api/v1/user/google', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
