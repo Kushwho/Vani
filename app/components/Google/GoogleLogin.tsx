@@ -1,19 +1,21 @@
+"use client"
+
 import { Button } from "@/components/ui/button";
 import { FcGoogle } from "react-icons/fc";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { useRouter } from 'next/navigation';
 
 const GoogleLogin = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const router = useRouter()
 
   const handleGoogleLogin = async () => {
     try {
       setIsLoading(true);
       
-      // Make a GET request to the backend API
-      window.location.href = "https://backend.vanii.ai/auth/api/v1/user/google";
-      
+      router.push("https://backend.vanii.ai/auth/api/v1/user/google")
       // Show success toast
       toast({
         title: "Success",
