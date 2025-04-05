@@ -8,34 +8,22 @@ interface UserData {
   [key: string]: unknown; // For any additional properties
 }
 
-interface GoogleAuthRequest {
-  token: string;
-}
+
 
 interface GoogleAuthResponse {
   user: UserData;
   [key: string]: unknown; // For any additional properties
 }
 
-export async function POST(request: NextRequest) {
+export async function GET(request: NextRequest) {
   try {
-    const body = await request.json() as GoogleAuthRequest;
-    const { token } = body;
-
-    if (!token) {
-      return NextResponse.json(
-        { error: 'Token is required' },
-        { status: 400 }
-      );
-    }
-
     // Forward the request to your backend server
     const response = await fetch('https://backend.vanii.ai/auth/api/v1/user/google', {
-      method: 'POST',
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ token }),
+
     });
 
     if (!response.ok) {

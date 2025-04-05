@@ -1,109 +1,57 @@
-import { useGoogleLogin } from "@react-oauth/google";
 import { Button } from "@/components/ui/button";
 import { FcGoogle } from "react-icons/fc";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
-import useAuthContext from "@/hooks/custom/useAuthContext";
 
-// Define a proper interface for user data
-interface UserData {
-  _id: string;
-  email: string;
-  voice?: string;
-  [key: string]: unknown; // For any additional properties
-}
-
-interface GoogleLoginProps {
-  onSuccess?: (userData: UserData) => void;
-}
-
-const GoogleLogin = ({ onSuccess }: GoogleLoginProps) => {
+const GoogleLogin = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
   const { toast } = useToast();
-  const auth = useAuthContext();
 
-  const login = useGoogleLogin({
-    onSuccess: async (response) => {
-      try {
-        setIsLoading(true);
-        setError(null);
-        
-        // Make API call to backend instead of direct redirection
-        const result = await fetch("/api/auth/google", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ token: response.access_token }),
-          credentials: "include", // Important for cookies
-        });
+  const handleGoogleLogin = async () => {
+    try {
+      setIsLoading(true);
+      
+      // Make a GET request to the backend API
+      const response = await fetch("https://backend.vanii.ai/auth/api/v1/user/google", {
+        method: "GET",
+        credentials: "include", 
+      });
 
-        if (!result.ok) {
-          throw new Error("Authentication failed");
-        }
-
-        const data = await result.json();
-        
-        // Store user data if needed
-        if (data.user) {
-          localStorage.setItem("user", JSON.stringify(data.user));
-          
-          // Update auth context if available
-          if (auth) {
-            auth.setConfig({
-              loggedIn: true,
-              id: data.user._id,
-              email: data.user.email,
-              voice: data.user.voice
-            });
-          }
-          
-          // Call onSuccess callback if provided
-          if (onSuccess) {
-            onSuccess(data.user as UserData);
-          }
-          
-          // Show success toast
-          toast({
-            title: "Success",
-            description: "Google login successful",
-          });
-          
-          // Redirect to dashboard or home page
-          router.push("/");
-        }
-      } catch (err) {
-        console.error("Login error:", err);
-        setError("Authentication failed. Please try again.");
-        toast({
-          title: "Error",
-          description: "Google login failed. Please try again.",
-          variant: "destructive",
-        });
-      } finally {
-        setIsLoading(false);
+      if (!response.ok) {
+        throw new Error("Authentication failed");
       }
-    },
-    onError: () => {
-      console.error("Login Failed");
-      setError("Google login failed. Please try again.");
+
+      // Handle the response as needed
+      const data = await response.json();
+      console.log("Google auth response:", data);
+      
+      // Show success toast
+      toast({
+        title: "Success",
+        description: "Google authentication successful",
+      });
+      
+      // You can handle the response data here
+      // For example, redirect to a specific page or update UI
+      
+    } catch (error) {
+      console.error("Google auth error:", error);
       toast({
         title: "Error",
-        description: "Google login failed. Please try again.",
+        description: "Google authentication failed. Please try again.",
         variant: "destructive",
       });
-    },
-  });
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="w-full">
       <Button
         variant="outline"
         className="flex items-center gap-2 w-full"
-        onClick={() => login()}
+        onClick={handleGoogleLogin}
         disabled={isLoading}
       >
         {isLoading ? (
@@ -113,7 +61,6 @@ const GoogleLogin = ({ onSuccess }: GoogleLoginProps) => {
         )}
         <span>{isLoading ? "Authenticating..." : "Continue with Google"}</span>
       </Button>
-      {error && <p className="text-red-500 mt-2 text-sm">{error}</p>}
     </div>
   );
 };
