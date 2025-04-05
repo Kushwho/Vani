@@ -35,6 +35,9 @@ import { PostVerifyOtp } from "@/lib/apis/otp/VerifyOtp";
 import PhoneNumberInput from "../components/forms/PhoneNumberInput";
 import PasswordVerify from "@/lib/form/PasswordVerify";
 import { GetCountry } from "@/lib/apis/util/GetCountry";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import GoogleWrapper from "../components/Google/GoogleWrapper";
+import GoogleLogin from "../components/Google/GoogleLogin";
 
 const signupSchema = z
   .object({
@@ -132,6 +135,7 @@ const Signup: FC = () => {
             }
           },
           onError: (error) => {
+            
             toast({
               variant: "destructive",
               title: "Error",
@@ -161,7 +165,7 @@ const Signup: FC = () => {
             toast({
               variant: "destructive",
               title: "Error",
-              description: error.message,
+              description: error.message
             });
           },
         });
@@ -195,6 +199,23 @@ const Signup: FC = () => {
           </CardHeader>
 
           <CardContent>
+            <GoogleWrapper>
+              <div className="mb-6">
+                <GoogleLogin />
+              </div>
+            </GoogleWrapper>
+            
+            <div className="relative mb-6">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-background px-2 text-muted-foreground">
+                  Or continue with
+                </span>
+              </div>
+            </div>
+            
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
@@ -292,6 +313,7 @@ const Signup: FC = () => {
                     )}
                     {displayOtp ? "Verify OTP" : "Sign Up"}
                   </Button>
+                  
                 </div>
               </form>
             </Form>

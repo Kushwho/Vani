@@ -43,6 +43,12 @@ export default function RootLayout({
             })(window,document,'script','dataLayer','GTM-PCHH5RVH');
           `}
         </Script>
+        <Script src="https://apis.google.com/js/platform.js" strategy="afterInteractive" />
+        <meta
+          name="google-signin-client_id"
+          content="885631174114-gspnjd2i7giuf681hkido7m6jdegbp7c.apps.googleusercontent.com"
+        />
+
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}

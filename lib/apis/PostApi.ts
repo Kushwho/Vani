@@ -1,4 +1,5 @@
 import { ApiError, ApiResponse, PostApiInput } from "@/types/api";
+import { AxiosError, isAxiosError } from "axios";
 
 export async function PostApi<T, D>({
   url,
@@ -14,7 +15,15 @@ export async function PostApi<T, D>({
     }
   } catch (error: unknown) {
     if (onError) {
-      onError(error as ApiError);
+      if (
+        typeof error === "object" &&
+        error !== null &&
+        "response" in error
+      ) {
+        onError((error as any).response as ApiError);
+      } else {
+        onError(error as ApiError);
+      }
     }
   }
 }

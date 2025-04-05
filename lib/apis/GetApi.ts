@@ -7,15 +7,21 @@ export async function GetApi<T>({
   onError,
 }: GetApiInput<T>) {
   try {
-    const response = await axios.get<ApiResponse<T>>(url,{
-      
-    });
+    const response = await axios.get<ApiResponse<T>>(url);
     if (onSuccess) {
       onSuccess(response.data);
     }
   } catch (error: unknown) {
     if (onError) {
-      onError(error as ApiError);
+      if (
+        typeof error === "object" &&
+        error !== null &&
+        "response" in error
+      ) {
+        onError((error as any).response);
+      } else {
+        onError(error as ApiError);
+      }
     }
   }
 }
