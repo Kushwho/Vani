@@ -3,6 +3,7 @@ import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription, D
 import { useRouter } from "next/navigation";
 import { LiveKitMetadata } from "@/types/livekit";
 import useAuthContext from "@/hooks/custom/useAuthContext";
+import { Button } from "@/components/ui/button";
 
 
 const chaptersBySubject: Record<string, string[]> = {
@@ -63,7 +64,7 @@ const LearnSubjectButton = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <button className="px-4 py-2 border rounded-md">Start Learning Subject</button>
+        <Button variant={"outline"}>Start Learning Subject</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogTitle>Select Your Class, Subject & Chapter</DialogTitle>
@@ -115,9 +116,9 @@ const LearnSubjectButton = () => {
         {/* Start Learning Button */}
         <div className="mt-4 flex justify-end">
           <DialogClose asChild>
-            <button className="px-4 py-2 bg-blue-500 text-white rounded" onClick={handleStartLearning}>
+            <Button variant={"outline"} onClick={handleStartLearning}>
               Start Learning
-            </button>
+            </Button>
           </DialogClose>
         </div>
       </DialogContent>
