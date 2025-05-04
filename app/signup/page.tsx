@@ -138,7 +138,8 @@ const Signup: FC = () => {
             toast({
               variant: "destructive",
               title: "Error",
-              description: error.message,
+              // @ts-expect-error: data.message may not exist
+              description:  error?.data?.message || "An error occurred",
             });
           },
         });

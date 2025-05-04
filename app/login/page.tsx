@@ -118,7 +118,8 @@ const Login: FC = () => {
           toast({
             variant: "destructive",
             title: "Error",
-            description: error.message || "An unknown error occurred",
+           // @ts-expect-error: data.message may not exist
+            description: error.data.message || "An error occurred",
           });
         },
       });
