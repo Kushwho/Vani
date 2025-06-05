@@ -114,12 +114,11 @@ const Login: FC = () => {
         },
         onError: (error) => {
           console.log(error);
-          
+
           toast({
             variant: "destructive",
             title: "Error",
-           // @ts-expect-error: data.message may not exist
-            description: error.data.message || "An error occurred",
+            description: error.message || "An error occurred",
           });
         },
       });

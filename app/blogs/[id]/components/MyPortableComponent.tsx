@@ -4,6 +4,7 @@ import {
   PortableTextReactComponents,
 } from "@portabletext/react";
 import { urlFor } from "@/lib/sanity-client";
+import Image from "next/image";
 
 interface ImageProps {
   asset: {
@@ -25,7 +26,13 @@ interface LinkProps {
 export const myPortableTextComponents: Partial<PortableTextReactComponents> = {
   types: {
     image: ({ value }: PortableTextComponentProps<ImageProps>) => (
-      <img src={urlFor(value.asset._ref).url()} alt={value.alt || ""} />
+      <Image 
+        src={urlFor(value.asset._ref).url()} 
+        alt={value.alt || ""} 
+        width={800}
+        height={600}
+        className="w-full h-auto"
+      />
     ),
     callToAction: ({
       value,

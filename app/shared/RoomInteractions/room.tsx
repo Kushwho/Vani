@@ -1,14 +1,11 @@
 "use client";
-import { ChatMessageType } from "@/types/chats";
 import {
   TrackToggle,
   useConnectionState,
-  useDataChannel,
   useLocalParticipant,
   useVoiceAssistant,
 } from "@livekit/components-react";
-import { Track } from "livekit-client";
-import { ConnectionState } from "livekit-client";
+import { Track, ConnectionState } from "livekit-client";
 import React, {
   FC,
   useCallback,
@@ -23,7 +20,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useLivekitContext } from "@/hooks/custom/useLivekitContext";
 import { useMediaQuery } from "@/hooks/custom/useMediaQuery";
-import { Dialog } from "@radix-ui/react-dialog";
+import { Dialog as UIDialog } from "@/components/ui/dialog";
 // import MicrophoneButton from "./audio/MicrophoneButton";
 
 import { cn } from "@/lib/utils";
@@ -31,8 +28,6 @@ import AudioVisualizerComponent from "./audio/AudioInputTile";
 import { useTimerStore } from "@/app/components/demo/TimerStore";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
-import { DeleteLiveKitRoom } from "@/lib/apis/learn/delete-room";
-import useAxiosContext from "@/hooks/custom/useAxiosContext";
 import useAuthContext from "@/hooks/custom/useAuthContext";
 
 interface RoomProps {
@@ -42,8 +37,6 @@ interface RoomProps {
 const Room: FC<RoomProps> = ({ showChat }) => {
   const voiceAssistant = useVoiceAssistant();
   const roomState = useConnectionState();
-  /* eslint-disable  @typescript-eslint/no-unused-vars */
-  const [_, setTranscripts] = useState<ChatMessageType[]>([]);
   const { localParticipant } = useLocalParticipant();
 
   const [feedbackModalOpen, setFeedbackModalOpen] = useState(false);
@@ -55,65 +48,34 @@ const Room: FC<RoomProps> = ({ showChat }) => {
   const toggleTimerRef = useRef(useTimerStore.getState().toggleTimer);
   const { toast } = useToast();
   const router = useRouter();
-  const axios = useAxiosContext();
   const auth = useAuthContext();
 
   useEffect(() => {
     if (roomState === ConnectionState.Connected) {
       localParticipant.setMicrophoneEnabled(false);
     }
-  }, [roomState]);
-
-  const onDataReceived = useCallback(
-    /* eslint-disable  @typescript-eslint/no-explicit-any */
-    (msg: any) => {
-      if (msg.topic === "transcription") {
-        const decoded = JSON.parse(
-          new TextDecoder("utf-8").decode(msg.payload)
-        );
-        let timestamp = new Date().getTime();
-        if ("timestamp" in decoded && decoded.timestamp > 0) {
-          timestamp = decoded.timestamp;
-        }
-        console.log(decoded.text);
-
-        setTranscripts((prevTranscripts) => [
-          ...prevTranscripts,
-          {
-            name: "You",
-            message: decoded.text,
-            timestamp: timestamp,
-            isSelf: true,
-          },
-        ]);
-      }
-    },
-    [setTranscripts]
-  );
+  }, [roomState, localParticipant]);
 
   const isSessionActive = useMemo(
     () => config.isConnected && voiceAssistant.audioTrack,
     [config.isConnected, voiceAssistant.audioTrack]
   );
 
-  useDataChannel(onDataReceived);
   const leaveSession = useCallback(() => {
-
     setFeedbackModalOpen(false)
 
-    DeleteLiveKitRoom({
-      axios,
-      onSuccess: () => {
-        setConfig((prevConfig) => ({
-          ...prevConfig,
-          isConnected: false,
-        }));
-      },
-      onError: (e) => {console.log(e);
-      },
-    });
+    // Room will be automatically deleted by SPS microservice when user leaves
+    // No need to call delete room API
+    setConfig((prevConfig) => ({
+      ...prevConfig,
+      isConnected: false,
+    }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [setConfig, axios]);
+  }, [setConfig]);
+
+  const handleFeedbackModalClose = useCallback(() => {
+    setFeedbackModalOpen(false);
+  }, []);
 
   return (
     <>
@@ -123,13 +85,15 @@ const Room: FC<RoomProps> = ({ showChat }) => {
           showChat && "h-screen"
         )}
       >
-        <Dialog>
+        <UIDialog>
           {" "}
           <FeedbackModal
             isOpen={feedbackModalOpen}
-            cleanupFunction={leaveSession}
+            cleanupFunction={handleFeedbackModalClose}
           />
-        </Dialog>
+        </UIDialog>
+
+
 
         <Card
           className="w-full bg-background1682
@@ -170,7 +134,7 @@ const Room: FC<RoomProps> = ({ showChat }) => {
                     source={Track.Source.Microphone}
                     showIcon={false}
                     className="max-w-32 w-full bg-red-300"
-                    onChange={(enabled, isUserInitiated) => {
+                    onChange={(_, isUserInitiated) => {
                       if (isUserInitiated) {
                         toggleTimerRef.current(
                           300,

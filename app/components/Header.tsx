@@ -157,7 +157,11 @@ export function Navbar() {
                 <Button variant="outline" onClick={() => router.push("/learn")}>
                   Start Learning
                 </Button>
-                
+
+                <Button variant="outline" onClick={() => router.push("/sessions")}>
+                  My Sessions
+                </Button>
+
                 <LearnSubjectButton></LearnSubjectButton>
 
                 <Button
@@ -202,6 +206,9 @@ export function Navbar() {
         <>
           <Button variant="outline" onClick={() => router.push("/learn")}>
             Learn English
+          </Button>
+          <Button variant="outline" onClick={() => router.push("/sessions")}>
+            My Sessions
           </Button>
           <LearnSubjectButton>
           </LearnSubjectButton>

@@ -6,6 +6,7 @@ export type LivekitContextType = {
   token: string;
   serverUrl: string;
   audioOn: boolean;
+  sessionId?: string;
 };
 
 export type LivekitContextValue = {

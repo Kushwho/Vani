@@ -13,6 +13,7 @@ export const defaultConfig: LivekitContextType = {
   serverUrl: "wss://vanii-490yrzvm.livekit.cloud",
   audioOn: false,
   isConnected: false,
+  sessionId: undefined,
 };
 
 export const LivekitContext = createContext<LivekitContextValue | undefined>(

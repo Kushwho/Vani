@@ -5,14 +5,12 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 type ChatMessageInput = {
   placeholder: string;
-
   height: number;
-  onSend?: (message: string) => void;
+  onSend?: (_message: string) => void;
 };
 
 const ChatMessageInput = ({
   placeholder,
-
   height,
   onSend,
 }: ChatMessageInput) => {

@@ -9,17 +9,17 @@ interface TimerState {
   timerStarted: boolean;
   intervalId: NodeJS.Timeout | null;
   toggleTimer: (
-    limit: number,
-    toast: (val: Toast) => object,
-    router: AppRouterInstance,
-    onClose: () => void
+    _limit: number,
+    _toast: (_val: Toast) => object,
+    _router: AppRouterInstance,
+    _onClose: () => void
   ) => void;
-  toggleVisibiliy: (isVisible: boolean) => void;
+  toggleVisibiliy: (_isVisible: boolean) => void;
   startTimer: (
-    limit: number,
-    toast: (val: Toast) => object,
-    router: AppRouterInstance,
-    onClose: () => void
+    _limit: number,
+    _toast: (_val: Toast) => object,
+    _router: AppRouterInstance,
+    _onClose: () => void
   ) => void;
   stopTimer: () => void;
 }

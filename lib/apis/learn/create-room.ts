@@ -10,10 +10,17 @@ export interface LiveKitRoomResponse {
     name: string;
     sid: string;
   };
+  sessionId: string;
 }
 
 const URL = "/api/v1/livekit/create-room";
 const URL2 = "/api/v1/livekit/create-study-room";
+
+// Continue session request types
+export interface ContinueSessionRequest {
+  continueSession: boolean;
+  sessionId: string;
+}
 
 export async function GetLiveKitRoom({
   axios,
@@ -27,6 +34,22 @@ export async function GetLiveKitRoom({
     onError,
   });
 }
+
+export async function PostLiveKitRoom({
+  axios,
+  data,
+  onSuccess,
+  onError,
+}: Omit<PostApiInput<LiveKitRoomResponse, ContinueSessionRequest>, "url">) {
+  PostApi<LiveKitRoomResponse, ContinueSessionRequest>({
+    url: URL,
+    axios,
+    data,
+    onSuccess,
+    onError,
+  });
+}
+
 export async function GetLiveKitStudyRoom({
   axios,
   data,
@@ -34,6 +57,21 @@ export async function GetLiveKitStudyRoom({
   onError,
 }: Omit<PostApiInput<LiveKitRoomResponse,LiveKitMetadata>, "url">) {
   PostApi<LiveKitRoomResponse,LiveKitMetadata>({
+    url: URL2,
+    axios,
+    data,
+    onSuccess,
+    onError,
+  });
+}
+
+export async function PostLiveKitStudyRoom({
+  axios,
+  data,
+  onSuccess,
+  onError,
+}: Omit<PostApiInput<LiveKitRoomResponse, LiveKitMetadata & ContinueSessionRequest>, "url">) {
+  PostApi<LiveKitRoomResponse, LiveKitMetadata & ContinueSessionRequest>({
     url: URL2,
     axios,
     data,
