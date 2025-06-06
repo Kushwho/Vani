@@ -358,38 +358,46 @@ const SessionsPage = () => {
                   </div>
                 )}
 
-                <Button
-                  onClick={() => handleContinueSession(session)}
-                  disabled={joiningSession === session._id}
-                  className="w-full"
-                  variant={session.status === 'active' ? 'default' : 'outline'}
-                >
-                  {joiningSession === session._id ? (
-                    session.status === 'active' ? 'Rejoining...' : 'Continuing...'
-                  ) : (
-                    <>
-                      <Play className="h-4 w-4 mr-2" />
-                      {session.status === 'active' ? 'Rejoin Session' : 'Continue Session'}
-                    </>
-                  )}
-                </Button>
+                <div className="space-y-2">
+                  <Button
+                    onClick={() => handleContinueSession(session)}
+                    disabled={joiningSession === session._id || session.status === 'active'}
+                    className="w-full"
+                    variant={session.status === 'active' ? 'default' : 'outline'}
+                  >
+                    {joiningSession === session._id ? (
+                      session.status === 'active' ? 'Rejoining...' : 'Continuing...'
+                    ) : (
+                      <>
+                        <Play className="h-4 w-4 mr-2" />
+                        {session.status === 'active' ? 'Continue Session' : 'Continue Session'}
+                      </>
+                    )}
+                  </Button>
 
-                {session.status === 'completed' && (
-                  <div className="space-y-2">
-                    <div className="text-sm text-muted-foreground">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleGetFeedback(session)}
+                    disabled={session.status === 'active'}
+                    className="w-full"
+                  >
+                    <Sparkles className="h-4 w-4 mr-2" />
+                    Get AI Feedback
+                  </Button>
+
+                  {session.status === 'active' && (
+                    <div className="text-xs text-muted-foreground text-center">
+                      Complete the session to enable these options
+                    </div>
+                  )}
+
+                  {session.status === 'completed' && (
+                    <div className="text-sm text-muted-foreground text-center">
                       Completed on {new Date(session.endTime!).toLocaleDateString()}
                     </div>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleGetFeedback(session)}
-                      className="w-full"
-                    >
-                      <Sparkles className="h-4 w-4 mr-2" />
-                      Get AI Feedback
-                    </Button>
-                  </div>
-                )}
+                  )}
+                </div>
               </CardContent>
             </Card>
           ))}
