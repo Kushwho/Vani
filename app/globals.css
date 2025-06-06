@@ -10,6 +10,23 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+
+  /* Mobile-first responsive utilities */
+  .mobile-container {
+    @apply px-4 sm:px-6 lg:px-8;
+  }
+
+  .mobile-text-responsive {
+    @apply text-sm sm:text-base lg:text-lg;
+  }
+
+  .mobile-heading-responsive {
+    @apply text-xl sm:text-2xl lg:text-3xl;
+  }
+
+  .mobile-spacing {
+    @apply space-y-4 sm:space-y-6 lg:space-y-8;
+  }
 }
 
 @layer base {
@@ -40,7 +57,7 @@ body {
     --chart-5: 8 75% 55%;
     --radius: 0.5rem;
   }
-  
+
   .dark {
     --background: 28 25% 10%;
     --foreground: 38 100% 98%;

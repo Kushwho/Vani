@@ -175,8 +175,8 @@ const Signup: FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex md:flex-row flex-col">
-      <div className="relative md:w-2/5 w-full md:h-screen h-1/3 min-h-[300px]">
+    <div className="min-h-screen flex flex-col lg:flex-row">
+      <div className="relative lg:w-2/5 w-full lg:h-screen h-48 sm:h-64">
         <Image
           src="/images/login/bg.png"
           alt="Background"
@@ -186,13 +186,13 @@ const Signup: FC = () => {
         />
       </div>
 
-      <div className="flex-1 flex items-center justify-center p-6 bg-card" >
+      <div className="flex-1 flex items-center justify-center p-4 sm:p-6 bg-card">
         <Card className="w-full max-w-md shadow-none border-none">
-          <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl text-center">
+          <CardHeader className="space-y-1 text-center">
+            <CardTitle className="text-xl sm:text-2xl">
               Welcome to Vanii!
             </CardTitle>
-            <CardDescription className="text-center">
+            <CardDescription className="text-sm sm:text-base">
               Speak Fluently, Connect Instantly
             </CardDescription>
           </CardHeader>
@@ -257,12 +257,13 @@ const Signup: FC = () => {
                   <div className="space-y-4">
                     <FormItem>
                       <FormLabel>Enter OTP</FormLabel>
-                      <div className="flex gap-2">
+                      <div className="flex flex-col sm:flex-row gap-2">
                         <FormControl>
                           <Input
                             placeholder="Enter OTP"
                             value={otp}
                             onChange={(e) => setOtp(e.target.value)}
+                            className="flex-1"
                           />
                         </FormControl>
                         <Button
@@ -270,6 +271,8 @@ const Signup: FC = () => {
                           variant="outline"
                           onClick={handleOtpResend}
                           disabled={isLoading}
+                          className="w-full sm:w-auto"
+                          size="sm"
                         >
                           {isLoading ? (
                             <Loader2 className="h-4 w-4 animate-spin" />
@@ -296,23 +299,24 @@ const Signup: FC = () => {
                   }}
                 />
 
-                <div className="flex justify-between items-center pt-4">
-                  <Button
-                    variant="link"
-                    className="p-0"
-                    onClick={() => router.push("/login")}
-                    type="button"
-                  >
-                    Already have an account
-                  </Button>
-
-                  <Button type="submit" disabled={isLoading}>
+                <div className="space-y-4 pt-4">
+                  <Button type="submit" disabled={isLoading} className="w-full">
                     {isLoading && (
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     )}
                     {displayOtp ? "Verify OTP" : "Sign Up"}
                   </Button>
-                  
+
+                  <div className="text-center">
+                    <Button
+                      variant="link"
+                      className="p-0 text-sm"
+                      onClick={() => router.push("/login")}
+                      type="button"
+                    >
+                      Already have an account? Sign in
+                    </Button>
+                  </div>
                 </div>
               </form>
             </Form>

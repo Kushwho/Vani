@@ -179,13 +179,13 @@ const OnboardingForm: FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black/50 flex flex-col items-center justify-center p-4">
-      <Card className="w-full max-w-xl">
-        <CardHeader>
-          <CardTitle>
+    <div className="min-h-screen bg-black/50 flex flex-col items-center justify-center p-4 sm:p-6">
+      <Card className="w-full max-w-xl mx-auto">
+        <CardHeader className="space-y-3 sm:space-y-4">
+          <CardTitle className="text-lg sm:text-xl">
             Step {currentStep + 1} of {OnboardingSteps.length}
           </CardTitle>
-          <CardDescription>
+          <CardDescription className="text-sm sm:text-base leading-relaxed">
             {OnboardingSteps[currentStep].question}
           </CardDescription>
           <Progress value={progress} className="h-2" />
@@ -199,26 +199,35 @@ const OnboardingForm: FC = () => {
           </Form>
         </CardContent>
 
-        <CardFooter className="flex justify-between">
+        <CardFooter className="flex flex-col sm:flex-row gap-3 sm:justify-between">
           <Button
             variant="outline"
             onClick={handlePrevious}
             disabled={currentStep === 0 || isSubmitting}
+            className="w-full sm:w-auto order-2 sm:order-1"
+            size="sm"
           >
             <ChevronLeft className="mr-2 h-4 w-4" />
             Previous
           </Button>
 
-          <div className="flex gap-2">
+          <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto order-1 sm:order-2">
             <Button
               variant="outline"
               onClick={() => router.push("/")}
               disabled={isSubmitting}
+              className="w-full sm:w-auto"
+              size="sm"
             >
               Skip
             </Button>
 
-            <Button onClick={handleNext} disabled={isSubmitting}>
+            <Button
+              onClick={handleNext}
+              disabled={isSubmitting}
+              className="w-full sm:w-auto"
+              size="sm"
+            >
               {isSubmitting ? (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               ) : currentStep === OnboardingSteps.length - 1 ? (

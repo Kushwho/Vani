@@ -65,7 +65,7 @@ export default function RootLayout({
         <AxiosContextProvider>
           <AuthProvider>
             <Wrapper>
-              <div className="mx-auto">
+              <div className="min-h-screen">
                 {children}
                 <Toaster />
               </div>

@@ -70,19 +70,27 @@ export default function Blogs() {
   if (error) return <ErrorState retry={fetchData} />;
 
   return (
-    <div className=" py-8 px-4  h-full bg-transparent">
-      <div className="flex gap-12 max-w-7xl mx-auto justify-center">
-        {/* Sidebar with smaller width */}
-        <aside className="w-72 flex-shrink-0">
-          <BlogsSidebar posts={popularPostTitle} />
-        </aside>
+    <div className="py-4 sm:py-8 px-4 h-full bg-transparent">
+      <div className="max-w-7xl mx-auto">
+        {/* Mobile-first responsive layout */}
+        <div className="flex flex-col lg:flex-row gap-6 lg:gap-12 lg:justify-center">
+          {/* Sidebar - hidden on mobile, shown on large screens */}
+          <aside className="hidden lg:block w-72 flex-shrink-0">
+            <BlogsSidebar posts={popularPostTitle} />
+          </aside>
 
-        {/* Main content centered with max-width */}
-        <main className="flex-1 max-w-2xl space-y-4">
-          {posts.map((post) => (
-            <BlogsCard key={post.id} {...post} />
-          ))}
-        </main>
+          {/* Main content - full width on mobile, constrained on desktop */}
+          <main className="flex-1 lg:max-w-2xl space-y-4">
+            {posts.map((post) => (
+              <BlogsCard key={post.id} {...post} />
+            ))}
+          </main>
+        </div>
+
+        {/* Mobile sidebar - shown at bottom on mobile */}
+        <div className="lg:hidden mt-8">
+          <BlogsSidebar posts={popularPostTitle} />
+        </div>
       </div>
     </div>
   );

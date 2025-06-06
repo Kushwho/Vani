@@ -282,43 +282,44 @@ const SessionsPage = () => {
   }
 
   return (
-    <div className="container mx-auto p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">My Sessions</h1>
+    <div className="container mx-auto p-4 sm:p-6">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
+        <h1 className="text-2xl sm:text-3xl font-bold">My Sessions</h1>
         <Button
           onClick={() => router.push('/learn')}
-          className="flex items-center gap-2"
+          className="flex items-center gap-2 w-full sm:w-auto"
+          size="sm"
         >
           <Play className="h-4 w-4" />
-          Start New Session
+          <span className="sm:inline">Start New Session</span>
         </Button>
       </div>
 
       {(sessions || []).length === 0 ? (
-        <Card className="text-center p-8">
+        <Card className="text-center p-6 sm:p-8">
           <CardContent>
-            <MessageCircle className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-            <h3 className="text-lg font-semibold mb-2">No sessions yet</h3>
-            <p className="text-muted-foreground mb-4">
+            <MessageCircle className="h-10 w-10 sm:h-12 sm:w-12 mx-auto mb-4 text-muted-foreground" />
+            <h3 className="text-base sm:text-lg font-semibold mb-2">No sessions yet</h3>
+            <p className="text-sm sm:text-base text-muted-foreground mb-4 px-4">
               Start your first conversation with Vanii to see your sessions here.
             </p>
-            <Button onClick={() => router.push('/learn')}>
+            <Button onClick={() => router.push('/learn')} className="w-full sm:w-auto">
               Start Learning
             </Button>
           </CardContent>
         </Card>
       ) : (
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
           {(sessions || []).map((session) => (
             <Card key={session._id} className="hover:shadow-lg transition-shadow">
-              <CardHeader>
-                <div className="flex justify-between items-start">
-                  <div>
-                    <CardTitle className="text-lg">
+              <CardHeader className="pb-3 sm:pb-6">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3">
+                  <div className="flex-1 min-w-0">
+                    <CardTitle className="text-base sm:text-lg truncate">
                       Session #{session._id.slice(-6)}
                     </CardTitle>
                     {session.roomName && (
-                      <p className="text-sm text-muted-foreground mt-1">
+                      <p className="text-xs sm:text-sm text-muted-foreground mt-1 truncate">
                         Room: {session.roomName}
                       </p>
                     )}
@@ -328,33 +329,28 @@ const SessionsPage = () => {
                       </Badge>
                     </div>
                   </div>
-                  <Badge className={getStatusColor(session.status)}>
+                  <Badge className={`${getStatusColor(session.status)} flex-shrink-0 text-xs`}>
                     {session.status}
                   </Badge>
                 </div>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Calendar className="h-4 w-4" />
-                  {new Date(session.startTime).toLocaleDateString()}
+              <CardContent className="space-y-3 sm:space-y-4 pt-0">
+                <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
+                  <Calendar className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
+                  <span className="truncate">{new Date(session.startTime).toLocaleDateString()}</span>
                 </div>
 
-                {/* <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Clock className="h-4 w-4" />
-                  Duration: {formatDuration(session.startTime, session.endTime)}
-                </div> */}
-
                 {session.chatHistory && session.chatHistory.length > 0 && (
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <MessageCircle className="h-4 w-4" />
-                    {session.chatHistory.length} messages
+                  <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
+                    <MessageCircle className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
+                    <span>{session.chatHistory.length} messages</span>
                   </div>
                 )}
 
                 {session.feedback && session.feedback.length > 0 && (
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <Star className="h-4 w-4" />
-                    {session.feedback.length} feedback items
+                  <div className="flex items-center gap-2 text-xs sm:text-sm text-muted-foreground">
+                    <Star className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
+                    <span>{session.feedback.length} feedback items</span>
                   </div>
                 )}
 
@@ -362,15 +358,16 @@ const SessionsPage = () => {
                   <Button
                     onClick={() => handleContinueSession(session)}
                     disabled={joiningSession === session._id || session.status === 'active'}
-                    className="w-full"
+                    className="w-full text-sm"
+                    size="sm"
                     variant={session.status === 'active' ? 'default' : 'outline'}
                   >
                     {joiningSession === session._id ? (
                       session.status === 'active' ? 'Rejoining...' : 'Continuing...'
                     ) : (
                       <>
-                        <Play className="h-4 w-4 mr-2" />
-                        {session.status === 'active' ? 'Continue Session' : 'Continue Session'}
+                        <Play className="h-3 w-3 sm:h-4 sm:w-4 mr-2" />
+                        <span className="truncate">Continue Session</span>
                       </>
                     )}
                   </Button>
@@ -380,20 +377,20 @@ const SessionsPage = () => {
                     size="sm"
                     onClick={() => handleGetFeedback(session)}
                     disabled={session.status === 'active'}
-                    className="w-full"
+                    className="w-full text-sm"
                   >
-                    <Sparkles className="h-4 w-4 mr-2" />
-                    Get AI Feedback
+                    <Sparkles className="h-3 w-3 sm:h-4 sm:w-4 mr-2" />
+                    <span className="truncate">Get AI Feedback</span>
                   </Button>
 
                   {session.status === 'active' && (
-                    <div className="text-xs text-muted-foreground text-center">
+                    <div className="text-xs text-muted-foreground text-center px-2">
                       Complete the session to enable these options
                     </div>
                   )}
 
                   {session.status === 'completed' && (
-                    <div className="text-sm text-muted-foreground text-center">
+                    <div className="text-xs sm:text-sm text-muted-foreground text-center">
                       Completed on {new Date(session.endTime!).toLocaleDateString()}
                     </div>
                   )}

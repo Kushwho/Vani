@@ -41,7 +41,7 @@ export default function Page({ params }: { params: { id: string } }) {
   return (
     <div className="w-full bg-white">
       {post ? (
-        <div className="relative h-[60vh] w-full">
+        <div className="relative h-[40vh] sm:h-[50vh] lg:h-[60vh] w-full">
           <Image
             src={urlFor(post.mainImage.asset._ref).url()}
             alt="Hero Image"
@@ -53,14 +53,16 @@ export default function Page({ params }: { params: { id: string } }) {
         <></>
       )}
       {post ? (
-        <div className="max-w-[70vw] mx-auto my-6 px-8">
+        <div className="max-w-4xl mx-auto my-4 sm:my-6 px-4 sm:px-6 lg:px-8">
           <Card className="border-none shadow-none">
-            <CardHeader>
-              <CardTitle className="text-3xl">{post.title}</CardTitle>
+            <CardHeader className="px-0 sm:px-6">
+              <CardTitle className="text-xl sm:text-2xl lg:text-3xl leading-tight">
+                {post.title}
+              </CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="flex items-center mb-4">
-                <Avatar>
+            <CardContent className="px-0 sm:px-6">
+              <div className="flex items-center mb-4 sm:mb-6">
+                <Avatar className="h-10 w-10 sm:h-12 sm:w-12">
                   <AvatarImage
                     src={urlFor(post.author.image.asset._ref).url()}
                     alt="Avatar"
@@ -68,12 +70,12 @@ export default function Page({ params }: { params: { id: string } }) {
                   />
                   <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
-                <div className="text-sm text-gray-500 ml-4">
-                  <div>{post.author.name}</div>
+                <div className="text-sm text-gray-500 ml-3 sm:ml-4">
+                  <div className="font-medium">{post.author.name}</div>
                   <div>{new Date(post.publishedAt).toLocaleDateString()}</div>
                 </div>
               </div>
-              <div className="text-lg space-y-4">
+              <div className="text-base sm:text-lg space-y-4 leading-relaxed">
                 <PortableText
                   value={post.content}
                   components={myPortableTextComponents}
@@ -83,7 +85,12 @@ export default function Page({ params }: { params: { id: string } }) {
           </Card>
         </div>
       ) : (
-        <>An Error Occurred</>
+        <div className="flex items-center justify-center min-h-[50vh]">
+          <div className="text-center">
+            <h2 className="text-xl font-semibold text-gray-900 mb-2">An Error Occurred</h2>
+            <p className="text-gray-600">Unable to load the blog post.</p>
+          </div>
+        </div>
       )}
     </div>
   );

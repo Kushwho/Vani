@@ -134,8 +134,8 @@ const Login: FC = () => {
   };
 
   return (
-    <div className="h-full min-h-screen flex md:flex-row max-md:flex-col max-md:space-y-12 bg-card">
-      <div className="relative md:w-3/5 md:h-screen max-md:w-full max-md:min-h-[300px] max-md:h-2/5">
+    <div className="min-h-screen flex flex-col lg:flex-row bg-card">
+      <div className="relative lg:w-3/5 lg:h-screen w-full h-48 sm:h-64">
         <Image
           src="/images/login/bg.png"
           alt="Background"
@@ -145,10 +145,10 @@ const Login: FC = () => {
         />
       </div>
 
-      <div className="flex items-center justify-center md:w-3/5 max-md:w-full p-8 ">
+      <div className="flex items-center justify-center lg:w-2/5 w-full p-4 sm:p-6 lg:p-8">
         <Card className="w-full max-w-md border-none shadow-none">
-          <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl text-center">
+          <CardHeader className="space-y-1 text-center">
+            <CardTitle className="text-xl sm:text-2xl">
               Log in to your account
             </CardTitle>
           </CardHeader>
@@ -213,27 +213,27 @@ const Login: FC = () => {
                   )}
                 />
 
-                <div className="flex justify-between items-center">
-                  <div className="space-y-1">
+                <div className="space-y-4">
+                  <Button type="submit" className="w-full">
+                    Sign in
+                  </Button>
+
+                  <div className="flex flex-col sm:flex-row sm:justify-between items-center gap-2">
                     <Button
                       variant="link"
-                      className="h-auto p-0 text-primary"
+                      className="h-auto p-0 text-primary text-sm"
                       onClick={() => router.push("/signup")}
                     >
                       Create account
                     </Button>
                     <Button
                       variant="link"
-                      className="h-auto p-0 text-primary block"
+                      className="h-auto p-0 text-primary text-sm"
                       onClick={() => router.push("/forgotpassword")}
                     >
                       Forgot password
                     </Button>
-
-                    
                   </div>
-
-                  <Button type="submit">Sign in</Button>
                 </div>
               </form>
             </Form>
