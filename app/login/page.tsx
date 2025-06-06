@@ -4,7 +4,7 @@ import { FC, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { useToast } from "@/hooks/use-toast";
 import {
@@ -40,6 +40,7 @@ const formSchema = z.object({
 
 const Login: FC = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const auth = useAuthContext();
   const axios = useAxiosContext();
   const { toast } = useToast();
@@ -53,6 +54,35 @@ const Login: FC = () => {
   });
 
   const [countryCode, setCountryCode] = useState("+91");
+
+  // Check for Google Auth errors
+  useEffect(() => {
+    const error = searchParams.get('error');
+    if (error) {
+      let errorMessage = "Authentication failed. Please try again.";
+
+      switch (error) {
+        case 'auth_failed':
+          errorMessage = "Google authentication failed. Please try again.";
+          break;
+        case 'no_user':
+          errorMessage = "No user account found. Please sign up first.";
+          break;
+        case 'login_failed':
+          errorMessage = "Failed to log you in. Please try again.";
+          break;
+      }
+
+      toast({
+        variant: "destructive",
+        title: "Authentication Error",
+        description: errorMessage,
+      });
+
+      // Clean up the URL
+      router.replace('/login');
+    }
+  }, [searchParams, toast, router]);
 
   // Check if user is already logged in
   useEffect(() => {

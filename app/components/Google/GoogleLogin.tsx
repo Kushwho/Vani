@@ -14,17 +14,10 @@ const GoogleLogin = () => {
   const handleGoogleLogin = async () => {
     try {
       setIsLoading(true);
-      
-      router.push("https://backend.vanii.ai/auth/api/v1/user/google")
-      // Show success toast
-      toast({
-        title: "Success",
-        description: "Google authentication successful",
-      });
-      
-      // You can handle the response data here
-      // For example, redirect to a specific page or update UI
-      
+
+      // Redirect to Google OAuth endpoint
+      window.location.href = "https://backend.vanii.ai/auth/api/v1/user/google";
+
     } catch (error) {
       console.error("Google auth error:", error);
       toast({
@@ -32,7 +25,6 @@ const GoogleLogin = () => {
         description: "Google authentication failed. Please try again.",
         variant: "destructive",
       });
-    } finally {
       setIsLoading(false);
     }
   };
