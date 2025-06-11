@@ -4,33 +4,50 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import useAuthContext from "@/hooks/custom/useAuthContext";
+import { GetUser } from "@/lib/apis/auth/GetUser";
+import useAxiosContext from "@/hooks/custom/useAxiosContext";
 
 const GoogleAuthSuccess = () => {
   const router = useRouter();
   const { toast } = useToast();
   const auth = useAuthContext();
+  const axios = useAxiosContext();
 
   useEffect(() => {
-    // Show success message
-    toast({
-      title: "Success!",
-      description: "Google authentication successful. Welcome to Vanii!",
-    });
+    GetUser({
+      axios,
+      onSuccess: (response) => {
+        const userData = response.data.user;
+        
+        // Set auth state with user data
+        auth?.setConfig({
+          loggedIn: true,
+          id: userData._id,
+          email: userData.email,
+          voice: userData.voice || ""
+        });
 
-    // Set user as logged in (the backend should have set the cookie)
-    // You might want to fetch user data from a protected endpoint here
-    auth?.setConfig({
-      loggedIn: true,
-      id: "", // Will be populated from backend
-      email: "", // Will be populated from backend
-      voice: "" // Will be populated from backend
-    });
+        toast({
+          title: "Success!",
+          description: "Google authentication successful. Welcome to Vanii!",
+        });
 
-    // Redirect to dashboard after a short delay
-    setTimeout(() => {
-      router.push("/dashboard");
-    }, 2000);
-  }, [router, toast, auth]);
+        // Redirect to dashboard after a short delay
+        setTimeout(() => {
+          router.push("/dashboard");
+        }, 2000);
+      },
+      onError: (error) => {
+        console.error('Error fetching user data:', error);
+        toast({
+          title: "Error",
+          description: "Failed to fetch user data. Please try again.",
+          variant: "destructive",
+        });
+        router.push("/login");
+      }
+    });
+  }, [router, toast, auth, axios]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-green-50 to-blue-50">
@@ -46,5 +63,4 @@ const GoogleAuthSuccess = () => {
     </div>
   );
 };
-
 export default GoogleAuthSuccess;

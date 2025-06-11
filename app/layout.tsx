@@ -46,7 +46,7 @@ export default function RootLayout({
         <Script src="https://apis.google.com/js/platform.js" strategy="afterInteractive" />
         <meta
           name="google-signin-client_id"
-          content="885631174114-gspnjd2i7giuf681hkido7m6jdegbp7c.apps.googleusercontent.com"
+          content="680850558467-85a31vs3e17dl09qi5jg1abf3i2tu9sr.apps.googleusercontent.com"
         />
 
       </head>
